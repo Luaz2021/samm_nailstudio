@@ -230,7 +230,7 @@ export default function AdminPage() {
                 ADMINISTRATION DASHBOARD
               </span>
               <span className="text-[11px] sm:text-xs text-[#8d7e78] font-medium block">
-                Recepción & Gestión Miraflores
+                Recepción & Gestión Callao, Lima
               </span>
             </div>
           </div>

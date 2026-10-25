@@ -22,8 +22,8 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  title: "samm. NAIL STUDIO · Miraflores, Lima",
-  description: "Atelier de manicura y estética ungueal de alta precisión en Lima. Servicios cerrados de 2 horas con productos 20-Free y esterilización hospitalaria.",
+  title: "samm. NAIL STUDIO · Callao, Lima - Perú",
+  description: "Atelier de manicura y estética ungueal de alta precisión en Callao, Lima. Servicios cerrados de 2 horas con productos 20-Free y esterilización hospitalaria.",
 };
 
 export default function RootLayout({

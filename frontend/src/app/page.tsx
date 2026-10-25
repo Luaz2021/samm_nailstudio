@@ -387,7 +387,7 @@ export default function HomePage() {
             </span>
           </div>
           <span className="text-[10px] tracking-wider text-[#EFE2DC]/90 font-medium hidden md:inline-block">
-            Atelier Miraflores · Lima, Perú
+            Atelier Callao · Lima, Perú
           </span>
         </div>
       </div>
@@ -1343,12 +1343,11 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Navegación footer */}
+            {/* Navegación footer sin enlace público a admin */}
             <div className="md:col-span-4 flex flex-wrap items-center gap-5 text-[11px] tracking-wider uppercase font-medium">
               <button onClick={() => setActiveTab("inicio")} className="hover:text-white transition-colors">Inicio</button>
               <button onClick={() => setActiveTab("tratamientos")} className="hover:text-white transition-colors">Uñas & Carta</button>
               <button onClick={() => setActiveTab("reserva")} className="hover:text-white transition-colors">Citas & Agenda</button>
-              <a href="/admin" className="text-[#C8927B] hover:text-white transition-colors">Panel Admin</a>
             </div>
 
             {/* Enlaces Legales & Libro de Reclamaciones */}
@@ -1381,7 +1380,7 @@ export default function HomePage() {
           </div>
 
           <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] text-white/40">
-            <p>© 2026 samm. NAIL STUDIO · Miraflores, Lima - Perú. Todos los derechos reservados.</p>
+            <p>© 2026 samm. NAIL STUDIO · Callao, Lima - Perú. Todos los derechos reservados.</p>
             <p>Horario de Atención: Lunes a Sábado 9:00 am - 6:00 pm</p>
           </div>
         </div>
