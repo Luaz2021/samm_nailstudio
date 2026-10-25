@@ -221,7 +221,7 @@ export default function AdminPage() {
           
           <div className="flex items-center gap-3">
             <img 
-              src="/samm-nailstudio-wordmark.svg" 
+              src="./samm-nailstudio-wordmark.svg" 
               alt="samm. NAIL STUDIO" 
               className="h-9 sm:h-11 w-auto object-contain"
             />

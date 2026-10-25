@@ -398,7 +398,7 @@ export default function HomePage() {
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab("inicio")}>
             {/* Logotipo Oficial samm. NAIL STUDIO */}
             <img 
-              src="/samm-nailstudio-wordmark.svg" 
+              src="./samm-nailstudio-wordmark.svg" 
               alt="samm. NAIL STUDIO" 
               className="h-9 sm:h-12 w-auto object-contain"
             />
@@ -1333,7 +1333,7 @@ export default function HomePage() {
             {/* Logo en footer */}
             <div className="md:col-span-5 flex items-center gap-4">
               <img 
-                src="/samm-nailstudio-wordmark.svg" 
+                src="./samm-nailstudio-wordmark.svg" 
                 alt="samm. NAIL STUDIO" 
                 className="h-10 w-auto brightness-200"
               />
