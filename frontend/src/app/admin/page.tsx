@@ -217,37 +217,37 @@ export default function AdminPage() {
 
       {/* 2. HEADER ELEGANTE CON LOGO OFICIAL SVG Y BOTÓN DE SIMULACIÓN */}
       <header className="bg-white/95 backdrop-blur-md border-b border-[#EFE2DC] sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-22 flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 min-h-20 flex flex-col md:flex-row md:items-center justify-between gap-3 py-3">
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <img 
               src="/samm-nailstudio-wordmark.svg" 
               alt="samm. NAIL STUDIO" 
-              className="h-11 w-auto object-contain"
+              className="h-9 sm:h-11 w-auto object-contain"
             />
-            <div className="border-l border-[#EFE2DC] pl-3.5">
-              <span className="text-[10px] tracking-[0.2em] uppercase font-bold text-[#7A3E48] block">
+            <div className="border-l border-[#EFE2DC] pl-3">
+              <span className="text-[9px] sm:text-[10px] tracking-[0.2em] uppercase font-bold text-[#7A3E48] block">
                 ADMINISTRATION DASHBOARD
               </span>
-              <span className="text-xs text-[#8d7e78] font-medium block">
-                Recepción & Gestión de Citas Miraflores
+              <span className="text-[11px] sm:text-xs text-[#8d7e78] font-medium block">
+                Recepción & Gestión Miraflores
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2 pt-1 md:pt-0">
             <button
               onClick={handleCreateMockPreReservation}
-              className="bg-[#7A3E48] hover:bg-[#5E2F37] text-white text-xs font-semibold px-4 py-2.5 rounded-full transition-all shadow-sm hover:shadow flex items-center gap-2"
+              className="bg-[#7A3E48] hover:bg-[#5E2F37] text-white text-[11px] sm:text-xs font-semibold px-3.5 py-2 rounded-full transition-all shadow-xs flex items-center gap-1.5"
             >
-              <Plus className="w-4 h-4 text-[#C8927B]" /> 
-              Simular Pre-Reserva Web (+20% Yape)
+              <Plus className="w-3.5 h-3.5 text-[#C8927B]" /> 
+              Simular Pre-Reserva
             </button>
             <a 
               href="/"
-              className="bg-[#FBF8F6] hover:bg-[#EFE2DC] text-[#231C1A] text-xs px-4 py-2.5 rounded-full transition-all font-semibold border border-[#EFE2DC]"
+              className="bg-[#FBF8F6] hover:bg-[#EFE2DC] text-[#231C1A] text-[11px] sm:text-xs px-3.5 py-2 rounded-full transition-all font-semibold border border-[#EFE2DC]"
             >
-              Ver Web Pública
+              Web Pública
             </a>
           </div>
 

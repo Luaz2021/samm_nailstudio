@@ -394,14 +394,14 @@ export default function HomePage() {
 
       {/* 2. HEADER BLANCO LIMPIO CON LOGOTIPO SAMM */}
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#EFE2DC]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-24 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-18 sm:h-24 flex items-center justify-between">
           
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab("inicio")}>
             {/* Logotipo Oficial samm. NAIL STUDIO */}
             <img 
               src="/samm-nailstudio-wordmark.svg" 
               alt="samm. NAIL STUDIO" 
-              className="h-12 w-auto object-contain"
+              className="h-9 sm:h-12 w-auto object-contain"
             />
           </div>
 
@@ -440,10 +440,10 @@ export default function HomePage() {
 
           <button
             onClick={() => setActiveTab("reserva")}
-            className="bg-[#7A3E48] hover:bg-[#5E2F37] text-white text-xs uppercase tracking-[0.18em] font-semibold px-6 py-3.5 rounded-full transition-all shadow-sm hover:shadow flex items-center gap-2"
+            className="bg-[#7A3E48] hover:bg-[#5E2F37] text-white text-[11px] sm:text-xs uppercase tracking-[0.16em] sm:tracking-[0.18em] font-semibold px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-full transition-all shadow-sm hover:shadow flex items-center gap-1.5 sm:gap-2"
           >
             <CalendarIcon className="w-3.5 h-3.5" />
-            Reservar Cita
+            <span>Reservar Cita</span>
           </button>
         </div>
       </header>
@@ -561,27 +561,27 @@ export default function HomePage() {
                 </p>
               </div>
 
-              {/* Tríptico de 3 fotos altas estilo Hello Nails curadas con la paleta Milky Almond, Rosewood & Berry */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="h-[430px] rounded-2xl overflow-hidden shadow-xs border border-[#EFE2DC] group">
+              {/* Tríptico de 3 fotos con aspect ratio adaptativo para móvil (aspect-[4/3] en móvil y aspect-[3/4] en desktop) */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                <div className="w-full aspect-4/3 sm:aspect-3/4 rounded-2xl overflow-hidden shadow-xs border border-[#EFE2DC] group">
                   <img 
                     src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80" 
                     alt="Manicura anatómica rusa con esmaltado nivelado Rosewood"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-                <div className="h-[430px] rounded-2xl overflow-hidden shadow-xs border border-[#EFE2DC] group">
+                <div className="w-full aspect-4/3 sm:aspect-3/4 rounded-2xl overflow-hidden shadow-xs border border-[#EFE2DC] group">
                   <img 
                     src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80" 
                     alt="Esmaltado nude brillante y cuidado milimétrico de cutículas"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-                <div className="h-[430px] rounded-2xl overflow-hidden shadow-xs border border-[#EFE2DC] group">
+                <div className="w-full aspect-4/3 sm:aspect-3/4 rounded-2xl overflow-hidden shadow-xs border border-[#EFE2DC] group">
                   <img 
                     src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80" 
                     alt="Nail art editorial en tonos berry y destellos dorados"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
               </div>
@@ -623,7 +623,7 @@ export default function HomePage() {
                     <img 
                       src="https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=1000&q=80" 
                       alt="Aplicación de esmalte y cuidado de cutículas en atelier Samm" 
-                      className="w-full h-[400px] object-cover"
+                      className="w-full h-64 sm:h-96 md:h-[400px] object-cover object-center"
                     />
                   </div>
                 </div>
@@ -705,11 +705,11 @@ export default function HomePage() {
                 
                 {/* Tarjeta 1: Summer Jelly */}
                 <div className="rounded-2xl overflow-hidden border border-[#EFE2DC] shadow-xs group bg-white">
-                  <div className="h-72 overflow-hidden relative">
+                  <div className="aspect-4/3 sm:aspect-16/10 overflow-hidden relative">
                     <img 
                       src="https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=800&q=80" 
                       alt="Colección Summer Jelly"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
                     <span className="absolute top-4 left-4 bg-white/95 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full text-[#231C1A] shadow-xs">
                       Translúcido
@@ -723,11 +723,11 @@ export default function HomePage() {
 
                 {/* Tarjeta 2: French Neón Pastel */}
                 <div className="rounded-2xl overflow-hidden border border-[#EFE2DC] shadow-xs group bg-white">
-                  <div className="h-72 overflow-hidden relative">
+                  <div className="aspect-4/3 sm:aspect-16/10 overflow-hidden relative">
                     <img 
                       src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80" 
                       alt="Colección French Pastel"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
                     <span className="absolute top-4 left-4 bg-white/95 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full text-[#231C1A] shadow-xs">
                       Micro Trazos
@@ -741,11 +741,11 @@ export default function HomePage() {
 
                 {/* Tarjeta 3: Cromo Perlado Glazed */}
                 <div className="rounded-2xl overflow-hidden border border-[#EFE2DC] shadow-xs group bg-white">
-                  <div className="h-72 overflow-hidden relative">
+                  <div className="aspect-4/3 sm:aspect-16/10 overflow-hidden relative">
                     <img 
                       src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80" 
                       alt="Colección Glazed Pearl"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
                     <span className="absolute top-4 left-4 bg-white/95 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full text-[#231C1A] shadow-xs">
                       Efecto Glazed
