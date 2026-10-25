@@ -19,14 +19,16 @@ import {
   X,
   Compass,
   ArrowRight,
-  Palette
+  Palette,
+  Sun,
+  Flame
 } from "lucide-react";
 
 // Tipos
 interface ServiceItem {
   id: string;
   name: string;
-  category: "manicura" | "pedicura" | "nailart" | "tratamientos";
+  category: "manicura" | "pedicura" | "nailart" | "acrilico";
   price: number;
   duration: number; // 120 min = 2 horas cerrado
   desc: string;
@@ -38,7 +40,7 @@ interface ExtraItem {
   id: string;
   name: string;
   price: number;
-  duration: number; // 30 min cada bloque
+  duration: number; // 30 min cada bloque de extra y desinfección
   desc: string;
 }
 
@@ -59,106 +61,107 @@ interface PreReservation {
   status: "disponible" | "pre_reserva" | "confirmada";
 }
 
-// Catálogo con fotos CDN de alta calidad (editorial + estética Hello Nails)
+// Catálogo especializado 100% en uñas y derivados (acrílico, gel, soft gel, esmaltado y nail art)
+// Fotos de alta resolución vía CDN (Pexels / Unsplash curadas)
 const SERVICES: ServiceItem[] = [
   {
     id: "mani-rusa",
-    name: "Manicura Rusa Anatómica",
+    name: "Manicura Rusa Anatómica Combinada",
     category: "manicura",
     price: 38,
     duration: 120, // 2 horas cerrado
-    desc: "Limpieza anatómica milimétrica de cutícula con torno y esmaltado nivelado de alta precisión.",
+    desc: "Limpieza anatómica milimétrica de cutícula con fresas de diamante, torno médico y esmaltado nivelado de alta precisión.",
     tag: "Bestseller",
-    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80"
+    imgUrl: "https://images.pexels.com/photos/3997391/pexels-photo-3997391.jpeg?auto=compress&cs=tinysrgb&w=800"
   },
   {
-    id: "mani-semi",
-    name: "Esmaltado Semipermanente Manos",
+    id: "unas-acrilicas",
+    name: "Esculpidas en Acrílico Premium con Molde",
+    category: "acrilico",
+    price: 55,
+    duration: 120,
+    desc: "Estructura arquitectónica con acrílico de alta resistencia, ápice reforzado, limado estructural y acabado brillante de espejo.",
+    tag: "Durabilidad Extrema",
+    imgUrl: "https://images.pexels.com/photos/705255/pexels-photo-705255.jpeg?auto=compress&cs=tinysrgb&w=800"
+  },
+  {
+    id: "semi-summer",
+    name: "Esmaltado Semipermanente Summer Glazed",
     category: "manicura",
     price: 28,
     duration: 120,
-    desc: "Limado y forma orgánica, esmaltado 20-Free con brillo cerámico de larga duración (21+ días).",
-    tag: "Clásico",
-    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80"
+    desc: "Nivelación con base rubber, esmaltes 20-Free tonos cálidos verano Lima y efecto nacarado/cromo con brillo cerámico.",
+    tag: "Verano 2027",
+    imgUrl: "https://images.pexels.com/photos/887352/pexels-photo-887352.jpeg?auto=compress&cs=tinysrgb&w=800"
+  },
+  {
+    id: "soft-gel-tips",
+    name: "Extensiones Soft Gel / Tips Press-On Gel",
+    category: "acrilico",
+    price: 50,
+    duration: 120,
+    desc: "Cápsulas de gel flexible adheridas con base estructural. Cero limado agresivo sobre la uña natural.",
+    tag: "Largo Natural",
+    imgUrl: "https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=800"
   },
   {
     id: "nailart-editorial",
-    name: "Nail Art Amber & Cromo Glazed",
+    name: "Nail Art Verano Lima & Glow Solar",
     category: "nailart",
     price: 46,
     duration: 120,
-    desc: "Efecto glazed donut, trazos micro-franceses o acentos minimalistas a mano alzada de temporada.",
-    tag: "Tendencia",
-    imgUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80"
+    desc: "Micro-french neón pastel, degradados veraniegos aura, efectos cromados solares y trazos a mano alzada.",
+    tag: "Tendencia Solar",
+    imgUrl: "https://images.pexels.com/photos/939836/pexels-photo-939836.jpeg?auto=compress&cs=tinysrgb&w=800"
   },
   {
-    id: "pedi-spa",
-    name: "Pedicura Spa Jelly Relax",
+    id: "pedi-rusa",
+    name: "Pedicura Clínica Rusa & Esmaltado",
     category: "pedicura",
-    price: 44,
+    price: 42,
     duration: 120,
-    desc: "Inmersión exfoliante en gelatina de aromas, retirada de durezas profunda y masaje con manteca pura.",
-    tag: "Wellness",
-    imgUrl: "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: "soft-gel",
-    name: "Extensiones Soft Gel / Press-On",
-    category: "manicura",
-    price: 54,
-    duration: 120,
-    desc: "Alargamiento con cápsulas orgánicas de gel empapable que respetan y no desgastan la lámina natural.",
-    tag: "Durabilidad",
-    imgUrl: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: "trata-ibx",
-    name: "Tratamiento Reparador Molecular IBX",
-    category: "tratamientos",
-    price: 24,
-    duration: 120,
-    desc: "Fusión molecular interna para uñas quebradizas, descamadas o dañadas por acrílicos agresivos.",
-    tag: "Clínico",
-    imgUrl: "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=800&q=80"
+    desc: "Limpieza profunda de canales ungueales con fresas, retiro de asperezas y esmaltado de alta adherencia para sandalias de playa.",
+    tag: "Beach Ready",
+    imgUrl: "https://images.pexels.com/photos/3997383/pexels-photo-3997383.jpeg?auto=compress&cs=tinysrgb&w=800"
   }
 ];
 
-// Extras dinámicos (letras normales + suma 30 min de margen y limpieza)
+// Extras dinámicos en texto plano (+30 min cada uno)
 const EXTRAS: ExtraItem[] = [
   { 
     id: "retirada-previa", 
-    name: "Retirada de Acrílico o Gel Ajeno", 
+    name: "Retirada de Acrílico o Gel de Otro Salón", 
     price: 10, 
     duration: 30, 
-    desc: "Retirada técnica sin torno invasivo para no dañar tu uña." 
+    desc: "Retirada técnica segura con fresa cerámica suave sin debilitar la uña." 
   },
   { 
     id: "french-micro", 
-    name: "French Micro-Line en 10 uñas", 
+    name: "French Micro-Line en las 10 uñas", 
     price: 8, 
     duration: 30, 
-    desc: "Línea francesa ultra-fina minimalista en tono blanco roto o metalizado." 
+    desc: "Línea francesa ultra-fina minimalista en blanco roto o colores de temporada." 
   },
   { 
     id: "reparacion-una", 
-    name: "Reconstrucción Uña Rota (Fibra/Gel)", 
+    name: "Reconstrucción Uña Rota (Acrílico o Gel)", 
     price: 5, 
     duration: 30, 
-    desc: "Rescate de uña fisurada sin tener que cortarlas todas." 
+    desc: "Rescate milimétrico de uña fisurada sin tener que cortarlas todas." 
   },
   { 
     id: "nailart-alzada", 
-    name: "Nail Art Personalizado (2 Uñas)", 
+    name: "Nail Art Personalizado (2 Uñas de Acento)", 
     price: 9, 
     duration: 30, 
-    desc: "Diseño botánico, trazos abstractos o piedras Swarovski." 
+    desc: "Diseños de palmeras veraniegas, efecto aura o pedrería fina." 
   },
   { 
-    id: "masaje-vela", 
-    name: "Masaje Térmico con Vela de Cera Soja", 
+    id: "bano-aceite", 
+    name: "Nutrición Térmica con Aceite de Argán & Karité", 
     price: 7, 
     duration: 30, 
-    desc: "Hidratación profunda caliente para cutículas resecas." 
+    desc: "Hidratación profunda caliente post-playa para cutículas resecas." 
   }
 ];
 
@@ -188,7 +191,7 @@ const ALL_SLOTS = [
   "18:00"
 ];
 
-// Simulación de estados en BD: blanco (disponible) | naranja (pre_reserva) | verde (confirmada)
+// Estados en BD: blanco (disponible) | naranja (pre_reserva) | verde (confirmada)
 const INITIAL_DB_SCHEDULE: Record<string, { time: string; status: "pre_reserva" | "confirmada"; client: string }[]> = {
   "2026-10-27": [
     { time: "09:00", status: "confirmada", client: "Lucía P. (Adelanto Pagado)" },
@@ -205,12 +208,6 @@ const INITIAL_DB_SCHEDULE: Record<string, { time: string; status: "pre_reserva" 
     { time: "11:30", status: "pre_reserva", client: "Sofi R." },
     { time: "12:00", status: "pre_reserva", client: "Sofi R." },
     { time: "12:30", status: "pre_reserva", client: "Sofi R." },
-  ],
-  "2026-10-29": [
-    { time: "16:00", status: "confirmada", client: "Elena B. (Confirmado)" },
-    { time: "16:30", status: "confirmada", client: "Elena B." },
-    { time: "17:00", status: "confirmada", client: "Elena B." },
-    { time: "17:30", status: "confirmada", client: "Elena B." },
   ]
 };
 
@@ -244,7 +241,7 @@ export default function HomePage() {
     const hrs = Math.floor(totalDurationMinutes / 60);
     const mins = totalDurationMinutes % 60;
     if (mins === 0) return `${hrs} horas cerradas`;
-    return `${hrs}h ${mins}min (con extras y limpieza)`;
+    return `${hrs}h ${mins}min (con extras y esterilización)`;
   }, [totalDurationMinutes]);
 
   const totalPrice = useMemo(() => {
@@ -256,7 +253,6 @@ export default function HomePage() {
     return base + extrasPrice;
   }, [selectedService, selectedExtras]);
 
-  // 20% de anticipo
   const advanceDeposit = useMemo(() => {
     return Math.round(totalPrice * 0.20 * 10) / 10;
   }, [totalPrice]);
@@ -335,16 +331,16 @@ export default function HomePage() {
 
     const extrasText = newPreRes.extras.length > 0 ? `\n✨ *Extras:* ${newPreRes.extras.join(", ")}` : "";
     const waMessage = encodeURIComponent(
-      `💅 *SOLICITUD DE PRE-RESERVA · SAMM NAIL STUDIO*\n` +
+      `💅 *SOLICITUD DE PRE-RESERVA · SAMM NAIL STUDIO (LIMA)*\n` +
       `-----------------------------------------\n` +
       `📌 *Código:* #${reservationCode}\n` +
       `👤 *Clienta:* ${clientName}\n` +
       `📞 *Teléfono:* ${clientPhone}\n` +
-      `🌸 *Servicio:* ${selectedService.name} (2h cerrado)${extrasText}\n` +
+      `🌸 *Servicio de Uñas:* ${selectedService.name} (2h cerrado)${extrasText}\n` +
       `📅 *Fecha:* ${selectedDate}\n` +
-      `⏰ *Horario reservado:* ${selectedStartTime} hrs a ${calculatedEndTime} hrs (${totalDurationMinutes} min totales con limpieza)\n` +
-      `💰 *Total Presupuesto:* ${totalPrice}€ / S/. ${totalPrice * 4}\n` +
-      `🟠 *Adelanto 20% para Confirmar:* ${advanceDeposit}€ / S/. ${Math.round(advanceDeposit * 4)}\n` +
+      `⏰ *Horario bloqueado:* ${selectedStartTime} hrs a ${calculatedEndTime} hrs (${totalDurationMinutes} min totales con esterilización)\n` +
+      `💰 *Total Presupuesto:* S/. ${Math.round(totalPrice * 4)} (${totalPrice}€)\n` +
+      `🟠 *Adelanto 20% para Confirmar (Yape / Plin):* S/. ${Math.round(advanceDeposit * 4)} (${advanceDeposit}€)\n` +
       `-----------------------------------------\n` +
       `Hola Samm! Ya registré mi pre-reserva en la web. ¿Me facilitas tu Yape / Plin para abonar el 20% de adelanto y pasar mi casilla a verde confirmada? Gracias!`
     );
@@ -379,16 +375,16 @@ export default function HomePage() {
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-1.5 font-medium">
               <Leaf className="w-3.5 h-3.5 text-[#E0D5C1]" /> 
-              Fórmulas 20-Free & Veganas
+              Fórmulas 20-Free & Esmaltado Saludable
             </span>
             <span className="hidden sm:inline-flex items-center gap-1.5 text-white/80">
               <ShieldCheck className="w-3.5 h-3.5 text-[#E0D5C1]" />
-              Esterilización con Autoclave Hospitalario
+              Especialistas Exclusivas en Uñas, Acrílico & Nail Art
             </span>
           </div>
-          <span className="text-[10px] tracking-wider text-[#E0D5C1] font-semibold">
-            Atelier de Manicura & Pedicura de Autor
-          </span>
+          <a href="/admin" className="text-[10px] tracking-wider text-[#E0D5C1] hover:text-white font-semibold underline">
+            Acceso Cabina (Admin)
+          </a>
         </div>
       </div>
 
@@ -396,7 +392,6 @@ export default function HomePage() {
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#EAE6DF]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-24 flex items-center justify-between">
           
-          {/* Logo Studio */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab("inicio")}>
             <div className="w-12 h-12 rounded-full bg-[#AB9677] text-white flex items-center justify-center font-serif text-2xl font-bold shadow-xs">
               S
@@ -406,12 +401,11 @@ export default function HomePage() {
                 SAMM
               </span>
               <span className="block text-[10px] tracking-[0.35em] uppercase text-[#AB9677] font-semibold mt-1">
-                NAIL STUDIO · ATELIER
+                NAIL STUDIO · LIMA ATELIER
               </span>
             </div>
           </div>
 
-          {/* Menú Superior estilo Hello Nails (INICIO, TRATAMIENTOS, CITAS) */}
           <nav className="hidden md:flex items-center gap-8 text-xs uppercase tracking-[0.2em] font-semibold text-[#5C5046]">
             <button 
               onClick={() => setActiveTab("inicio")}
@@ -431,7 +425,7 @@ export default function HomePage() {
                   : "border-transparent hover:text-[#AB9677]"
               }`}
             >
-              Tratamientos
+              Uñas & Carta
             </button>
             <button 
               onClick={() => setActiveTab("reserva")}
@@ -445,7 +439,6 @@ export default function HomePage() {
             </button>
           </nav>
 
-          {/* Botón Acción Cita */}
           <button
             onClick={() => setActiveTab("reserva")}
             className="bg-[#5C5046] hover:bg-[#483E36] text-white text-xs uppercase tracking-[0.18em] font-semibold px-6 py-3.5 rounded-full transition-all shadow-sm hover:shadow flex items-center gap-2"
@@ -456,81 +449,96 @@ export default function HomePage() {
         </div>
       </header>
 
-      {/* 3. VISTA PRINCIPAL: 100% INSPIRACIÓN HELLO NAILS (SIN PRECIOS, PURO BRANDING Y TENDENCIAS) */}
+      {/* 3. VISTA PRINCIPAL (INICIO): ESTÉTICA HELLO NAILS ADAPTADA A PERÚ / VERANO LIMA */}
       {activeTab === "inicio" && (
         <main className="flex-1">
           
-          {/* SECCIÓN 1: DECO HELLO / NAIL ART OTOÑO (SPLIT 50/50 ESTILO IMAGEN 1) */}
-          <section className="border-b border-[#EAE6DF] py-16 lg:py-24 bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          {/* SECCIÓN 1: HERO CON EL FONDO EXACTO QUE DISTE (Botes de esmalte en estanterías doradas Unsplash OpjlRo-31SI) */}
+          <section className="relative overflow-hidden border-b border-[#EAE6DF] py-20 lg:py-28 bg-[#FAF7F2]">
+            {/* Foto de fondo OpjlRo-31SI: Botes de esmalte en estanterías doradas */}
+            <div className="absolute inset-0 z-0">
+              <img 
+                src="https://static.wixstatic.com/media/11062b_9624dc97c0484bf1b2e418131863e703~mv2.jpeg/v1/fit/w_1920,h_1528,q_90/11062b_9624dc97c0484bf1b2e418131863e703~mv2.jpeg" 
+                alt="Estanterías doradas con esmaltes de autor" 
+                className="w-full h-full object-cover object-center opacity-30 filter saturate-120"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-white via-white/90 to-transparent"></div>
+            </div>
+
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
-                {/* Columna Izquierda: Póster de Tendencias Deco Nails */}
-                <div className="lg:col-span-6 bg-[#FAF7F2] rounded-2xl p-6 sm:p-8 border border-[#EAE6DF] shadow-xs">
-                  <div className="relative rounded-xl overflow-hidden bg-white border border-[#EAE6DF]">
-                    <div className="p-6 bg-gradient-to-b from-[#8C5D38] to-[#5C3A20] text-white text-center">
-                      <span className="text-[11px] tracking-[0.3em] uppercase opacity-90 block">Nueva Colección</span>
-                      <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-wider mt-1">DECO SAMM</h2>
-                      <p className="text-xs tracking-widest text-[#E0D5C1] uppercase mt-0.5">AMBER · OTOÑO 2026</p>
+                {/* Póster de Temporada: PRE-VERANO LIMA (Nail Art Solar, Cromo y Neón Pastel) */}
+                <div className="lg:col-span-6 bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-[#EAE6DF] shadow-md">
+                  <div className="rounded-xl overflow-hidden border border-[#EAE6DF] bg-white">
+                    <div className="p-6 bg-gradient-to-r from-[#AB9677] via-[#8C6D4C] to-[#5C5046] text-white text-center">
+                      <span className="text-[10px] tracking-[0.35em] uppercase font-semibold block text-[#E0D5C1]">
+                        Colección Temporada
+                      </span>
+                      <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-wider mt-1">
+                        DECO SAMM
+                      </h2>
+                      <p className="text-xs tracking-widest text-white/90 uppercase mt-0.5 font-medium flex items-center justify-center gap-1.5">
+                        <Sun className="w-3.5 h-3.5 text-amber-300" /> SOLAR GLOW · VERANO LIMA
+                      </p>
                     </div>
 
-                    {/* Muestrario de Tonos y Nail Art (Referencia exacta a la foto del usuario) */}
+                    {/* Paleta Solar Verano Lima (Terracota, Oro Cálido, Menta Playa, Coral y Rosa Nube) */}
                     <div className="p-6 bg-[#FAF8F5]">
                       <div className="flex justify-center gap-2 mb-6">
-                        {["#3730A3", "#047857", "#450A0A", "#F472B6", "#78350F", "#881337"].map((color, idx) => (
+                        {["#F59E0B", "#F472B6", "#10B981", "#FB7185", "#D97706", "#818CF8"].map((c, i) => (
                           <div 
-                            key={idx} 
-                            className="w-7 h-12 rounded-full border border-white shadow-sm"
-                            style={{ backgroundColor: color }}
+                            key={i} 
+                            className="w-7 h-12 rounded-full border border-white shadow-xs"
+                            style={{ backgroundColor: c }}
                           />
                         ))}
                       </div>
 
-                      {/* Diseños Nail Art */}
                       <div className="grid grid-cols-4 gap-3 max-w-sm mx-auto">
-                        <div className="h-16 rounded-full bg-[#D1D5DB] border-2 border-white shadow-xs flex items-center justify-center text-[10px] font-bold text-black/50">Dot</div>
-                        <div className="h-16 rounded-full bg-[#881337] border-2 border-white shadow-xs flex items-center justify-center text-[10px] font-bold text-white">Star</div>
-                        <div className="h-16 rounded-full bg-[#F5D0A9] border-2 border-white shadow-xs flex items-center justify-center text-[10px] font-bold text-black/60">Tweed</div>
-                        <div className="h-16 rounded-full bg-[#A0522D] border-2 border-white shadow-xs flex items-center justify-center text-[10px] font-bold text-white">Leopard</div>
+                        <div className="h-16 rounded-full bg-[#FEF3C7] border-2 border-white shadow-xs flex items-center justify-center text-[10px] font-bold text-amber-900">Glazed</div>
+                        <div className="h-16 rounded-full bg-[#FECDD3] border-2 border-white shadow-xs flex items-center justify-center text-[10px] font-bold text-rose-900">Solar</div>
+                        <div className="h-16 rounded-full bg-[#D1FAE5] border-2 border-white shadow-xs flex items-center justify-center text-[10px] font-bold text-emerald-900">French</div>
+                        <div className="h-16 rounded-full bg-[#E0E7FF] border-2 border-white shadow-xs flex items-center justify-center text-[10px] font-bold text-indigo-900">Cromo</div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Columna Derecha: Texto Editorial Nail Art Otoño (Sin Precios) */}
+                {/* Texto Hero Editorial (Sin precios) */}
                 <div className="lg:col-span-6">
-                  <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#AB9677] block mb-2">
-                    Pon tus uñas de moda
+                  <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#AB9677] block mb-2 flex items-center gap-1.5">
+                    <Sun className="w-4 h-4 text-[#AB9677]" /> Temporada Sol & Playa · Lima
                   </span>
                   <h1 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B332C] tracking-tight leading-tight">
-                    NAIL ART OTOÑO
+                    NAIL ART SOLAR & ACRÍLICO DE AUTOR
                   </h1>
                   <p className="text-sm font-semibold text-[#5C5046] uppercase tracking-wider mt-2">
-                    ¡Diseños de vanguardia en cada milímetro!
+                    ¡Prepara tus manos para la temporada de verano!
                   </p>
 
                   <p className="text-sm text-[#666059] leading-relaxed mt-4">
-                    Diseños que se inspiran en los tonos y estampados de la temporada: desde el efecto magnético, 
-                    elegante y luminoso, hasta detalles de estrellas, cuadros y animal print. Ideas perfectas para darle 
-                    un toque creativo y otoñal a tus uñas, ya sea en una sola uña o combinando varios diseños.
+                    Especialistas exclusivas en arquitectura de uñas, extensiones en acrílico esculpido con molde y esmaltados de larga duración. 
+                    Diseños inspirados en los reflejos dorados del atardecer limeño, efecto glazed donut, francesa neón suave y acabados ultralimpios que no se rompen en el mar ni en piscina.
                   </p>
 
                   <p className="text-xs text-[#8A8177] italic mt-3">
-                    ¿Cuál de estas decos elegirías para tu próxima cita? Reserva tu turno en nuestro atelier.
+                    Dedica 2 horas exclusivas a tu cuidado personal sin esperas. Reserva tu turno online con anticipo protegido.
                   </p>
 
                   <div className="mt-8 flex items-center gap-4">
                     <button
                       onClick={() => setActiveTab("reserva")}
-                      className="bg-[#5C5046] hover:bg-[#483E36] text-white text-xs uppercase tracking-[0.18em] font-semibold px-8 py-4 rounded-md transition-all shadow-sm"
+                      className="bg-[#5C5046] hover:bg-[#483E36] text-white text-xs uppercase tracking-[0.18em] font-semibold px-8 py-4 rounded-md transition-all shadow-sm flex items-center gap-2"
                     >
+                      <CalendarIcon className="w-4 h-4" />
                       Reservar Cita Ahora
                     </button>
                     <button
                       onClick={() => setActiveTab("tratamientos")}
-                      className="border border-[#5C5046] text-[#5C5046] hover:bg-[#FAF7F2] text-xs uppercase tracking-[0.18em] font-semibold px-8 py-4 rounded-md transition-all"
+                      className="border border-[#5C5046] text-[#5C5046] hover:bg-white text-xs uppercase tracking-[0.18em] font-semibold px-8 py-4 rounded-md transition-all"
                     >
-                      Ver Tratamientos
+                      Ver Técnicas de Uñas
                     </button>
                   </div>
                 </div>
@@ -539,38 +547,41 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* SECCIÓN 2: TRÍPTICO DE FOTOGRAFÍA EDITORIAL (ESTILO IMAGEN 2 DEL USUARIO) */}
-          <section className="py-16 bg-[#FAF7F2] border-b border-[#EAE6DF]">
+          {/* SECCIÓN 2: TRÍPTICO DE FOTOGRAFÍA EDITORIAL RENOVADO (100% UÑAS VERANIEGAS & PEXELS CDN) */}
+          <section className="py-20 bg-white border-b border-[#EAE6DF]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
-              <div className="text-center max-w-xl mx-auto mb-12">
+              <div className="text-center max-w-xl mx-auto mb-14">
                 <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#AB9677] block">
-                  Galería Visual
+                  Galería de Cabina
                 </span>
                 <h3 className="font-serif text-3xl font-bold text-[#3B332C] mt-1">
-                  Texturas, Brillo & Pigmentos
+                  Brillo de Espejo, Acrílico & Cutícula Impecable
                 </h3>
+                <p className="text-xs text-[#8A8177] mt-2">
+                  Fotografía real de acabados que duran más de 21 días intactos.
+                </p>
               </div>
 
-              {/* Tríptico de 3 Fotos Altas estilo Hello Nails */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="h-[420px] rounded-2xl overflow-hidden shadow-sm group">
+              {/* Tríptico de 3 fotos altas estilo Hello Nails */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="h-[430px] rounded-2xl overflow-hidden shadow-xs border border-[#EAE6DF] group">
                   <img 
-                    src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80" 
-                    alt="Aceite y nutrición de cutícula"
+                    src="https://images.pexels.com/photos/3997391/pexels-photo-3997391.jpeg?auto=compress&cs=tinysrgb&w=800" 
+                    alt="Manicura rusa con fresa de precisión"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-                <div className="h-[420px] rounded-2xl overflow-hidden shadow-sm group">
+                <div className="h-[430px] rounded-2xl overflow-hidden shadow-xs border border-[#EAE6DF] group">
                   <img 
-                    src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80" 
-                    alt="Esmaltado terracota otoño"
+                    src="https://images.pexels.com/photos/705255/pexels-photo-705255.jpeg?auto=compress&cs=tinysrgb&w=800" 
+                    alt="Esmaltado nude brillante de alta precisión"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
-                <div className="h-[420px] rounded-2xl overflow-hidden shadow-sm group">
+                <div className="h-[430px] rounded-2xl overflow-hidden shadow-xs border border-[#EAE6DF] group">
                   <img 
-                    src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80" 
-                    alt="Manos con acabado cromo glazed natural"
+                    src="https://images.pexels.com/photos/887352/pexels-photo-887352.jpeg?auto=compress&cs=tinysrgb&w=800" 
+                    alt="Nail art de verano con acabados luminosos"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
@@ -578,23 +589,24 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* SECCIÓN 3: SOBRE NOSOTROS (ESTILO IMAGEN 3 DEL USUARIO - FOTO CONTEXTUAL DE EQUIPO / ATELIER) */}
-          <section className="py-20 bg-white border-b border-[#EAE6DF]">
+          {/* SECCIÓN 3: SOBRE SAMM NAILS (CON FOCO EN LIMA / DEDICACIÓN EXCLUSIVA A UÑAS) */}
+          <section className="py-20 bg-[#FAF7F2] border-b border-[#EAE6DF]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
-                {/* Texto Sobre Nosotros */}
                 <div className="lg:col-span-6">
                   <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#5C5046] tracking-tight uppercase">
-                    Sobre Nosotros
+                    Sobre Samm Nails
                   </h2>
                   <p className="text-sm text-[#5C5046] font-semibold mt-4 leading-relaxed">
-                    Samm Nail Studio nació con el objetivo de implantar un espacio de belleza específico y clínico para uñas.
+                    Samm Nail Studio nació con el propósito de ofrecer en Lima una experiencia de uñas sin prisas y de grado quirúrgico.
                   </p>
                   <p className="text-sm text-[#666059] leading-relaxed mt-4">
-                    Especialistas apasionadas por el cuidado anatómico y la estética minimalista, decidimos unir fuerzas 
-                    en este atelier para crear un modelo de atención caracterizado por la alta calidad del producto, fórmulas 
-                    saludables y tratamientos minuciosamente adaptados a las necesidades de cada clienta.
+                    No hacemos peluquería ni masajes generales: <strong>nos dedicamos 100% y de forma exclusiva al mundo de las uñas</strong>. 
+                    Desde el esculpido anatómico en acrílico y nivelación con gel, hasta el cuidado terapéutico de la lámina ungueal con esmaltes libres de tóxicos.
+                  </p>
+                  <p className="text-xs text-[#8A8177] mt-3">
+                    Cada turno se cierra en bloques de 2 horas para garantizar esterilización en autoclave, desinfección total de fresas y una atención de tú a tú.
                   </p>
                   
                   <div className="mt-8">
@@ -607,12 +619,11 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Foto Atelier / Técnicas */}
                 <div className="lg:col-span-6">
                   <div className="relative rounded-2xl overflow-hidden shadow-md border border-[#EAE6DF]">
                     <img 
-                      src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1000&q=80" 
-                      alt="Equipo de especialistas en manicura de autor" 
+                      src="https://images.pexels.com/photos/3997383/pexels-photo-3997383.jpeg?auto=compress&cs=tinysrgb&w=1000" 
+                      alt="Técnica experta aplicando esmalte en cabina Samm" 
                       className="w-full h-[400px] object-cover"
                     />
                   </div>
@@ -622,26 +633,24 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* SECCIÓN 4: BANNER CIRCULAR DE TENDENCIA (ESTILO IMAGEN 4 DEL USUARIO) */}
-          <section className="py-20 bg-[#FAF7F2] border-b border-[#EAE6DF]">
+          {/* SECCIÓN 4: BANNER CIRCULAR ESTILO HELLO NAILS */}
+          <section className="py-20 bg-white border-b border-[#EAE6DF]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
                 <div className="lg:col-span-6">
                   <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#AB9677] block mb-1">
-                    Tendencia Continua
+                    Tratamiento Estrella
                   </span>
                   <h3 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B332C] tracking-tight">
                     PON TUS UÑAS DE MODA
                   </h3>
                   <p className="text-sm text-[#666059] leading-relaxed mt-4">
-                    En Samm Nail Studio nos encanta sorprenderte con nuevas colecciones y diseños exclusivos para que 
-                    siempre encuentres el estilo perfecto para tus manos. Nuestras cartas están inspiradas en las últimas modas, 
-                    los tonos de temporada y esos pequeños detalles que marcan la diferencia.
+                    Especialmente pensado para clientas que buscan una uña fuerte, estilizada y resistente al agua de mar y piscinas. 
+                    Nuestra manicura anatómica rusa retira toda la piel muerta sin cortes abrasivos, logrando que el color crezca desde dentro y dure impecable por semanas.
                   </p>
                   <p className="text-xs text-[#8A8177] mt-3 leading-relaxed">
-                    Cada cita es una oportunidad para experimentar con acabados únicos y pigmentos puros. 
-                    Consulta nuestras opciones y encuentra la que mejor se adapte a tu personalidad.
+                    Personaliza con acrílico, soft gel o nail art de tendencia en nuestra agenda online.
                   </p>
 
                   <div className="mt-8">
@@ -654,18 +663,18 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* Gran Círculo Emblema (Referencia Visual Exacta de Imagen 4) */}
+                {/* Círculo Emblema con Línea Dorada */}
                 <div className="lg:col-span-6 flex justify-center">
-                  <div className="w-80 h-80 sm:w-96 sm:h-96 rounded-full border-[3px] border-[#AB9677] flex flex-col items-center justify-center p-8 text-center bg-white shadow-sm">
+                  <div className="w-80 h-80 sm:w-96 sm:h-96 rounded-full border-[3px] border-[#AB9677] flex flex-col items-center justify-center p-8 text-center bg-[#FAF8F5] shadow-xs">
                     <div className="w-12 h-0.5 bg-[#AB9677] mb-3"></div>
                     <span className="text-xs uppercase tracking-[0.3em] font-bold text-[#5C5046]">
-                      Esmaltado
+                      Especialidad Samm
                     </span>
                     <h4 className="font-serif text-2xl sm:text-3xl font-bold text-[#3B332C] uppercase tracking-wider mt-1">
-                      Semipermanente Manos
+                      Manicura Rusa & Acrílico
                     </h4>
                     <span className="text-xs uppercase tracking-widest text-[#AB9677] font-semibold mt-2">
-                      Fórmula 20-Free
+                      Fórmula 20-Free · Cero Tóxicos
                     </span>
                     <div className="w-12 h-0.5 bg-[#AB9677] my-4"></div>
                     <p className="text-[11px] uppercase tracking-widest text-[#666059] font-medium">
@@ -678,74 +687,74 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* SECCIÓN 5: COLECCIONES ESTACIONALES (ESTILO IMAGEN 5: SUMMER JELLY, MACARONS & POLAR) */}
-          <section className="py-20 bg-white">
+          {/* SECCIÓN 5: COLECCIONES DE VERANO (ESTILO IMAGEN 5 DEL USUARIO) */}
+          <section className="py-20 bg-[#FAF7F2]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
               <div className="text-center max-w-xl mx-auto mb-14">
                 <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#AB9677] block">
-                  Ediciones Especiales
+                  Ediciones Verano Lima
                 </span>
                 <h3 className="font-serif text-4xl font-bold text-[#3B332C] mt-1">
-                  Colecciones de Temporada
+                  Colecciones de Tendencia
                 </h3>
                 <p className="text-xs text-[#8A8177] mt-2">
-                  Inspiración cromática renovada cada estación.
+                  Paletas creadas para lucir con luz solar natural.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 
                 {/* Tarjeta 1: Summer Jelly */}
-                <div className="rounded-2xl overflow-hidden border border-[#EAE6DF] shadow-xs group bg-[#FAF7F2]">
+                <div className="rounded-2xl overflow-hidden border border-[#EAE6DF] shadow-xs group bg-white">
                   <div className="h-72 overflow-hidden relative">
                     <img 
-                      src="https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=800&q=80" 
+                      src="https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=800" 
                       alt="Colección Summer Jelly"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <span className="absolute top-4 left-4 bg-white/95 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full text-[#3B332C] shadow-xs">
-                      Colección Cálida
+                      Translúcido
                     </span>
                   </div>
                   <div className="p-6 text-center">
                     <h4 className="font-serif text-2xl font-bold text-[#3B332C]">SUMMER JELLY</h4>
-                    <p className="text-xs text-[#666059] mt-2">Tonos translúcidos con efecto almíbar y brillo de cristal.</p>
+                    <p className="text-xs text-[#666059] mt-2">Efecto gelatina de fruta, brillo cristalino y tonos veraniegos.</p>
                   </div>
                 </div>
 
-                {/* Tarjeta 2: Macaron Pastel */}
-                <div className="rounded-2xl overflow-hidden border border-[#EAE6DF] shadow-xs group bg-[#FAF7F2]">
+                {/* Tarjeta 2: French Neón Pastel */}
+                <div className="rounded-2xl overflow-hidden border border-[#EAE6DF] shadow-xs group bg-white">
                   <div className="h-72 overflow-hidden relative">
                     <img 
-                      src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=800&q=80" 
-                      alt="Colección Primavera Macaron"
+                      src="https://images.pexels.com/photos/939836/pexels-photo-939836.jpeg?auto=compress&cs=tinysrgb&w=800" 
+                      alt="Colección French Pastel"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <span className="absolute top-4 left-4 bg-white/95 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full text-[#3B332C] shadow-xs">
-                      Pastel Suave
+                      Micro Trazos
                     </span>
                   </div>
                   <div className="p-6 text-center">
-                    <h4 className="font-serif text-2xl font-bold text-[#3B332C]">SPRING PASTEL</h4>
-                    <p className="text-xs text-[#666059] mt-2">Menta suave, lila etéreo y rosa nube con acabado aterciopelado.</p>
+                    <h4 className="font-serif text-2xl font-bold text-[#3B332C]">SUNSET FRENCH</h4>
+                    <p className="text-xs text-[#666059] mt-2">Línea francesa ultra-fina en menta, lima suave y amarillo mantequilla.</p>
                   </div>
                 </div>
 
-                {/* Tarjeta 3: Polar Winter */}
-                <div className="rounded-2xl overflow-hidden border border-[#EAE6DF] shadow-xs group bg-[#FAF7F2]">
+                {/* Tarjeta 3: Cromo Perlado Glazed */}
+                <div className="rounded-2xl overflow-hidden border border-[#EAE6DF] shadow-xs group bg-white">
                   <div className="h-72 overflow-hidden relative">
                     <img 
-                      src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80" 
-                      alt="Colección Polar Glazed"
+                      src="https://images.pexels.com/photos/705255/pexels-photo-705255.jpeg?auto=compress&cs=tinysrgb&w=800" 
+                      alt="Colección Glazed Pearl"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                     <span className="absolute top-4 left-4 bg-white/95 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full text-[#3B332C] shadow-xs">
-                      Invierno Profundo
+                      Efecto Hailey
                     </span>
                   </div>
                   <div className="p-6 text-center">
-                    <h4 className="font-serif text-2xl font-bold text-[#3B332C]">POLAR GLAZED</h4>
-                    <p className="text-xs text-[#666059] mt-2">Azules noche, borgoña intenso y destellos de purpurina magnética.</p>
+                    <h4 className="font-serif text-2xl font-bold text-[#3B332C]">PEARL GLAZED</h4>
+                    <p className="text-xs text-[#666059] mt-2">Micropolvo perlado nacarado que refleja la luz del sol en la playa.</p>
                   </div>
                 </div>
 
@@ -756,19 +765,19 @@ export default function HomePage() {
         </main>
       )}
 
-      {/* 4. VISTA DE TRATAMIENTOS PRESENTACIONAL (SIN PRECIOS DIRECTOS, ENFOQUE EN PROTOCOLOS) */}
+      {/* 4. VISTA DE TRATAMIENTOS (SIN PRECIOS, PRESENTACIONAL DE TÉCNICAS) */}
       {activeTab === "tratamientos" && (
         <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16 flex-1 w-full">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#AB9677]">
-              Carta de Servicios
+              Carta Especializada
             </span>
             <h1 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B332C] mt-2">
-              Tratamientos Especializados
+              Uñas, Acrílico & Cuidado Clínico
             </h1>
             <p className="text-xs text-[#666059] mt-3 leading-relaxed">
-              Consulta nuestra carta de técnicas anatómicas. Los precios exactos y opciones personalizadas 
-              se configuran directamente en nuestro modelo de reserva interactiva.
+              Técnicas realizadas con instrumental médico y productos libres de componentes agresivos. 
+              Los precios finales y la reserva de turnos se gestionan en nuestra agenda interactiva.
             </p>
           </div>
 
@@ -791,7 +800,7 @@ export default function HomePage() {
                     <h3 className="font-serif text-2xl font-bold text-[#3B332C]">{s.name}</h3>
                     <p className="text-xs text-[#666059] mt-2 leading-relaxed">{s.desc}</p>
                     <span className="inline-block mt-4 text-[11px] font-semibold text-[#AB9677] uppercase tracking-wider">
-                      Incluye protocolo de corte anatómico y nutrición
+                      Incluye esterilización y retirada anterior
                     </span>
                   </div>
                 </div>
@@ -813,11 +822,11 @@ export default function HomePage() {
         </main>
       )}
 
-      {/* 5. VISTA DE RESERVA (AQUÍ ES DONDE SÍ ESTÁN LOS PRECIOS, EL PRESUPUESTO, EXTRAS, CALENDARIO L-L Y REGLA 20% YAPE) */}
+      {/* 5. VISTA DE RESERVA (PRESUPUESTO, 20% YAPE / PLIN EN SOLES, SEMÁFORO 3 COLORES) */}
       {activeTab === "reserva" && (
         <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex-1 w-full">
 
-          {/* Banner de Reglas de los 3 Colores y Política de Anticipo */}
+          {/* Banner de los 3 Colores */}
           <div className="mb-8 bg-[#FAF8F5] border border-[#EAE6DF] rounded-2xl p-5 shadow-xs">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-start gap-3">
@@ -829,8 +838,8 @@ export default function HomePage() {
                     Modelo de Pre-Reserva Inteligente · Política de Anticipo
                   </h4>
                   <p className="text-xs text-[#666059] mt-0.5">
-                    Las citas se registran inicialmente en <strong>Pre-Reserva (Naranja)</strong>. 
-                    Se confirman en <strong>Verde</strong> al abonar el <strong>20% de adelanto</strong> vía Yape o Transferencia.
+                    Las citas se registran en <strong>Pre-Reserva (Naranja)</strong>. 
+                    Se confirman en <strong>Verde</strong> al abonar el <strong>20% de adelanto vía Yape / Plin</strong>.
                   </p>
                 </div>
               </div>
@@ -853,7 +862,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Banner si hay una Pre-Reserva activa esperando Yape */}
+          {/* Pre-Reserva Activa esperando Yape */}
           {activePreReservation && (
             <div className="mb-8 bg-gradient-to-r from-orange-50 via-[#FFF9F2] to-emerald-50 border-2 border-orange-400 rounded-2xl p-6 shadow-md">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -883,7 +892,7 @@ export default function HomePage() {
                       className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-sm transition-all flex items-center gap-1.5"
                     >
                       <CheckCircle2 className="w-4 h-4" />
-                      Simular Recepción de Yape 20% ({activePreReservation.advanceDeposit}€)
+                      Simular Recepción de Yape 20% (S/. {Math.round(activePreReservation.advanceDeposit * 4)})
                     </button>
                   ) : (
                     <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-3 py-2 rounded-xl flex items-center gap-1.5">
@@ -910,7 +919,7 @@ export default function HomePage() {
               Configura tu Cita & Presupuesto
             </h2>
             <p className="text-xs text-[#666059] mt-2">
-              Selecciona tu tratamiento base con foto referencial, añade extras en texto y consulta el importe total junto con el 20% de anticipo.
+              Selecciona tu técnica de uñas base, añade extras en texto y consulta el total con el 20% de anticipo.
             </p>
           </div>
 
@@ -924,7 +933,7 @@ export default function HomePage() {
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="font-serif text-lg font-bold text-[#3B332C]">
-                      1. Selecciona Tratamiento Base
+                      1. Selecciona Técnica de Uñas Base
                     </h3>
                     <p className="text-xs text-[#666059] mt-0.5">
                       Servicio cerrado estándar de ~2 horas de duración.
@@ -973,7 +982,7 @@ export default function HomePage() {
                                 {s.name}
                               </h4>
                               <span className="font-serif text-lg font-bold text-[#AB9677]">
-                                {s.price}€
+                                S/. {s.price * 4} <span className="text-xs text-black/40 font-normal">({s.price}€)</span>
                               </span>
                             </div>
                             <p className="text-xs text-[#666059] mt-1 leading-relaxed">
@@ -1001,10 +1010,10 @@ export default function HomePage() {
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="font-serif text-lg font-bold text-[#3B332C]">
-                      2. Extras & Añadidos
+                      2. Extras & Cuidados Adicionales
                     </h3>
                     <p className="text-xs text-[#666059] mt-0.5">
-                      Cada extra suma <strong>media hora (+30 min)</strong> para dar tiempo de desinfección y limpieza de cabina.
+                      Cada extra suma <strong>media hora (+30 min)</strong> para dar tiempo de desinfección y preparación en cabina.
                     </p>
                   </div>
                   <span className="text-xs text-[#8A8177] font-medium">
@@ -1038,8 +1047,8 @@ export default function HomePage() {
                         </div>
 
                         <div className="text-right shrink-0">
-                          <span className="text-xs font-bold text-[#3B332C]">+{extra.price}€</span>
-                          <span className="text-[10px] text-[#AB9677] font-semibold block">+{extra.duration} min limpieza</span>
+                          <span className="text-xs font-bold text-[#3B332C]">+S/. {extra.price * 4}</span>
+                          <span className="text-[10px] text-[#AB9677] font-semibold block">+{extra.duration} min</span>
                         </div>
                       </div>
                     );
@@ -1145,7 +1154,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Columna Derecha: Ticket de Presupuesto con 20% Adelanto */}
+            {/* Columna Derecha: Ticket de Presupuesto en Soles con 20% Yape */}
             <div className="lg:col-span-4">
               <div className="sticky top-28 bg-white rounded-2xl border border-[#EAE6DF] p-6 shadow-md">
                 
@@ -1175,7 +1184,7 @@ export default function HomePage() {
                         Servicio Base · 2 horas cerrado
                       </span>
                     </div>
-                    <span className="font-serif text-base font-bold">{selectedService.price}€</span>
+                    <span className="font-serif text-base font-bold">S/. {selectedService.price * 4}</span>
                   </div>
 
                   {selectedExtras.length > 0 && (
@@ -1189,7 +1198,7 @@ export default function HomePage() {
                         return (
                           <div key={id} className="flex items-center justify-between text-[11px] text-[#3B332C]">
                             <span>+ {ex.name} (+30 min)</span>
-                            <span className="font-bold">+{ex.price}€</span>
+                            <span className="font-bold">+S/. {ex.price * 4}</span>
                           </div>
                         );
                       })}
@@ -1216,37 +1225,39 @@ export default function HomePage() {
                     </div>
                   </div>
 
-                  {/* Condición de Reserva: 20% Adelanto */}
+                  {/* Condición de Reserva: 20% Adelanto Yape */}
                   <div className="bg-orange-50 border border-orange-200 p-3.5 rounded-xl space-y-1.5">
                     <div className="flex items-center gap-1.5 text-orange-900 font-bold text-xs">
                       <AlertCircle className="w-4 h-4 text-orange-600 shrink-0" />
                       <span>Condición de Reserva: 20% Adelanto</span>
                     </div>
                     <p className="text-[11px] text-orange-800 leading-tight">
-                      Para garantizar el turno y pasar tu casilla de <span className="font-bold text-orange-600">Naranja</span> a <span className="font-bold text-emerald-700">Verde</span> se requiere abonar el 20%. El restante 80% se abona en cabina.
+                      Para garantizar el turno y pasar tu casilla de <span className="font-bold text-orange-600">Naranja</span> a <span className="font-bold text-emerald-700">Verde</span> se abona el 20% por Yape o Plin. El 80% restante se paga en cabina.
                     </p>
                   </div>
                 </div>
 
-                {/* Importe Total y Cuota 20% */}
+                {/* Importe Total y Cuota 20% en Soles */}
                 <div className="py-4 border-b border-[#EAE6DF] space-y-2">
                   <div className="flex justify-between items-baseline">
                     <span className="font-serif text-sm text-[#8A8177]">Presupuesto Total:</span>
-                    <span className="font-serif text-2xl font-bold text-[#3B332C]">{totalPrice}€</span>
+                    <span className="font-serif text-2xl font-bold text-[#3B332C]">
+                      S/. {totalPrice * 4} <span className="text-xs font-normal text-black/40">({totalPrice}€)</span>
+                    </span>
                   </div>
 
                   <div className="flex justify-between items-baseline pt-1 border-t border-[#EAE6DF]">
                     <span className="text-xs font-bold text-orange-800">
-                      🟠 Adelanto 20% (Yape / Transferencia):
+                      🟠 Adelanto 20% (Yape / Plin):
                     </span>
                     <span className="font-serif text-xl font-bold text-orange-600">
-                      {advanceDeposit}€ <span className="text-xs font-normal text-black/50">(o S/. {Math.round(advanceDeposit * 4)})</span>
+                      S/. {Math.round(advanceDeposit * 4)} <span className="text-xs font-normal text-black/50">({advanceDeposit}€)</span>
                     </span>
                   </div>
 
                   <div className="flex justify-between items-baseline text-[11px] text-[#8A8177]">
                     <span>Restante en cabina (80%):</span>
-                    <span className="font-semibold text-[#3B332C]">{remainingBalance}€</span>
+                    <span className="font-semibold text-[#3B332C]">S/. {Math.round(remainingBalance * 4)}</span>
                   </div>
                 </div>
 
@@ -1271,7 +1282,7 @@ export default function HomePage() {
 
                   <div>
                     <label className="block text-[11px] uppercase tracking-wider font-semibold text-[#5C5046] mb-1">
-                      Teléfono WhatsApp
+                      Teléfono WhatsApp (Perú)
                     </label>
                     <div className="relative">
                       <Phone className="w-3.5 h-3.5 text-black/40 absolute left-3 top-3.5" />
@@ -1296,7 +1307,7 @@ export default function HomePage() {
                 </form>
 
                 <p className="text-[10px] text-center text-[#8A8177] mt-3">
-                  Te redirigiremos a WhatsApp con los datos listos para coordinar tu Yape.
+                  Te redirigiremos a WhatsApp para enviar los datos y pagar tu Yape de S/. {Math.round(advanceDeposit * 4)}.
                 </p>
               </div>
             </div>
@@ -1315,14 +1326,15 @@ export default function HomePage() {
             </div>
             <div>
               <span className="font-serif text-lg tracking-widest text-white block">SAMM NAIL STUDIO</span>
-              <span className="text-[10px] text-[#E0D5C1] tracking-wider">Atelier de Uñas & Cuidado Anatómico · Lima</span>
+              <span className="text-[10px] text-[#E0D5C1] tracking-wider">Atelier de Uñas & Cuidado Anatómico · Lima, Perú</span>
             </div>
           </div>
 
           <div className="flex items-center gap-6 text-[11px] tracking-wider uppercase font-medium">
             <button onClick={() => setActiveTab("inicio")} className="hover:text-white transition-colors">Inicio</button>
-            <button onClick={() => setActiveTab("tratamientos")} className="hover:text-white transition-colors">Tratamientos</button>
+            <button onClick={() => setActiveTab("tratamientos")} className="hover:text-white transition-colors">Uñas & Carta</button>
             <button onClick={() => setActiveTab("reserva")} className="hover:text-white transition-colors">Citas & Agenda</button>
+            <a href="/admin" className="text-[#E0D5C1] hover:text-white transition-colors">Panel Admin</a>
           </div>
 
           <p className="text-[11px] text-white/50">
