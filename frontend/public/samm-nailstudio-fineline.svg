@@ -1,0 +1,23 @@
+<svg id="svg-logo-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 180" class="w-full max-w-xs h-auto">
+                            <!-- Ilustración Fine-Line de dedo/mano elegante con uña larga y flor/destello -->
+                            <g transform="translate(180, 72)">
+                                <!-- Círculo de fondo suave -->
+                                <circle cx="0" cy="0" r="46" fill="#EFE2DC" opacity="0.7"/>
+                                <!-- Trazo minimalista de mano femenina y uña -->
+                                <path d="M-28,28 C-18,10 -10,-12 -2,-24 C2,-30 8,-28 8,-20 C8,-8 -2,12 -8,28" fill="none" stroke="#231C1A" stroke-width="2" stroke-linecap="round" class="logo-adaptive-stroke"/>
+                                <!-- Uña almendrada pintada en el extremo del dedo -->
+                                <path d="M-2,-24 C1,-35 9,-37 10,-26 C9,-21 3,-20 -2,-24 Z" fill="#C8927B"/>
+                                <!-- Rama botánica / destellos alrededor -->
+                                <path d="M18,-28 L20,-21 L27,-19 L20,-17 L18,-10 L16,-17 L9,-19 L16,-21 Z" fill="#7A3E48"/>
+                                <circle cx="-18" cy="-14" r="2.5" fill="#C8927B"/>
+                                <path d="M10,20 Q24,6 28,-6" fill="none" stroke="#C8927B" stroke-width="1.5" stroke-linecap="round"/>
+                                <ellipse cx="23" cy="2" rx="5" ry="2.5" transform="rotate(-30 23 2)" fill="#C8927B"/>
+                                <ellipse cx="16" cy="12" rx="5" ry="2.5" transform="rotate(-20 16 12)" fill="#C8927B"/>
+                            </g>
+                            <text x="180" y="146" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="30" font-weight="700" fill="#231C1A" class="logo-adaptive-text">
+                                samm<tspan fill="#C8927B" font-style="italic">.nailstudio</tspan>
+                            </text>
+                            <text x="180" y="164" text-anchor="middle" font-family="Plus Jakarta Sans, Arial, sans-serif" font-size="8.5" font-weight="600" letter-spacing="5" fill="#7A3E48" class="logo-adaptive-sub">
+                                ARTISTRY &amp; CARE
+                            </text>
+                        </svg>

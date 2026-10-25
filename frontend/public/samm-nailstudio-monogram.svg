@@ -1,0 +1,12 @@
+<svg id="svg-logo-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" class="w-full max-w-[260px] h-auto">
+                            <!-- Arco de uña almendrada doble -->
+                            <path d="M150 22 C182 22, 202 62, 202 104 C202 138, 179 162, 150 162 C121 162, 98 138, 98 104 C98 62, 118 22, 150 22 Z" fill="none" stroke="#C8927B" stroke-width="2"/>
+                            <path d="M150 30 C176 30, 194 66, 194 104 C194 133, 174 154, 150 154 C126 154, 106 133, 106 104 C106 66, 124 30, 150 30 Z" fill="none" stroke="#DFC3B6" stroke-width="0.8"/>
+                            <!-- Lúnula de la uña en la base -->
+                            <path d="M126 144 Q150 130 174 144" fill="none" stroke="#C8927B" stroke-width="1.2"/>
+                            <!-- Destello superior -->
+                            <path d="M150 8 L152.5 16.5 L161 19 L152.5 21.5 L150 30 L147.5 21.5 L139 19 L147.5 16.5 Z" fill="#C8927B"/>
+                            <!-- Monograma S + N entrelazado -->
+                            <text x="150" y="114" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="68" font-style="italic" font-weight="700" fill="#231C1A" class="logo-adaptive-text">S</text>
+                            <text x="150" y="185" text-anchor="middle" font-family="Plus Jakarta Sans, Arial, sans-serif" font-size="11" font-weight="600" letter-spacing="4.5" fill="#7A3E48" class="logo-adaptive-sub">SAMM.NAILSTUDIO</text>
+                        </svg>

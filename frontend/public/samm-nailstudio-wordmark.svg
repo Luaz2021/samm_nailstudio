@@ -1,0 +1,15 @@
+<svg id="svg-logo-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 150" class="w-full max-w-xs h-auto">
+                            <!-- Destello superior -->
+                            <path d="M292 28 L295 39 L306 42 L295 45 L292 56 L289 45 L278 42 L289 39 Z" fill="#C8927B"/>
+                            <circle cx="314" cy="28" r="2.5" fill="#7A3E48"/>
+                            <!-- Texto Principal samm. -->
+                            <text x="210" y="92" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="76" font-weight="700" fill="#231C1A" class="logo-adaptive-text" letter-spacing="-1">
+                                samm<tspan fill="#C8927B" font-style="italic">.</tspan>
+                            </text>
+                            <!-- Línea fina decorativa -->
+                            <line x1="125" y1="108" x2="295" y2="108" stroke="#C8927B" stroke-width="1"/>
+                            <!-- Subtítulo NAIL STUDIO -->
+                            <text x="210" y="128" text-anchor="middle" font-family="Plus Jakarta Sans, Arial, sans-serif" font-size="13" font-weight="600" letter-spacing="9" fill="#7A3E48" class="logo-adaptive-sub">
+                                NAIL STUDIO
+                            </text>
+                        </svg>

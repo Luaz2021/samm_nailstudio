@@ -22,8 +22,8 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  title: "Samm Nail Studio · Miraflores, Lima",
-  description: "Atelier de Manicura & Pedicura de autor. Reserva tu cita en tiempo real con cálculo dinámico de servicios y extras.",
+  title: "samm. NAIL STUDIO · Miraflores, Lima",
+  description: "Atelier de manicura y estética ungueal de alta precisión en Lima. Servicios cerrados de 2 horas con productos 20-Free y esterilización hospitalaria.",
 };
 
 export default function RootLayout({
@@ -33,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${cormorant.variable} ${plusJakarta.variable} ${syne.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col font-sans bg-[#fbf9f4] text-[#1a1715]">
+      <body className="min-h-full flex flex-col font-sans bg-[#FBF8F6] text-[#231C1A]">
         {children}
       </body>
     </html>
