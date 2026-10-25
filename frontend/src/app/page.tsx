@@ -386,9 +386,9 @@ export default function HomePage() {
               Especialistas Exclusivas en Uñas, Acrílico & Nail Art
             </span>
           </div>
-          <a href="/admin" className="text-[10px] tracking-wider text-[#EFE2DC] hover:text-white font-semibold underline">
-            Acceso Cabina (Admin)
-          </a>
+          <span className="text-[10px] tracking-wider text-[#EFE2DC]/90 font-medium hidden md:inline-block">
+            Atelier Miraflores · Lima, Perú
+          </span>
         </div>
       </div>
 
