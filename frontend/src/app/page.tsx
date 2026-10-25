@@ -63,9 +63,8 @@ interface PreReservation {
   status: "disponible" | "pre_reserva" | "confirmada";
 }
 
-// Catálogo especializado 100% en uñas y derivados (acrílico, gel, soft gel, esmaltado y nail art)
 // Catálogo especializado 100% en uñas y derivados en Soles Peruanos (S/)
-// Bloque base: 2 Horas Cerradas (120 min) por tratamiento
+// Fotos de alta resolución curadas bajo la paleta Milky Almond, Rosewood & Berry Glaze
 const SERVICES: ServiceItem[] = [
   {
     id: "mani-rusa",
@@ -75,7 +74,7 @@ const SERVICES: ServiceItem[] = [
     duration: 120, // 2 horas cerrado
     desc: "Limpieza anatómica milimétrica de cutícula con fresas de diamante, torno médico y esmaltado nivelado de alta precisión. Sesión cerrada de 2 horas.",
     tag: "Bestseller Lima",
-    imgUrl: "https://images.pexels.com/photos/3997391/pexels-photo-3997391.jpeg?auto=compress&cs=tinysrgb&w=800"
+    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "unas-acrilicas",
@@ -85,7 +84,7 @@ const SERVICES: ServiceItem[] = [
     duration: 120, // 2 horas cerrado
     desc: "Estructura arquitectónica con acrílico de alta resistencia, ápice reforzado, limado estructural y acabado brillante espejo. Bloque de 2 horas.",
     tag: "Durabilidad Extrema",
-    imgUrl: "https://images.pexels.com/photos/705255/pexels-photo-705255.jpeg?auto=compress&cs=tinysrgb&w=800"
+    imgUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "semi-summer",
@@ -95,7 +94,7 @@ const SERVICES: ServiceItem[] = [
     duration: 120, // 2 horas cerrado
     desc: "Nivelación con base rubber, esmaltes 20-Free tonos cálidos verano Lima y efecto nacarado/cromo con brillo cerámico. Sesión de 2 horas.",
     tag: "Verano 2027",
-    imgUrl: "https://images.pexels.com/photos/887352/pexels-photo-887352.jpeg?auto=compress&cs=tinysrgb&w=800"
+    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "soft-gel-tips",
@@ -105,7 +104,7 @@ const SERVICES: ServiceItem[] = [
     duration: 120, // 2 horas cerrado
     desc: "Cápsulas de gel flexible adheridas con base estructural. Cero limado agresivo sobre la uña natural. Sesión de 2 horas.",
     tag: "Largo Natural",
-    imgUrl: "https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=800"
+    imgUrl: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "nailart-editorial",
@@ -115,7 +114,7 @@ const SERVICES: ServiceItem[] = [
     duration: 120, // 2 horas cerrado
     desc: "Micro-french neón pastel, degradados veraniegos aura, efectos cromados solares y trazos a mano alzada. Sesión artística de 2 horas.",
     tag: "Tendencia Solar",
-    imgUrl: "https://images.pexels.com/photos/939836/pexels-photo-939836.jpeg?auto=compress&cs=tinysrgb&w=800"
+    imgUrl: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "pedi-rusa",
@@ -125,7 +124,7 @@ const SERVICES: ServiceItem[] = [
     duration: 120, // 2 horas cerrado
     desc: "Limpieza profunda de canales ungueales con fresas, retiro de asperezas y esmaltado de alta adherencia para sandalias de playa. 2 horas.",
     tag: "Beach Ready",
-    imgUrl: "https://images.pexels.com/photos/3997383/pexels-photo-3997383.jpeg?auto=compress&cs=tinysrgb&w=800"
+    imgUrl: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=800&q=80"
   }
 ];
 
