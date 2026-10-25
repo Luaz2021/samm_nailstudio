@@ -467,8 +467,8 @@ export default function HomePage() {
             <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
                 
-                {/* Póster de Temporada: PRE-VERANO LIMA (Nail Art Solar, Cromo y Neón Pastel) */}
-                <div className="lg:col-span-6 bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-[#EFE2DC] shadow-md">
+                {/* Póster de Temporada: Visible solo en pantallas medianas y grandes (md:block). En móviles pequeños se oculta para dar prioridad inmediata al texto y botones */}
+                <div className="hidden md:block lg:col-span-6 bg-white/95 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-[#EFE2DC] shadow-md">
                   <div className="rounded-xl overflow-hidden border border-[#EFE2DC] bg-white">
                     <div className="p-6 bg-gradient-to-r from-[#C8927B] via-[#8C6D4C] to-[#7A3E48] text-white text-center">
                       <span className="text-[10px] tracking-[0.35em] uppercase font-semibold block text-[#EFE2DC]">
@@ -506,36 +506,37 @@ export default function HomePage() {
 
                 {/* Texto Hero Editorial (Sin precios) */}
                 <div className="lg:col-span-6">
-                  <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#C8927B] block mb-2 flex items-center gap-1.5">
+                  <span className="text-[11px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.25em] font-bold text-[#C8927B] block mb-2 flex items-center gap-1.5">
                     <Sun className="w-4 h-4 text-[#C8927B]" /> Temporada Sol & Playa · Lima
                   </span>
-                  <h1 className="font-serif text-4xl sm:text-5xl font-bold text-[#231C1A] tracking-tight leading-tight">
+                  <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-[#231C1A] tracking-tight leading-tight">
                     NAIL ART SOLAR & ACRÍLICO DE AUTOR
                   </h1>
-                  <p className="text-sm font-semibold text-[#7A3E48] uppercase tracking-wider mt-2">
+                  <p className="text-xs sm:text-sm font-semibold text-[#7A3E48] uppercase tracking-wider mt-2">
                     ¡Prepara tus manos para la temporada de verano!
                   </p>
 
-                  <p className="text-sm text-[#666059] leading-relaxed mt-4">
+                  <p className="text-xs sm:text-sm text-[#666059] leading-relaxed mt-3 sm:mt-4">
                     Especialistas exclusivas en arquitectura de uñas, extensiones en acrílico esculpido con molde y esmaltados de larga duración. 
                     Diseños inspirados en los reflejos dorados del atardecer limeño, efecto glazed donut, francesa neón suave y acabados ultralimpios que no se rompen en el mar ni en piscina.
                   </p>
 
-                  <p className="text-xs text-[#8A8177] italic mt-3">
+                  <p className="text-[11px] sm:text-xs text-[#8A8177] italic mt-2.5 sm:mt-3">
                     Dedica 2 horas exclusivas a tu cuidado personal sin esperas. Reserva tu turno online con anticipo protegido.
                   </p>
 
-                  <div className="mt-8 flex items-center gap-4">
+                  {/* Botones Apilados en Móviles Pequeños (flex-col sm:flex-row) */}
+                  <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
                     <button
                       onClick={() => setActiveTab("reserva")}
-                      className="bg-[#7A3E48] hover:bg-[#5E2F37] text-white text-xs uppercase tracking-[0.18em] font-semibold px-8 py-4 rounded-md transition-all shadow-sm flex items-center gap-2"
+                      className="w-full sm:w-auto bg-[#7A3E48] hover:bg-[#5E2F37] text-white text-[11px] sm:text-xs uppercase tracking-[0.16em] sm:tracking-[0.18em] font-semibold px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-md transition-all shadow-sm flex items-center justify-center gap-2"
                     >
                       <CalendarIcon className="w-4 h-4" />
                       Reservar Cita Ahora
                     </button>
                     <button
                       onClick={() => setActiveTab("tratamientos")}
-                      className="border border-[#7A3E48] text-[#7A3E48] hover:bg-white text-xs uppercase tracking-[0.18em] font-semibold px-8 py-4 rounded-md transition-all"
+                      className="w-full sm:w-auto border border-[#7A3E48] text-[#7A3E48] hover:bg-white text-[11px] sm:text-xs uppercase tracking-[0.16em] sm:tracking-[0.18em] font-semibold px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl sm:rounded-md transition-all text-center"
                     >
                       Ver Técnicas de Uñas
                     </button>
