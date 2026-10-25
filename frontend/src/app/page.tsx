@@ -6,24 +6,20 @@ import {
   Calendar as CalendarIcon, 
   Clock, 
   CheckCircle2, 
-  ChevronLeft, 
   ChevronRight, 
-  Plus, 
   ShieldCheck, 
   User, 
   Phone,
-  Heart,
-  Eye,
-  ExternalLink,
   Award,
   Leaf,
   Check,
-  ShoppingBag,
-  SlidersHorizontal,
   MessageCircle,
   AlertCircle,
   Info,
-  X
+  X,
+  Compass,
+  ArrowRight,
+  Palette
 } from "lucide-react";
 
 // Tipos
@@ -32,7 +28,7 @@ interface ServiceItem {
   name: string;
   category: "manicura" | "pedicura" | "nailart" | "tratamientos";
   price: number;
-  duration: number; // minutos base (120 min = 2 horas cerrado)
+  duration: number; // 120 min = 2 horas cerrado
   desc: string;
   tag?: string;
   imgUrl: string;
@@ -42,7 +38,7 @@ interface ExtraItem {
   id: string;
   name: string;
   price: number;
-  duration: number; // 30 min cada bloque de extra y desinfección
+  duration: number; // 30 min cada bloque
   desc: string;
 }
 
@@ -63,37 +59,37 @@ interface PreReservation {
   status: "disponible" | "pre_reserva" | "confirmada";
 }
 
-// Catálogo de Servicios con fotos reales de alta resolución (CDN)
+// Catálogo con fotos CDN de alta calidad (editorial + estética Hello Nails)
 const SERVICES: ServiceItem[] = [
   {
     id: "mani-rusa",
-    name: "Manicura Rusa Combinada",
+    name: "Manicura Rusa Anatómica",
     category: "manicura",
     price: 38,
-    duration: 120, // 2 horas servicio cerrado
-    desc: "Limpieza anatómica milimétrica de cutícula con torno y esmaltado de máxima precisión bajo cutícula.",
+    duration: 120, // 2 horas cerrado
+    desc: "Limpieza anatómica milimétrica de cutícula con torno y esmaltado nivelado de alta precisión.",
     tag: "Bestseller",
-    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=900&q=80"
+    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "mani-semi",
-    name: "Manicura Semipermanente Nude",
+    name: "Esmaltado Semipermanente Manos",
     category: "manicura",
     price: 28,
     duration: 120,
     desc: "Limado y forma orgánica, esmaltado 20-Free con brillo cerámico de larga duración (21+ días).",
     tag: "Clásico",
-    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=900&q=80"
+    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "nailart-editorial",
-    name: "Nail Art Minimal & Cromo Glazed",
+    name: "Nail Art Amber & Cromo Glazed",
     category: "nailart",
     price: 46,
     duration: 120,
-    desc: "Efecto Hailey Bieber glazed donut, micropolvo perlado o acentos franceses micro-lineales a mano alzada.",
+    desc: "Efecto glazed donut, trazos micro-franceses o acentos minimalistas a mano alzada de temporada.",
     tag: "Tendencia",
-    imgUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=900&q=80"
+    imgUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "pedi-spa",
@@ -101,40 +97,40 @@ const SERVICES: ServiceItem[] = [
     category: "pedicura",
     price: 44,
     duration: 120,
-    desc: "Inmersión exfoliante en gelatina de aromas, retirada de durezas profunda y masaje con manteca de karité pura.",
+    desc: "Inmersión exfoliante en gelatina de aromas, retirada de durezas profunda y masaje con manteca pura.",
     tag: "Wellness",
-    imgUrl: "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=900&q=80"
+    imgUrl: "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "soft-gel",
-    name: "Extensiones Soft Gel / Tips Press-On",
+    name: "Extensiones Soft Gel / Press-On",
     category: "manicura",
     price: 54,
     duration: 120,
-    desc: "Alargamiento con cápsulas de gel empapable que respetan y no desgastan la lámina natural.",
+    desc: "Alargamiento con cápsulas orgánicas de gel empapable que respetan y no desgastan la lámina natural.",
     tag: "Durabilidad",
-    imgUrl: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"
+    imgUrl: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "trata-ibx",
-    name: "Tratamiento Reparador IBX System",
+    name: "Tratamiento Reparador Molecular IBX",
     category: "tratamientos",
     price: 24,
     duration: 120,
     desc: "Fusión molecular interna para uñas quebradizas, descamadas o dañadas por acrílicos agresivos.",
-    tag: "Terapéutico",
-    imgUrl: "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=900&q=80"
+    tag: "Clínico",
+    imgUrl: "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=800&q=80"
   }
 ];
 
-// Extras dinámicos (letras normales sin fotos + suma 30 min de margen y limpieza)
+// Extras dinámicos (letras normales + suma 30 min de margen y limpieza)
 const EXTRAS: ExtraItem[] = [
   { 
     id: "retirada-previa", 
-    name: "Retirada de Acrílico / Gel Ajeno", 
+    name: "Retirada de Acrílico o Gel Ajeno", 
     price: 10, 
     duration: 30, 
-    desc: "Retirada técnica sin torno abrasivo para no dañar tu uña." 
+    desc: "Retirada técnica sin torno invasivo para no dañar tu uña." 
   },
   { 
     id: "french-micro", 
@@ -145,7 +141,7 @@ const EXTRAS: ExtraItem[] = [
   },
   { 
     id: "reparacion-una", 
-    name: "Reconstrucción Uña Rota (Seda/Gel)", 
+    name: "Reconstrucción Uña Rota (Fibra/Gel)", 
     price: 5, 
     duration: 30, 
     desc: "Rescate de uña fisurada sin tener que cortarlas todas." 
@@ -155,7 +151,7 @@ const EXTRAS: ExtraItem[] = [
     name: "Nail Art Personalizado (2 Uñas)", 
     price: 9, 
     duration: 30, 
-    desc: "Dibujo botánico, trazos abstractos o piedras Swarovski." 
+    desc: "Diseño botánico, trazos abstractos o piedras Swarovski." 
   },
   { 
     id: "masaje-vela", 
@@ -219,8 +215,7 @@ const INITIAL_DB_SCHEDULE: Record<string, { time: string; status: "pre_reserva" 
 };
 
 export default function HomePage() {
-  // Pestaña inicial: 'salon' para mostrar el Hero impecable de bienvenida
-  const [activeTab, setActiveTab] = useState<"salon" | "reserva" | "iframe-hello">("salon");
+  const [activeTab, setActiveTab] = useState<"inicio" | "tratamientos" | "reserva">("inicio");
   const [categoryFilter, setCategoryFilter] = useState<string>("todos");
 
   // Estado del flujo de Reserva
@@ -249,7 +244,7 @@ export default function HomePage() {
     const hrs = Math.floor(totalDurationMinutes / 60);
     const mins = totalDurationMinutes % 60;
     if (mins === 0) return `${hrs} horas cerradas`;
-    return `${hrs}h ${mins}min (con extras y desinfección)`;
+    return `${hrs}h ${mins}min (con extras y limpieza)`;
   }, [totalDurationMinutes]);
 
   const totalPrice = useMemo(() => {
@@ -261,7 +256,7 @@ export default function HomePage() {
     return base + extrasPrice;
   }, [selectedService, selectedExtras]);
 
-  // 20% de adelanto
+  // 20% de anticipo
   const advanceDeposit = useMemo(() => {
     return Math.round(totalPrice * 0.20 * 10) / 10;
   }, [totalPrice]);
@@ -338,7 +333,6 @@ export default function HomePage() {
 
     setActivePreReservation(newPreRes);
 
-    // Mensaje de WhatsApp estructurado para la clienta / dueña
     const extrasText = newPreRes.extras.length > 0 ? `\n✨ *Extras:* ${newPreRes.extras.join(", ")}` : "";
     const waMessage = encodeURIComponent(
       `💅 *SOLICITUD DE PRE-RESERVA · SAMM NAIL STUDIO*\n` +
@@ -352,7 +346,7 @@ export default function HomePage() {
       `💰 *Total Presupuesto:* ${totalPrice}€ / S/. ${totalPrice * 4}\n` +
       `🟠 *Adelanto 20% para Confirmar:* ${advanceDeposit}€ / S/. ${Math.round(advanceDeposit * 4)}\n` +
       `-----------------------------------------\n` +
-      `Hola Samm! Ya registré mi pre-reserva en la web. ¿Me facilitas tu Yape / Plin / Cuenta para transferir el 20% de adelanto y pasar mi casilla a verde confirmada? Gracias!`
+      `Hola Samm! Ya registré mi pre-reserva en la web. ¿Me facilitas tu Yape / Plin para abonar el 20% de adelanto y pasar mi casilla a verde confirmada? Gracias!`
     );
 
     const waUrl = `https://api.whatsapp.com/send?phone=51999999999&text=${waMessage}`;
@@ -376,378 +370,474 @@ export default function HomePage() {
     });
   };
 
-  const filteredServices = categoryFilter === "todos" 
-    ? SERVICES 
-    : SERVICES.filter(s => s.category === categoryFilter);
-
   return (
-    <div className="min-h-screen bg-[#FDFBF7] text-[#221F1D] flex flex-col selection:bg-[#AB9677] selection:text-white">
+    <div className="min-h-screen bg-white text-[#55504A] flex flex-col font-sans selection:bg-[#AB9677] selection:text-white">
       
-      {/* 1. BARRA SUPERIOR DE PROMOCIÓN & COMPROMISOS (Hello Nails Style) */}
-      <div className="bg-[#221F1D] text-[#F9F6F0] py-2 px-4 text-xs tracking-wider flex items-center justify-between border-b border-black/10">
-        <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
+      {/* 1. TOP BAR MINIMALISTA (ESTILO HELLO NAILS: MARRÓN TOPO / DORADO ARENA) */}
+      <div className="bg-[#5C5046] text-white/90 py-2 px-4 text-[11px] tracking-widest uppercase border-b border-black/10">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-1.5 font-medium">
-              <Leaf className="w-3.5 h-3.5 text-[#AB9677]" /> 
+              <Leaf className="w-3.5 h-3.5 text-[#E0D5C1]" /> 
               Fórmulas 20-Free & Veganas
             </span>
-            <span className="hidden md:inline-flex items-center gap-1.5 text-white/70">
-              <Award className="w-3.5 h-3.5 text-[#AB9677]" />
-              Especialistas en Manicura Rusa Anatómica
+            <span className="hidden sm:inline-flex items-center gap-1.5 text-white/80">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#E0D5C1]" />
+              Esterilización con Autoclave Hospitalario
             </span>
           </div>
-
-          <div className="flex items-center gap-3">
-            <button 
-              onClick={() => setActiveTab("iframe-hello")}
-              className={`text-xs px-2.5 py-0.5 rounded border transition-colors flex items-center gap-1.5 ${
-                activeTab === "iframe-hello" 
-                  ? "bg-[#AB9677] text-white border-[#AB9677]" 
-                  : "border-white/20 hover:border-[#AB9677] text-white/80 hover:text-white"
-              }`}
-            >
-              <Eye className="w-3 h-3 text-[#AB9677]" />
-              Ver Referencia HelloNails.com
-            </button>
-          </div>
+          <span className="text-[10px] tracking-wider text-[#E0D5C1] font-semibold">
+            Atelier de Manicura & Pedicura de Autor
+          </span>
         </div>
       </div>
 
-      {/* 2. HEADER PRINCIPAL */}
-      <header className="sticky top-0 z-40 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-[#221F1D]/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+      {/* 2. HEADER BLANCO LIMPIO CON LOGOTIPO SAMM */}
+      <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#EAE6DF]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-24 flex items-center justify-between">
           
           {/* Logo Studio */}
-          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab("salon")}>
-            <div className="w-10 h-10 rounded-full bg-[#AB9677] text-white flex items-center justify-center font-serif text-xl tracking-tighter shadow-sm font-bold">
+          <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab("inicio")}>
+            <div className="w-12 h-12 rounded-full bg-[#AB9677] text-white flex items-center justify-center font-serif text-2xl font-bold shadow-xs">
               S
             </div>
             <div>
-              <span className="block font-serif text-2xl tracking-[0.18em] uppercase font-medium leading-none">
+              <span className="block font-serif text-2xl tracking-[0.2em] uppercase font-bold text-[#3B332C] leading-none">
                 SAMM
               </span>
-              <span className="block text-[10px] tracking-[0.3em] uppercase text-[#AB9677] font-semibold mt-1">
+              <span className="block text-[10px] tracking-[0.35em] uppercase text-[#AB9677] font-semibold mt-1">
                 NAIL STUDIO · ATELIER
               </span>
             </div>
           </div>
 
-          {/* Menú de Navegación */}
-          <nav className="hidden md:flex items-center gap-8 text-xs uppercase tracking-[0.18em] font-medium text-[#221F1D]/80">
+          {/* Menú Superior estilo Hello Nails (INICIO, TRATAMIENTOS, CITAS) */}
+          <nav className="hidden md:flex items-center gap-8 text-xs uppercase tracking-[0.2em] font-semibold text-[#5C5046]">
             <button 
-              onClick={() => setActiveTab("salon")}
+              onClick={() => setActiveTab("inicio")}
               className={`transition-colors py-2 border-b-2 ${
-                activeTab === "salon" 
-                  ? "border-[#AB9677] text-[#221F1D] font-bold" 
+                activeTab === "inicio" 
+                  ? "border-[#AB9677] text-[#3B332C]" 
                   : "border-transparent hover:text-[#AB9677]"
               }`}
             >
-              Tratamientos & Carta
+              Inicio
+            </button>
+            <button 
+              onClick={() => setActiveTab("tratamientos")}
+              className={`transition-colors py-2 border-b-2 ${
+                activeTab === "tratamientos" 
+                  ? "border-[#AB9677] text-[#3B332C]" 
+                  : "border-transparent hover:text-[#AB9677]"
+              }`}
+            >
+              Tratamientos
             </button>
             <button 
               onClick={() => setActiveTab("reserva")}
               className={`transition-colors py-2 border-b-2 ${
                 activeTab === "reserva" 
-                  ? "border-[#AB9677] text-[#221F1D] font-bold" 
+                  ? "border-[#AB9677] text-[#3B332C]" 
                   : "border-transparent hover:text-[#AB9677]"
               }`}
             >
-              Agenda Online
-            </button>
-            <button 
-              onClick={() => setActiveTab("iframe-hello")}
-              className={`transition-colors py-2 border-b-2 flex items-center gap-1 ${
-                activeTab === "iframe-hello" 
-                  ? "border-[#AB9677] text-[#221F1D] font-bold" 
-                  : "border-transparent hover:text-[#AB9677]"
-              }`}
-            >
-              Inspiración (Iframe)
+              Citas & Agenda
             </button>
           </nav>
 
-          {/* Botón CTA Cita Directa */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setActiveTab("reserva")}
-              className="bg-[#AB9677] hover:bg-[#978163] text-white text-xs uppercase tracking-[0.16em] font-semibold px-5 py-3 rounded-full transition-all duration-200 shadow-sm hover:shadow flex items-center gap-2"
-            >
-              <CalendarIcon className="w-3.5 h-3.5" />
-              Reservar Cita
-            </button>
-          </div>
+          {/* Botón Acción Cita */}
+          <button
+            onClick={() => setActiveTab("reserva")}
+            className="bg-[#5C5046] hover:bg-[#483E36] text-white text-xs uppercase tracking-[0.18em] font-semibold px-6 py-3.5 rounded-full transition-all shadow-sm hover:shadow flex items-center gap-2"
+          >
+            <CalendarIcon className="w-3.5 h-3.5" />
+            Reservar Cita
+          </button>
         </div>
       </header>
 
-      {/* 3. VISTA MODAL / PESTAÑA: IFRAME EN VIVO DE HELLO NAILS */}
-      {activeTab === "iframe-hello" && (
-        <section className="max-w-7xl mx-auto w-full px-4 py-8 flex-1 flex flex-col">
-          <div className="bg-white rounded-2xl border border-black/10 shadow-lg overflow-hidden flex flex-col flex-1 min-h-[750px]">
-            <div className="bg-[#221F1D] text-white px-6 py-4 flex items-center justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-widest text-[#AB9677] font-semibold">Referencia Visual de Diseño</p>
-                <h3 className="font-serif text-lg tracking-wide text-[#FDFBF7]">Hello Nails Oficial (En vivo en Iframe)</h3>
-              </div>
-              <div className="flex items-center gap-3">
-                <a 
-                  href="https://hellonails.com/" 
-                  target="_blank" 
-                  rel="noreferrer"
-                  className="text-xs bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-colors"
-                >
-                  Abrir pestaña externa <ExternalLink className="w-3 h-3" />
-                </a>
-                <button 
-                  onClick={() => setActiveTab("salon")}
-                  className="text-xs bg-[#AB9677] hover:bg-[#978163] text-white px-4 py-1.5 rounded-full font-medium transition-colors"
-                >
-                  Volver al Estudio
-                </button>
-              </div>
-            </div>
-            
-            <div className="w-full flex-1 bg-[#F9F9F9] relative">
-              <iframe 
-                src="https://hellonails.com/" 
-                title="Hello Nails Reference" 
-                className="w-full h-full min-h-[700px] border-0"
-                loading="lazy"
-              />
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 4. VISTA PRINCIPAL: ESTUDIO & TRATAMIENTOS (EL DISEÑO EDITORIAL ORIGINAL QUE TE GUSTÓ) */}
-      {activeTab === "salon" && (
+      {/* 3. VISTA PRINCIPAL: 100% INSPIRACIÓN HELLO NAILS (SIN PRECIOS, PURO BRANDING Y TENDENCIAS) */}
+      {activeTab === "inicio" && (
         <main className="flex-1">
-          {/* HERO BANNER EDITORIAL */}
-          <section className="relative overflow-hidden bg-[#221F1D] text-[#FDFBF7] py-20 lg:py-28">
-            <div className="absolute inset-0 z-0 opacity-25">
-              <img 
-                src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=2000&q=80" 
-                alt="Nail Art Background"
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
-              <div className="max-w-2xl">
-                <span className="inline-block text-[#AB9677] font-semibold text-xs tracking-[0.25em] uppercase mb-4">
-                  Colección Otoño / Invierno 2026
-                </span>
-                <h1 className="font-serif text-4xl sm:text-6xl font-light tracking-tight leading-[1.1] mb-6">
-                  El arte de la precisión <br />
-                  <span className="italic font-normal text-[#E8DCC4]">en cada milímetro.</span>
-                </h1>
-                <p className="text-white/80 text-base leading-relaxed mb-8 max-w-xl font-light">
-                  Inspirados en la estética contemporánea de los mejores centros de Europa. 
-                  Protocolos rusos de cutícula limpia, esmaltes 20-Free de larga duración y cálculo exacto de tiempos para que tu agenda nunca sufra retrasos.
-                </p>
-
-                <div className="flex flex-wrap items-center gap-4">
-                  <button
-                    onClick={() => setActiveTab("reserva")}
-                    className="bg-[#AB9677] hover:bg-[#978163] text-white text-xs uppercase tracking-[0.16em] font-semibold px-8 py-4 rounded-full transition-all shadow-md hover:shadow-lg flex items-center gap-2"
-                  >
-                    <CalendarIcon className="w-4 h-4" />
-                    Reservar tu Tratamiento
-                  </button>
-
-                  <a 
-                    href="#carta-servicios"
-                    className="bg-white/10 hover:bg-white/15 text-white text-xs uppercase tracking-[0.16em] font-medium px-7 py-4 rounded-full transition-all border border-white/20"
-                  >
-                    Ver Catálogo
-                  </a>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* VALORES DE MARCA / BADGES DE CONFIANZA */}
-          <section className="border-b border-[#221F1D]/10 bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-[#AB9677]/10 text-[#AB9677] flex items-center justify-center mb-3">
-                  <Leaf className="w-6 h-6" />
-                </div>
-                <h4 className="font-serif text-base font-semibold tracking-wide">Fórmula 20-Free</h4>
-                <p className="text-xs text-[#221F1D]/60 mt-1 max-w-[200px]">Sin químicos tóxicos ni sulfatos agresivos para la lámina.</p>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-[#AB9677]/10 text-[#AB9677] flex items-center justify-center mb-3">
-                  <Clock className="w-6 h-6" />
-                </div>
-                <h4 className="font-serif text-base font-semibold tracking-wide">Puntualidad Absoluta</h4>
-                <p className="text-xs text-[#221F1D]/60 mt-1 max-w-[200px]">Cálculo matemático de cada extra para cero esperas.</p>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-[#AB9677]/10 text-[#AB9677] flex items-center justify-center mb-3">
-                  <Award className="w-6 h-6" />
-                </div>
-                <h4 className="font-serif text-base font-semibold tracking-wide">Especialistas Tituladas</h4>
-                <p className="text-xs text-[#221F1D]/60 mt-1 max-w-[200px]">Técnicas certificadas en manicura rusa y nail art.</p>
-              </div>
-
-              <div className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-[#AB9677]/10 text-[#AB9677] flex items-center justify-center mb-3">
-                  <ShieldCheck className="w-6 h-6" />
-                </div>
-                <h4 className="font-serif text-base font-semibold tracking-wide">Esterilización Hospitalaria</h4>
-                <p className="text-xs text-[#221F1D]/60 mt-1 max-w-[200px]">Autoclave médico y sobres individuales para cada clienta.</p>
-              </div>
-            </div>
-          </section>
-
-          {/* CATÁLOGO DE TRATAMIENTOS INTERACTIVO */}
-          <section id="carta-servicios" className="max-w-7xl mx-auto px-4 sm:px-6 py-20">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
-              <div>
-                <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#AB9677]">
-                  Carta Exclusiva
-                </span>
-                <h2 className="font-serif text-3xl sm:text-4xl font-normal tracking-tight mt-2 text-[#221F1D]">
-                  Tratamientos de Uñas & Spa
-                </h2>
-              </div>
-
-              <div className="flex flex-wrap gap-2 mt-6 md:mt-0">
-                {[
-                  { id: "todos", label: "Todos" },
-                  { id: "manicura", label: "Manicura" },
-                  { id: "pedicura", label: "Pedicura" },
-                  { id: "nailart", label: "Nail Art" },
-                  { id: "tratamientos", label: "Tratamientos" },
-                ].map(cat => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setCategoryFilter(cat.id)}
-                    className={`text-xs uppercase tracking-wider px-4 py-2 rounded-full font-medium transition-all ${
-                      categoryFilter === cat.id 
-                        ? "bg-[#221F1D] text-white" 
-                        : "bg-white text-[#221F1D]/70 border border-black/10 hover:border-[#AB9677] hover:text-[#221F1D]"
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Grid de Servicios */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredServices.map(service => (
-                <div 
-                  key={service.id}
-                  className="group bg-white rounded-2xl border border-black/8 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
-                >
-                  <div className="relative h-64 overflow-hidden bg-[#F6F1E7]">
-                    <img 
-                      src={service.imgUrl} 
-                      alt={service.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
-                    />
-                    {service.tag && (
-                      <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-[#221F1D] text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full shadow-sm">
-                        {service.tag}
-                      </span>
-                    )}
-                    <div className="absolute bottom-4 right-4 bg-[#221F1D]/80 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full font-medium flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-[#AB9677]" />
-                      2h cerradas
+          
+          {/* SECCIÓN 1: DECO HELLO / NAIL ART OTOÑO (SPLIT 50/50 ESTILO IMAGEN 1) */}
+          <section className="border-b border-[#EAE6DF] py-16 lg:py-24 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                {/* Columna Izquierda: Póster de Tendencias Deco Nails */}
+                <div className="lg:col-span-6 bg-[#FAF7F2] rounded-2xl p-6 sm:p-8 border border-[#EAE6DF] shadow-xs">
+                  <div className="relative rounded-xl overflow-hidden bg-white border border-[#EAE6DF]">
+                    <div className="p-6 bg-gradient-to-b from-[#8C5D38] to-[#5C3A20] text-white text-center">
+                      <span className="text-[11px] tracking-[0.3em] uppercase opacity-90 block">Nueva Colección</span>
+                      <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-wider mt-1">DECO SAMM</h2>
+                      <p className="text-xs tracking-widest text-[#E0D5C1] uppercase mt-0.5">AMBER · OTOÑO 2026</p>
                     </div>
-                  </div>
 
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-baseline justify-between mb-2">
-                        <h3 className="font-serif text-xl font-medium tracking-tight text-[#221F1D] group-hover:text-[#AB9677] transition-colors">
-                          {service.name}
-                        </h3>
-                        <span className="font-serif text-xl font-semibold text-[#221F1D]">
-                          {service.price}€
-                        </span>
+                    {/* Muestrario de Tonos y Nail Art (Referencia exacta a la foto del usuario) */}
+                    <div className="p-6 bg-[#FAF8F5]">
+                      <div className="flex justify-center gap-2 mb-6">
+                        {["#3730A3", "#047857", "#450A0A", "#F472B6", "#78350F", "#881337"].map((color, idx) => (
+                          <div 
+                            key={idx} 
+                            className="w-7 h-12 rounded-full border border-white shadow-sm"
+                            style={{ backgroundColor: color }}
+                          />
+                        ))}
                       </div>
-                      <p className="text-xs text-[#221F1D]/70 leading-relaxed">
-                        {service.desc}
-                      </p>
-                    </div>
 
-                    <div className="pt-6 mt-6 border-t border-black/5 flex items-center justify-between">
-                      <span className="text-[11px] text-[#AB9677] font-semibold uppercase tracking-wider">
-                        Incluye limado y nutrición
-                      </span>
-                      <button
-                        onClick={() => {
-                          setSelectedService(service);
-                          setActiveTab("reserva");
-                        }}
-                        className="bg-[#AB9677] hover:bg-[#978163] text-white text-[11px] uppercase tracking-wider font-semibold px-4 py-2 rounded-full transition-colors flex items-center gap-1.5"
-                      >
-                        Reservar <ChevronRight className="w-3 h-3" />
-                      </button>
+                      {/* Diseños Nail Art */}
+                      <div className="grid grid-cols-4 gap-3 max-w-sm mx-auto">
+                        <div className="h-16 rounded-full bg-[#D1D5DB] border-2 border-white shadow-xs flex items-center justify-center text-[10px] font-bold text-black/50">Dot</div>
+                        <div className="h-16 rounded-full bg-[#881337] border-2 border-white shadow-xs flex items-center justify-center text-[10px] font-bold text-white">Star</div>
+                        <div className="h-16 rounded-full bg-[#F5D0A9] border-2 border-white shadow-xs flex items-center justify-center text-[10px] font-bold text-black/60">Tweed</div>
+                        <div className="h-16 rounded-full bg-[#A0522D] border-2 border-white shadow-xs flex items-center justify-center text-[10px] font-bold text-white">Leopard</div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              ))}
+
+                {/* Columna Derecha: Texto Editorial Nail Art Otoño (Sin Precios) */}
+                <div className="lg:col-span-6">
+                  <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#AB9677] block mb-2">
+                    Pon tus uñas de moda
+                  </span>
+                  <h1 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B332C] tracking-tight leading-tight">
+                    NAIL ART OTOÑO
+                  </h1>
+                  <p className="text-sm font-semibold text-[#5C5046] uppercase tracking-wider mt-2">
+                    ¡Diseños de vanguardia en cada milímetro!
+                  </p>
+
+                  <p className="text-sm text-[#666059] leading-relaxed mt-4">
+                    Diseños que se inspiran en los tonos y estampados de la temporada: desde el efecto magnético, 
+                    elegante y luminoso, hasta detalles de estrellas, cuadros y animal print. Ideas perfectas para darle 
+                    un toque creativo y otoñal a tus uñas, ya sea en una sola uña o combinando varios diseños.
+                  </p>
+
+                  <p className="text-xs text-[#8A8177] italic mt-3">
+                    ¿Cuál de estas decos elegirías para tu próxima cita? Reserva tu turno en nuestro atelier.
+                  </p>
+
+                  <div className="mt-8 flex items-center gap-4">
+                    <button
+                      onClick={() => setActiveTab("reserva")}
+                      className="bg-[#5C5046] hover:bg-[#483E36] text-white text-xs uppercase tracking-[0.18em] font-semibold px-8 py-4 rounded-md transition-all shadow-sm"
+                    >
+                      Reservar Cita Ahora
+                    </button>
+                    <button
+                      onClick={() => setActiveTab("tratamientos")}
+                      className="border border-[#5C5046] text-[#5C5046] hover:bg-[#FAF7F2] text-xs uppercase tracking-[0.18em] font-semibold px-8 py-4 rounded-md transition-all"
+                    >
+                      Ver Tratamientos
+                    </button>
+                  </div>
+                </div>
+
+              </div>
             </div>
           </section>
 
-          {/* BANNER COMPARATIVO */}
-          <section className="bg-[#FAF7F2] border-y border-black/10 py-16">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-8">
-              <div className="max-w-xl">
-                <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#AB9677]">
-                  Diseño & Tecnología
+          {/* SECCIÓN 2: TRÍPTICO DE FOTOGRAFÍA EDITORIAL (ESTILO IMAGEN 2 DEL USUARIO) */}
+          <section className="py-16 bg-[#FAF7F2] border-b border-[#EAE6DF]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <div className="text-center max-w-xl mx-auto mb-12">
+                <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#AB9677] block">
+                  Galería Visual
                 </span>
-                <h3 className="font-serif text-3xl font-normal tracking-tight mt-1 text-[#221F1D]">
-                  ¿Quieres comparar con el diseño original?
+                <h3 className="font-serif text-3xl font-bold text-[#3B332C] mt-1">
+                  Texturas, Brillo & Pigmentos
                 </h3>
-                <p className="text-xs text-[#221F1D]/70 mt-3 leading-relaxed">
-                  Incorporamos la previsualización directa en iframe de la web de Hello Nails para que audites la composición tipográfica, la gama cromática y la experiencia de usuario en tiempo real.
+              </div>
+
+              {/* Tríptico de 3 Fotos Altas estilo Hello Nails */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="h-[420px] rounded-2xl overflow-hidden shadow-sm group">
+                  <img 
+                    src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80" 
+                    alt="Aceite y nutrición de cutícula"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="h-[420px] rounded-2xl overflow-hidden shadow-sm group">
+                  <img 
+                    src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80" 
+                    alt="Esmaltado terracota otoño"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="h-[420px] rounded-2xl overflow-hidden shadow-sm group">
+                  <img 
+                    src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80" 
+                    alt="Manos con acabado cromo glazed natural"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* SECCIÓN 3: SOBRE NOSOTROS (ESTILO IMAGEN 3 DEL USUARIO - FOTO CONTEXTUAL DE EQUIPO / ATELIER) */}
+          <section className="py-20 bg-white border-b border-[#EAE6DF]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                {/* Texto Sobre Nosotros */}
+                <div className="lg:col-span-6">
+                  <h2 className="font-serif text-4xl sm:text-5xl font-bold text-[#5C5046] tracking-tight uppercase">
+                    Sobre Nosotros
+                  </h2>
+                  <p className="text-sm text-[#5C5046] font-semibold mt-4 leading-relaxed">
+                    Samm Nail Studio nació con el objetivo de implantar un espacio de belleza específico y clínico para uñas.
+                  </p>
+                  <p className="text-sm text-[#666059] leading-relaxed mt-4">
+                    Especialistas apasionadas por el cuidado anatómico y la estética minimalista, decidimos unir fuerzas 
+                    en este atelier para crear un modelo de atención caracterizado por la alta calidad del producto, fórmulas 
+                    saludables y tratamientos minuciosamente adaptados a las necesidades de cada clienta.
+                  </p>
+                  
+                  <div className="mt-8">
+                    <button
+                      onClick={() => setActiveTab("tratamientos")}
+                      className="bg-[#5C5046] hover:bg-[#483E36] text-white text-xs uppercase tracking-[0.18em] font-semibold px-8 py-3.5 rounded-md transition-all shadow-sm"
+                    >
+                      Conoce Nuestra Carta
+                    </button>
+                  </div>
+                </div>
+
+                {/* Foto Atelier / Técnicas */}
+                <div className="lg:col-span-6">
+                  <div className="relative rounded-2xl overflow-hidden shadow-md border border-[#EAE6DF]">
+                    <img 
+                      src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1000&q=80" 
+                      alt="Equipo de especialistas en manicura de autor" 
+                      className="w-full h-[400px] object-cover"
+                    />
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* SECCIÓN 4: BANNER CIRCULAR DE TENDENCIA (ESTILO IMAGEN 4 DEL USUARIO) */}
+          <section className="py-20 bg-[#FAF7F2] border-b border-[#EAE6DF]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div className="lg:col-span-6">
+                  <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#AB9677] block mb-1">
+                    Tendencia Continua
+                  </span>
+                  <h3 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B332C] tracking-tight">
+                    PON TUS UÑAS DE MODA
+                  </h3>
+                  <p className="text-sm text-[#666059] leading-relaxed mt-4">
+                    En Samm Nail Studio nos encanta sorprenderte con nuevas colecciones y diseños exclusivos para que 
+                    siempre encuentres el estilo perfecto para tus manos. Nuestras cartas están inspiradas en las últimas modas, 
+                    los tonos de temporada y esos pequeños detalles que marcan la diferencia.
+                  </p>
+                  <p className="text-xs text-[#8A8177] mt-3 leading-relaxed">
+                    Cada cita es una oportunidad para experimentar con acabados únicos y pigmentos puros. 
+                    Consulta nuestras opciones y encuentra la que mejor se adapte a tu personalidad.
+                  </p>
+
+                  <div className="mt-8">
+                    <button
+                      onClick={() => setActiveTab("reserva")}
+                      className="bg-[#5C5046] hover:bg-[#483E36] text-white text-xs uppercase tracking-[0.18em] font-semibold px-8 py-4 rounded-md transition-all shadow-sm"
+                    >
+                      Reservar Mi Turno
+                    </button>
+                  </div>
+                </div>
+
+                {/* Gran Círculo Emblema (Referencia Visual Exacta de Imagen 4) */}
+                <div className="lg:col-span-6 flex justify-center">
+                  <div className="w-80 h-80 sm:w-96 sm:h-96 rounded-full border-[3px] border-[#AB9677] flex flex-col items-center justify-center p-8 text-center bg-white shadow-sm">
+                    <div className="w-12 h-0.5 bg-[#AB9677] mb-3"></div>
+                    <span className="text-xs uppercase tracking-[0.3em] font-bold text-[#5C5046]">
+                      Esmaltado
+                    </span>
+                    <h4 className="font-serif text-2xl sm:text-3xl font-bold text-[#3B332C] uppercase tracking-wider mt-1">
+                      Semipermanente Manos
+                    </h4>
+                    <span className="text-xs uppercase tracking-widest text-[#AB9677] font-semibold mt-2">
+                      Fórmula 20-Free
+                    </span>
+                    <div className="w-12 h-0.5 bg-[#AB9677] my-4"></div>
+                    <p className="text-[11px] uppercase tracking-widest text-[#666059] font-medium">
+                      Retirada anterior & Limpieza anatómica incluida
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* SECCIÓN 5: COLECCIONES ESTACIONALES (ESTILO IMAGEN 5: SUMMER JELLY, MACARONS & POLAR) */}
+          <section className="py-20 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <div className="text-center max-w-xl mx-auto mb-14">
+                <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#AB9677] block">
+                  Ediciones Especiales
+                </span>
+                <h3 className="font-serif text-4xl font-bold text-[#3B332C] mt-1">
+                  Colecciones de Temporada
+                </h3>
+                <p className="text-xs text-[#8A8177] mt-2">
+                  Inspiración cromática renovada cada estación.
                 </p>
               </div>
 
-              <button
-                onClick={() => setActiveTab("iframe-hello")}
-                className="bg-[#221F1D] hover:bg-black text-white text-xs uppercase tracking-[0.16em] font-semibold px-8 py-4 rounded-full transition-all shadow-md flex items-center gap-2 shrink-0"
-              >
-                <Eye className="w-4 h-4 text-[#AB9677]" />
-                Abrir Iframe Hello Nails
-              </button>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                {/* Tarjeta 1: Summer Jelly */}
+                <div className="rounded-2xl overflow-hidden border border-[#EAE6DF] shadow-xs group bg-[#FAF7F2]">
+                  <div className="h-72 overflow-hidden relative">
+                    <img 
+                      src="https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=800&q=80" 
+                      alt="Colección Summer Jelly"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <span className="absolute top-4 left-4 bg-white/95 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full text-[#3B332C] shadow-xs">
+                      Colección Cálida
+                    </span>
+                  </div>
+                  <div className="p-6 text-center">
+                    <h4 className="font-serif text-2xl font-bold text-[#3B332C]">SUMMER JELLY</h4>
+                    <p className="text-xs text-[#666059] mt-2">Tonos translúcidos con efecto almíbar y brillo de cristal.</p>
+                  </div>
+                </div>
+
+                {/* Tarjeta 2: Macaron Pastel */}
+                <div className="rounded-2xl overflow-hidden border border-[#EAE6DF] shadow-xs group bg-[#FAF7F2]">
+                  <div className="h-72 overflow-hidden relative">
+                    <img 
+                      src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=800&q=80" 
+                      alt="Colección Primavera Macaron"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <span className="absolute top-4 left-4 bg-white/95 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full text-[#3B332C] shadow-xs">
+                      Pastel Suave
+                    </span>
+                  </div>
+                  <div className="p-6 text-center">
+                    <h4 className="font-serif text-2xl font-bold text-[#3B332C]">SPRING PASTEL</h4>
+                    <p className="text-xs text-[#666059] mt-2">Menta suave, lila etéreo y rosa nube con acabado aterciopelado.</p>
+                  </div>
+                </div>
+
+                {/* Tarjeta 3: Polar Winter */}
+                <div className="rounded-2xl overflow-hidden border border-[#EAE6DF] shadow-xs group bg-[#FAF7F2]">
+                  <div className="h-72 overflow-hidden relative">
+                    <img 
+                      src="https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80" 
+                      alt="Colección Polar Glazed"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <span className="absolute top-4 left-4 bg-white/95 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full text-[#3B332C] shadow-xs">
+                      Invierno Profundo
+                    </span>
+                  </div>
+                  <div className="p-6 text-center">
+                    <h4 className="font-serif text-2xl font-bold text-[#3B332C]">POLAR GLAZED</h4>
+                    <p className="text-xs text-[#666059] mt-2">Azules noche, borgoña intenso y destellos de purpurina magnética.</p>
+                  </div>
+                </div>
+
+              </div>
             </div>
           </section>
+
         </main>
       )}
 
-      {/* 5. VISTA DE RESERVA ONLINE (AQUÍ ES DONDE APLICAMOS LA LÓGICA DE FOTOS, EXTRAS, CALENDARIO L-L Y PRE-RESERVA 3 COLORES) */}
+      {/* 4. VISTA DE TRATAMIENTOS PRESENTACIONAL (SIN PRECIOS DIRECTOS, ENFOQUE EN PROTOCOLOS) */}
+      {activeTab === "tratamientos" && (
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16 flex-1 w-full">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#AB9677]">
+              Carta de Servicios
+            </span>
+            <h1 className="font-serif text-4xl sm:text-5xl font-bold text-[#3B332C] mt-2">
+              Tratamientos Especializados
+            </h1>
+            <p className="text-xs text-[#666059] mt-3 leading-relaxed">
+              Consulta nuestra carta de técnicas anatómicas. Los precios exactos y opciones personalizadas 
+              se configuran directamente en nuestro modelo de reserva interactiva.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {SERVICES.map(s => (
+              <div key={s.id} className="bg-white rounded-2xl border border-[#EAE6DF] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+                <div>
+                  <div className="h-60 relative overflow-hidden bg-[#FAF7F2]">
+                    <img src={s.imgUrl} alt={s.name} className="w-full h-full object-cover" />
+                    {s.tag && (
+                      <span className="absolute top-3 left-3 bg-white/95 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full text-[#3B332C] shadow-xs">
+                        {s.tag}
+                      </span>
+                    )}
+                    <span className="absolute bottom-3 right-3 bg-[#5C5046]/90 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full flex items-center gap-1 font-medium">
+                      <Clock className="w-3.5 h-3.5 text-[#E0D5C1]" /> 2 horas cerradas
+                    </span>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="font-serif text-2xl font-bold text-[#3B332C]">{s.name}</h3>
+                    <p className="text-xs text-[#666059] mt-2 leading-relaxed">{s.desc}</p>
+                    <span className="inline-block mt-4 text-[11px] font-semibold text-[#AB9677] uppercase tracking-wider">
+                      Incluye protocolo de corte anatómico y nutrición
+                    </span>
+                  </div>
+                </div>
+
+                <div className="p-6 pt-0">
+                  <button
+                    onClick={() => {
+                      setSelectedService(s);
+                      setActiveTab("reserva");
+                    }}
+                    className="w-full bg-[#5C5046] hover:bg-[#483E36] text-white text-xs uppercase tracking-wider font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+                  >
+                    Ver Tarifas & Agendar Cita <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </main>
+      )}
+
+      {/* 5. VISTA DE RESERVA (AQUÍ ES DONDE SÍ ESTÁN LOS PRECIOS, EL PRESUPUESTO, EXTRAS, CALENDARIO L-L Y REGLA 20% YAPE) */}
       {activeTab === "reserva" && (
         <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex-1 w-full">
 
-          {/* BANNER DE LOS 3 COLORES & POLÍTICA 20% ADELANTO */}
-          <div className="mb-8 bg-white border border-black/10 rounded-2xl p-5 shadow-sm">
+          {/* Banner de Reglas de los 3 Colores y Política de Anticipo */}
+          <div className="mb-8 bg-[#FAF8F5] border border-[#EAE6DF] rounded-2xl p-5 shadow-xs">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex items-start gap-3">
                 <div className="w-9 h-9 rounded-full bg-[#AB9677]/15 text-[#AB9677] flex items-center justify-center shrink-0 mt-0.5">
                   <Info className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-[#221F1D]">
-                    Sistema de Pre-Reserva Inteligente · Política de Anticipo
+                  <h4 className="text-sm font-bold text-[#3B332C]">
+                    Modelo de Pre-Reserva Inteligente · Política de Anticipo
                   </h4>
-                  <p className="text-xs text-[#221F1D]/70 mt-0.5">
-                    Las reservas entran en <strong>Pre-Reserva (Naranja)</strong> y se bloquean en el calendario. 
-                    Se confirman de forma definitiva en <strong>Verde</strong> al abonar el <strong>20% de adelanto</strong> vía Yape o Transferencia.
+                  <p className="text-xs text-[#666059] mt-0.5">
+                    Las citas se registran inicialmente en <strong>Pre-Reserva (Naranja)</strong>. 
+                    Se confirman en <strong>Verde</strong> al abonar el <strong>20% de adelanto</strong> vía Yape o Transferencia.
                   </p>
                 </div>
               </div>
 
               {/* Leyenda de los 3 Colores */}
-              <div className="flex items-center gap-3 shrink-0 text-xs font-medium">
-                <span className="flex items-center gap-1.5 bg-[#F9F9F9] border border-black/20 px-3 py-1.5 rounded-lg text-[#221F1D]">
+              <div className="flex items-center gap-2.5 shrink-0 text-xs font-semibold">
+                <span className="flex items-center gap-1.5 bg-white border border-[#D1D5DB] px-3 py-1.5 rounded-lg text-[#3B332C]">
                   <span className="w-3 h-3 rounded-full bg-white border-2 border-black/40"></span>
                   Disponible (Blanco)
                 </span>
@@ -763,7 +853,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Banner de Pre-Reserva Activa / Simulación de Yape */}
+          {/* Banner si hay una Pre-Reserva activa esperando Yape */}
           {activePreReservation && (
             <div className="mb-8 bg-gradient-to-r from-orange-50 via-[#FFF9F2] to-emerald-50 border-2 border-orange-400 rounded-2xl p-6 shadow-md">
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -778,10 +868,10 @@ export default function HomePage() {
                     </span>
                     <span className="text-xs font-semibold text-black/60">Código: #{activePreReservation.code}</span>
                   </div>
-                  <h3 className="font-serif text-xl font-bold text-[#221F1D] mt-2">
+                  <h3 className="font-serif text-xl font-bold text-[#3B332C] mt-2">
                     {activePreReservation.clientName} · {activePreReservation.service}
                   </h3>
-                  <p className="text-xs text-[#221F1D]/80 mt-1">
+                  <p className="text-xs text-[#55504A] mt-1">
                     📅 {activePreReservation.date} | ⏰ {activePreReservation.startTime} hrs a {activePreReservation.endTime} hrs ({activePreReservation.totalDuration} min reservados)
                   </p>
                 </div>
@@ -813,34 +903,34 @@ export default function HomePage() {
           )}
 
           <div className="mb-8">
-            <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#AB9677]">
+            <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#AB9677]">
               Paso a Paso
             </span>
-            <h1 className="font-serif text-3xl sm:text-4xl font-normal tracking-tight mt-1 text-[#221F1D]">
-              Configura tu Cita & Extras
-            </h1>
-            <p className="text-xs text-[#221F1D]/70 mt-2">
-              Selecciona tu tratamiento base con foto referencial, añade los extras en texto plano y el calendario calculará automáticamente el tiempo exacto en cabina.
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight mt-1 text-[#3B332C]">
+              Configura tu Cita & Presupuesto
+            </h2>
+            <p className="text-xs text-[#666059] mt-2">
+              Selecciona tu tratamiento base con foto referencial, añade extras en texto y consulta el importe total junto con el 20% de anticipo.
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            {/* COLUMNA IZQUIERDA: 1. SERVICIOS CON FOTOS, 2. EXTRAS EN TEXTO, 3. CALENDARIO SEMANAL L-L */}
+            {/* Columna Izquierda: 1. Tratamientos con fotos, 2. Extras en texto, 3. Calendario semanal L-L */}
             <div className="lg:col-span-8 space-y-8">
               
-              {/* 1. Selector de Servicio Base CON FOTOS REFERENCIALES */}
-              <div className="bg-white rounded-2xl border border-black/8 p-6 shadow-sm">
+              {/* 1. Selector de Tratamiento Base CON FOTOS REFERENCIALES */}
+              <div className="bg-white rounded-2xl border border-[#EAE6DF] p-6 shadow-xs">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h3 className="font-serif text-lg font-medium text-[#221F1D]">
+                    <h3 className="font-serif text-lg font-bold text-[#3B332C]">
                       1. Selecciona Tratamiento Base
                     </h3>
-                    <p className="text-xs text-[#221F1D]/60 mt-0.5">
+                    <p className="text-xs text-[#666059] mt-0.5">
                       Servicio cerrado estándar de ~2 horas de duración.
                     </p>
                   </div>
-                  <span className="text-[11px] font-semibold text-[#AB9677] uppercase tracking-wider bg-[#AB9677]/10 px-2.5 py-1 rounded-full">
+                  <span className="text-[11px] font-semibold text-[#AB9677] uppercase tracking-wider bg-[#FAF7F2] border border-[#EAE6DF] px-2.5 py-1 rounded-full">
                     Obligatorio
                   </span>
                 </div>
@@ -854,8 +944,8 @@ export default function HomePage() {
                         onClick={() => setSelectedService(s)}
                         className={`group cursor-pointer rounded-2xl border overflow-hidden transition-all flex flex-col justify-between ${
                           isSelected 
-                            ? "border-[#AB9677] ring-2 ring-[#AB9677]/60 shadow-md bg-[#FAF7F2]" 
-                            : "border-black/10 hover:border-black/25 bg-white"
+                            ? "border-[#AB9677] ring-2 ring-[#AB9677]/60 shadow-md bg-[#FAF8F5]" 
+                            : "border-[#EAE6DF] hover:border-[#AB9677]/50 bg-white"
                         }`}
                       >
                         {/* Foto Referencial */}
@@ -866,34 +956,34 @@ export default function HomePage() {
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           />
                           {s.tag && (
-                            <span className="absolute top-2 left-2 bg-white/90 backdrop-blur-sm text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md shadow-xs">
+                            <span className="absolute top-2 left-2 bg-white/95 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md shadow-xs text-[#3B332C]">
                               {s.tag}
                             </span>
                           )}
-                          <span className="absolute bottom-2 right-2 bg-black/75 text-white text-[10px] px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
-                            <Clock className="w-3 h-3 text-[#AB9677]" /> 2 horas cerrado
+                          <span className="absolute bottom-2 right-2 bg-[#5C5046]/90 text-white text-[10px] px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
+                            <Clock className="w-3 h-3 text-[#E0D5C1]" /> 2 horas cerrado
                           </span>
                         </div>
 
-                        {/* Detalle */}
+                        {/* Detalle y Precio aquí en reserva */}
                         <div className="p-4 flex-1 flex flex-col justify-between">
                           <div>
                             <div className="flex items-baseline justify-between">
-                              <h4 className="font-serif font-medium text-base text-[#221F1D] group-hover:text-[#AB9677] transition-colors">
+                              <h4 className="font-serif font-bold text-base text-[#3B332C] group-hover:text-[#AB9677] transition-colors">
                                 {s.name}
                               </h4>
                               <span className="font-serif text-lg font-bold text-[#AB9677]">
                                 {s.price}€
                               </span>
                             </div>
-                            <p className="text-xs text-[#221F1D]/70 mt-1 leading-relaxed">
+                            <p className="text-xs text-[#666059] mt-1 leading-relaxed">
                               {s.desc}
                             </p>
                           </div>
 
-                          <div className="mt-3 pt-2.5 border-t border-black/5 flex items-center justify-between">
-                            <span className="text-[10px] text-black/50 font-medium">Protocolo médico</span>
-                            <span className={`text-[11px] font-semibold flex items-center gap-1 ${
+                          <div className="mt-3 pt-2.5 border-t border-[#EAE6DF] flex items-center justify-between">
+                            <span className="text-[10px] text-[#8A8177] font-medium">Protocolo médico</span>
+                            <span className={`text-[11px] font-bold flex items-center gap-1 ${
                               isSelected ? "text-[#AB9677]" : "text-black/40"
                             }`}>
                               {isSelected ? "✓ Seleccionado" : "Elegir"}
@@ -907,17 +997,17 @@ export default function HomePage() {
               </div>
 
               {/* 2. Selector de Extras Dinámicos (EN LETRAS NORMALES) */}
-              <div className="bg-white rounded-2xl border border-black/8 p-6 shadow-sm">
+              <div className="bg-white rounded-2xl border border-[#EAE6DF] p-6 shadow-xs">
                 <div className="flex items-center justify-between mb-4">
                   <div>
-                    <h3 className="font-serif text-lg font-medium text-[#221F1D]">
+                    <h3 className="font-serif text-lg font-bold text-[#3B332C]">
                       2. Extras & Añadidos
                     </h3>
-                    <p className="text-xs text-[#221F1D]/60 mt-0.5">
-                      Cada extra suma <strong>media hora (+30 min)</strong> para dar tiempo de limpieza y desinfección en cabina.
+                    <p className="text-xs text-[#666059] mt-0.5">
+                      Cada extra suma <strong>media hora (+30 min)</strong> para dar tiempo de desinfección y limpieza de cabina.
                     </p>
                   </div>
-                  <span className="text-xs text-black/50 font-medium">
+                  <span className="text-xs text-[#8A8177] font-medium">
                     Opcional
                   </span>
                 </div>
@@ -931,8 +1021,8 @@ export default function HomePage() {
                         onClick={() => toggleExtra(extra.id)}
                         className={`p-3.5 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
                           isSelected 
-                            ? "border-[#AB9677] bg-[#FAF7F2] ring-1 ring-[#AB9677]" 
-                            : "border-black/10 hover:border-black/20 bg-white"
+                            ? "border-[#AB9677] bg-[#FAF8F5] ring-1 ring-[#AB9677]" 
+                            : "border-[#EAE6DF] hover:border-black/20 bg-white"
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -942,13 +1032,13 @@ export default function HomePage() {
                             {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                           </div>
                           <div>
-                            <span className="text-xs font-semibold text-[#221F1D] block">{extra.name}</span>
-                            <span className="text-[11px] text-black/50 block">{extra.desc}</span>
+                            <span className="text-xs font-bold text-[#3B332C] block">{extra.name}</span>
+                            <span className="text-[11px] text-[#666059] block">{extra.desc}</span>
                           </div>
                         </div>
 
                         <div className="text-right shrink-0">
-                          <span className="text-xs font-bold text-[#221F1D]">+{extra.price}€</span>
+                          <span className="text-xs font-bold text-[#3B332C]">+{extra.price}€</span>
                           <span className="text-[10px] text-[#AB9677] font-semibold block">+{extra.duration} min limpieza</span>
                         </div>
                       </div>
@@ -958,19 +1048,19 @@ export default function HomePage() {
               </div>
 
               {/* 3. Calendario Semanal de Lunes a Lunes (9 AM A 6 PM) */}
-              <div className="bg-white rounded-2xl border border-black/8 p-6 shadow-sm">
+              <div className="bg-white rounded-2xl border border-[#EAE6DF] p-6 shadow-xs">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
                   <div>
-                    <h3 className="font-serif text-lg font-medium text-[#221F1D] flex items-center gap-2">
+                    <h3 className="font-serif text-lg font-bold text-[#3B332C] flex items-center gap-2">
                       <CalendarIcon className="w-4 h-4 text-[#AB9677]" />
                       3. Agenda Semanal (Lunes a Lunes)
                     </h3>
-                    <p className="text-xs text-[#221F1D]/60 mt-0.5">
-                      Horario continuo de <strong>9:00 am a 6:00 pm</strong>. Selecciona tu turno.
+                    <p className="text-xs text-[#666059] mt-0.5">
+                      Horario de atención continuo de <strong>9:00 am a 6:00 pm</strong>.
                     </p>
                   </div>
 
-                  <div className="bg-[#FAF7F2] border border-[#AB9677]/30 px-3 py-1.5 rounded-xl text-xs text-[#221F1D] font-medium">
+                  <div className="bg-[#FAF8F5] border border-[#AB9677]/30 px-3 py-1.5 rounded-xl text-xs text-[#3B332C] font-semibold">
                     <span className="text-[#AB9677] font-bold">Tiempo a cubrir:</span> {totalDurationHours}
                   </div>
                 </div>
@@ -986,17 +1076,17 @@ export default function HomePage() {
                         onClick={() => setSelectedDate(w.fullDate)}
                         className={`p-2.5 rounded-xl text-center border transition-all ${
                           isSelected 
-                            ? "bg-[#221F1D] text-white border-[#AB9677] ring-1 ring-[#AB9677] shadow-sm" 
-                            : "bg-white text-[#221F1D] border-black/10 hover:border-[#AB9677]"
+                            ? "bg-[#5C5046] text-white border-[#AB9677] ring-1 ring-[#AB9677] shadow-sm" 
+                            : "bg-white text-[#5C5046] border-[#EAE6DF] hover:border-[#AB9677]"
                         }`}
                       >
-                        <span className="block text-[10px] uppercase font-bold tracking-wider opacity-70">
+                        <span className="block text-[10px] uppercase font-bold tracking-wider opacity-80">
                           {w.day}
                         </span>
                         <span className="block text-sm font-bold mt-0.5">
                           {w.dateNum}
                         </span>
-                        <span className="block text-[9px] opacity-60">
+                        <span className="block text-[9px] opacity-70">
                           {w.month}
                         </span>
                       </button>
@@ -1007,8 +1097,8 @@ export default function HomePage() {
                 {/* Huecos Horarios (9:00 a 18:00) */}
                 <div>
                   <div className="flex items-center justify-between mb-3 text-xs">
-                    <span className="font-medium text-[#221F1D]">Turnos para el {selectedDate} ({totalDurationMinutes} min totales):</span>
-                    <span className="text-[11px] text-black/50">
+                    <span className="font-semibold text-[#3B332C]">Turnos para el {selectedDate} ({totalDurationMinutes} min totales):</span>
+                    <span className="text-[11px] text-[#8A8177]">
                       Calcula fin: {selectedStartTime} → {calculatedEndTime} hrs
                     </span>
                   </div>
@@ -1031,7 +1121,7 @@ export default function HomePage() {
                         slotClasses = "bg-[#AB9677] text-white border-[#AB9677] shadow-md ring-2 ring-[#AB9677]/40";
                         statusBadge = "Tu Turno";
                       } else {
-                        slotClasses = "bg-white text-[#221F1D] border-black/15 hover:border-[#AB9677] hover:shadow-xs";
+                        slotClasses = "bg-white text-[#3B332C] border-[#D1D5DB] hover:border-[#AB9677] hover:shadow-xs";
                         statusBadge = "Libre";
                       }
 
@@ -1044,7 +1134,7 @@ export default function HomePage() {
                           className={`p-2.5 rounded-xl border text-center transition-all flex flex-col items-center justify-center ${slotClasses}`}
                         >
                           <span className="text-xs font-bold">{slot} hrs</span>
-                          <span className="text-[9px] uppercase tracking-wider font-semibold mt-0.5 opacity-80">
+                          <span className="text-[9px] uppercase tracking-wider font-semibold mt-0.5 opacity-90">
                             {statusBadge}
                           </span>
                         </button>
@@ -1055,33 +1145,33 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* COLUMNA DERECHA: TICKET DE RESERVA CON PRE-RESERVA Y 20% ADELANTO */}
+            {/* Columna Derecha: Ticket de Presupuesto con 20% Adelanto */}
             <div className="lg:col-span-4">
-              <div className="sticky top-28 bg-white rounded-2xl border border-black/10 p-6 shadow-md">
+              <div className="sticky top-28 bg-white rounded-2xl border border-[#EAE6DF] p-6 shadow-md">
                 
                 {/* Header Ticket */}
-                <div className="flex items-center justify-between pb-4 border-b border-black/10">
+                <div className="flex items-center justify-between pb-4 border-b border-[#EAE6DF]">
                   <div>
                     <span className="text-[10px] uppercase tracking-widest font-bold text-[#AB9677] block">
                       Presupuesto en Tiempo Real
                     </span>
-                    <h3 className="font-serif text-2xl font-medium tracking-tight text-[#221F1D]">
+                    <h3 className="font-serif text-2xl font-bold tracking-tight text-[#3B332C]">
                       Ticket de Reserva
                     </h3>
                   </div>
-                  <div className="w-8 h-8 rounded-full bg-[#FAF7F2] border border-[#AB9677]/30 flex items-center justify-center font-serif text-xs font-bold text-[#AB9677]">
+                  <div className="w-8 h-8 rounded-full bg-[#FAF8F5] border border-[#AB9677]/30 flex items-center justify-center font-serif text-xs font-bold text-[#AB9677]">
                     SN
                   </div>
                 </div>
 
-                {/* Detalle */}
-                <div className="py-5 space-y-4 text-xs border-b border-black/10">
+                {/* Desglose */}
+                <div className="py-5 space-y-4 text-xs border-b border-[#EAE6DF]">
                   <div className="flex items-start justify-between">
                     <div>
-                      <span className="font-semibold text-sm text-[#221F1D] block">
+                      <span className="font-bold text-sm text-[#3B332C] block">
                         {selectedService.name}
                       </span>
-                      <span className="text-black/50 text-[11px]">
+                      <span className="text-[#8A8177] text-[11px]">
                         Servicio Base · 2 horas cerrado
                       </span>
                     </div>
@@ -1090,16 +1180,16 @@ export default function HomePage() {
 
                   {selectedExtras.length > 0 && (
                     <div className="pt-2 space-y-2">
-                      <span className="text-[10px] uppercase tracking-wider text-black/50 font-bold block">
+                      <span className="text-[10px] uppercase tracking-wider text-[#8A8177] font-bold block">
                         Extras & Tiempo Adicional:
                       </span>
                       {selectedExtras.map(id => {
                         const ex = EXTRAS.find(e => e.id === id);
                         if (!ex) return null;
                         return (
-                          <div key={id} className="flex items-center justify-between text-[11px] text-[#221F1D]/80">
+                          <div key={id} className="flex items-center justify-between text-[11px] text-[#3B332C]">
                             <span>+ {ex.name} (+30 min)</span>
-                            <span className="font-semibold">+{ex.price}€</span>
+                            <span className="font-bold">+{ex.price}€</span>
                           </div>
                         );
                       })}
@@ -1107,26 +1197,26 @@ export default function HomePage() {
                   )}
 
                   {/* Resumen de Tiempo y Horario */}
-                  <div className="bg-[#FAF7F2] p-3 rounded-xl border border-black/5 space-y-1.5 text-[11px]">
+                  <div className="bg-[#FAF8F5] p-3 rounded-xl border border-[#EAE6DF] space-y-1.5 text-[11px]">
                     <div className="flex justify-between">
-                      <span className="text-black/50">Día seleccionado:</span>
-                      <span className="font-semibold">{selectedDate}</span>
+                      <span className="text-[#8A8177]">Día seleccionado:</span>
+                      <span className="font-semibold text-[#3B332C]">{selectedDate}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-black/50">Horario inicio:</span>
-                      <span className="font-semibold">{selectedStartTime} hrs</span>
+                      <span className="text-[#8A8177]">Horario inicio:</span>
+                      <span className="font-semibold text-[#3B332C]">{selectedStartTime} hrs</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-black/50">Horario término:</span>
-                      <span className="font-semibold">{calculatedEndTime} hrs</span>
+                      <span className="text-[#8A8177]">Horario término:</span>
+                      <span className="font-semibold text-[#3B332C]">{calculatedEndTime} hrs</span>
                     </div>
-                    <div className="flex justify-between text-[#AB9677] font-semibold pt-1 border-t border-black/5">
+                    <div className="flex justify-between text-[#AB9677] font-bold pt-1 border-t border-[#EAE6DF]">
                       <span>Tiempo cubierto:</span>
                       <span>{totalDurationHours}</span>
                     </div>
                   </div>
 
-                  {/* REGLA DEL 20% DE ADELANTO */}
+                  {/* Condición de Reserva: 20% Adelanto */}
                   <div className="bg-orange-50 border border-orange-200 p-3.5 rounded-xl space-y-1.5">
                     <div className="flex items-center gap-1.5 text-orange-900 font-bold text-xs">
                       <AlertCircle className="w-4 h-4 text-orange-600 shrink-0" />
@@ -1139,13 +1229,13 @@ export default function HomePage() {
                 </div>
 
                 {/* Importe Total y Cuota 20% */}
-                <div className="py-4 border-b border-black/10 space-y-2">
+                <div className="py-4 border-b border-[#EAE6DF] space-y-2">
                   <div className="flex justify-between items-baseline">
-                    <span className="font-serif text-sm text-black/60">Presupuesto Total:</span>
-                    <span className="font-serif text-2xl font-bold text-[#221F1D]">{totalPrice}€</span>
+                    <span className="font-serif text-sm text-[#8A8177]">Presupuesto Total:</span>
+                    <span className="font-serif text-2xl font-bold text-[#3B332C]">{totalPrice}€</span>
                   </div>
 
-                  <div className="flex justify-between items-baseline pt-1 border-t border-black/5">
+                  <div className="flex justify-between items-baseline pt-1 border-t border-[#EAE6DF]">
                     <span className="text-xs font-bold text-orange-800">
                       🟠 Adelanto 20% (Yape / Transferencia):
                     </span>
@@ -1154,16 +1244,16 @@ export default function HomePage() {
                     </span>
                   </div>
 
-                  <div className="flex justify-between items-baseline text-[11px] text-black/60">
+                  <div className="flex justify-between items-baseline text-[11px] text-[#8A8177]">
                     <span>Restante en cabina (80%):</span>
-                    <span className="font-semibold">{remainingBalance}€</span>
+                    <span className="font-semibold text-[#3B332C]">{remainingBalance}€</span>
                   </div>
                 </div>
 
                 {/* Formulario de Pre-Reserva */}
                 <form onSubmit={handlePreReserve} className="mt-5 space-y-4">
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider font-semibold text-black/70 mb-1">
+                    <label className="block text-[11px] uppercase tracking-wider font-semibold text-[#5C5046] mb-1">
                       Nombre y Apellidos
                     </label>
                     <div className="relative">
@@ -1174,13 +1264,13 @@ export default function HomePage() {
                         placeholder="Ej. Valeria Montes"
                         value={clientName}
                         onChange={(e) => setClientName(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2.5 text-xs bg-[#FDFBF7] border border-black/15 rounded-xl focus:outline-none focus:border-[#AB9677]"
+                        className="w-full pl-9 pr-3 py-2.5 text-xs bg-[#FAF8F5] border border-[#D1D5DB] rounded-xl focus:outline-none focus:border-[#AB9677]"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-[11px] uppercase tracking-wider font-semibold text-black/70 mb-1">
+                    <label className="block text-[11px] uppercase tracking-wider font-semibold text-[#5C5046] mb-1">
                       Teléfono WhatsApp
                     </label>
                     <div className="relative">
@@ -1191,21 +1281,21 @@ export default function HomePage() {
                         placeholder="+51 900 000 000"
                         value={clientPhone}
                         onChange={(e) => setClientPhone(e.target.value)}
-                        className="w-full pl-9 pr-3 py-2.5 text-xs bg-[#FDFBF7] border border-black/15 rounded-xl focus:outline-none focus:border-[#AB9677]"
+                        className="w-full pl-9 pr-3 py-2.5 text-xs bg-[#FAF8F5] border border-[#D1D5DB] rounded-xl focus:outline-none focus:border-[#AB9677]"
                       />
                     </div>
                   </div>
 
                   <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-[#221F1D] to-[#3a3530] hover:from-black hover:to-neutral-900 text-white text-xs uppercase tracking-[0.16em] font-semibold py-4 rounded-full transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                    className="w-full bg-[#5C5046] hover:bg-[#483E36] text-white text-xs uppercase tracking-[0.16em] font-semibold py-4 rounded-full transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                   >
                     <MessageCircle className="w-4 h-4 text-emerald-400" />
                     Confirmar Pre-Reserva vía WhatsApp
                   </button>
                 </form>
 
-                <p className="text-[10px] text-center text-black/40 mt-3">
+                <p className="text-[10px] text-center text-[#8A8177] mt-3">
                   Te redirigiremos a WhatsApp con los datos listos para coordinar tu Yape.
                 </p>
               </div>
@@ -1217,25 +1307,25 @@ export default function HomePage() {
       )}
 
       {/* FOOTER */}
-      <footer className="bg-[#221F1D] text-white/70 py-12 border-t border-black/20 text-xs mt-auto">
+      <footer className="bg-[#5C5046] text-white/80 py-12 border-t border-black/10 text-xs mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-[#AB9677] text-white flex items-center justify-center font-serif text-base font-bold">
+            <div className="w-9 h-9 rounded-full bg-[#AB9677] text-white flex items-center justify-center font-serif text-lg font-bold">
               S
             </div>
             <div>
               <span className="font-serif text-lg tracking-widest text-white block">SAMM NAIL STUDIO</span>
-              <span className="text-[10px] text-white/50 tracking-wider">Belleza de autor · Madrid / Lima</span>
+              <span className="text-[10px] text-[#E0D5C1] tracking-wider">Atelier de Uñas & Cuidado Anatómico · Lima</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-6 text-[11px] tracking-wider uppercase">
-            <button onClick={() => setActiveTab("salon")} className="hover:text-white transition-colors">Carta</button>
-            <button onClick={() => setActiveTab("reserva")} className="hover:text-white transition-colors">Reserva Online</button>
-            <button onClick={() => setActiveTab("iframe-hello")} className="hover:text-white transition-colors">Ver Hello Nails</button>
+          <div className="flex items-center gap-6 text-[11px] tracking-wider uppercase font-medium">
+            <button onClick={() => setActiveTab("inicio")} className="hover:text-white transition-colors">Inicio</button>
+            <button onClick={() => setActiveTab("tratamientos")} className="hover:text-white transition-colors">Tratamientos</button>
+            <button onClick={() => setActiveTab("reserva")} className="hover:text-white transition-colors">Citas & Agenda</button>
           </div>
 
-          <p className="text-[11px] text-white/40">
+          <p className="text-[11px] text-white/50">
             © 2026 Samm Nail Studio. Todos los derechos reservados.
           </p>
         </div>
