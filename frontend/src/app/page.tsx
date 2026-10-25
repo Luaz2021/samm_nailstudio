@@ -1,37 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { 
   Sparkles, 
   Calendar as CalendarIcon, 
   Clock, 
   CheckCircle2, 
-  Bell, 
   ChevronLeft, 
   ChevronRight, 
   Plus, 
   ShieldCheck, 
-  TrendingUp, 
   User, 
-  Phone
+  Phone,
+  Heart,
+  Eye,
+  ExternalLink,
+  Award,
+  Leaf,
+  Check,
+  ShoppingBag,
+  SlidersHorizontal,
+  X
 } from "lucide-react";
 
-// Tipos de Datos
-interface Service {
+// Tipos
+interface ServiceItem {
   id: string;
   name: string;
-  category: string;
+  category: "manicura" | "pedicura" | "nailart" | "tratamientos";
   price: number;
-  duration: number; // minutos
+  duration: number; // minutos base
   desc: string;
+  tag?: string;
   imgUrl: string;
 }
 
-interface Extra {
+interface ExtraItem {
   id: string;
   name: string;
   price: number;
-  duration: number; // minutos adicionales
+  duration: number; // minutos añadidos
   desc: string;
 }
 
@@ -49,457 +57,694 @@ interface Appointment {
   status: "confirmada" | "en_cabina" | "completada";
 }
 
-// Catálogo de Servicios Base
-const SERVICES: Service[] = [
+// Catálogo de Servicios con CDN de alta resolución
+const SERVICES: ServiceItem[] = [
   {
-    id: "s1",
-    name: "Manicura Rusa en Seco",
-    category: "Técnica Signature",
-    price: 55,
+    id: "mani-rusa",
+    name: "Manicura Rusa Combinada",
+    category: "manicura",
+    price: 38,
     duration: 60,
-    desc: "Limpieza anatómica profunda con torno y fresas alemanas. Esmaltado bajo cutícula de 21 días.",
-    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?w=500&auto=format&fit=crop&q=80"
+    desc: "Limpieza anatómica milimétrica de cutícula con torno y esmaltado de máxima precisión bajo cutícula.",
+    tag: "Bestseller",
+    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=900&q=80"
   },
   {
-    id: "s2",
-    name: "Uñas Soft Gel Tips",
-    category: "Estructura Ligera",
-    price: 85,
-    duration: 90,
-    desc: "Extensión con cápsulas flexibles de gel puro adheridas con base protéica. Cero daño a la uña natural.",
-    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?w=500&auto=format&fit=crop&q=80"
-  },
-  {
-    id: "s3",
-    name: "Acrílicas Esculpidas de Autor",
-    category: "Arquitectura",
-    price: 115,
-    duration: 120,
-    desc: "Construcción milimétrica sobre molde en punta Almendra o Coffin con french fino hecho a pincel.",
-    imgUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?w=500&auto=format&fit=crop&q=80"
-  },
-  {
-    id: "s4",
-    name: "Kapping Mineral Protector",
-    category: "Nivelación",
-    price: 65,
-    duration: 75,
-    desc: "Blindaje con calcio y gel autonivelante sobre tu propio largo para evitar roturas o descamaciones.",
-    imgUrl: "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?w=500&auto=format&fit=crop&q=80"
-  },
-  {
-    id: "s5",
-    name: "Pedicura Spa Rusa Profunda",
-    category: "Cuidado Podal",
-    price: 70,
-    duration: 75,
-    desc: "Exfoliación con sales botánicas, retiro de durezas con disco podológico y esmaltado semipermanente.",
-    imgUrl: "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?w=500&auto=format&fit=crop&q=80"
-  }
-];
-
-// Catálogo de Extras
-const EXTRAS_LIST: Extra[] = [
-  {
-    id: "e1",
-    name: "Retiro previo de Acrílico / Gel anterior",
-    price: 20,
-    duration: 30,
-    desc: "Remoción no invasiva con torno sin dañar la queratina natural."
-  },
-  {
-    id: "e2",
-    name: "Nail Art elaborado (2 uñas a mano alzada)",
-    price: 15,
-    duration: 15,
-    desc: "Diseño micro-editorial, líneas cromadas o encapsulado."
-  },
-  {
-    id: "e3",
-    name: "Nail Art Full Set (10 uñas)",
-    price: 40,
+    id: "mani-semi",
+    name: "Manicura Semipermanente Nude",
+    category: "manicura",
+    price: 26,
     duration: 45,
-    desc: "Diseño complejo integral en todas las uñas."
+    desc: "Limado y forma orgánica, esmaltado 20-Free con brillo cerámico de larga duración (21+ días).",
+    tag: "Clásico",
+    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=900&q=80"
   },
   {
-    id: "e4",
-    name: "Largo Extra XL (Esculpidas o Soft Gel)",
-    price: 20,
-    duration: 20,
-    desc: "Refuerzo estructural para longitud extrema."
+    id: "nailart-editorial",
+    name: "Nail Art Minimal & Cromo Glazed",
+    category: "nailart",
+    price: 45,
+    duration: 75,
+    desc: "Efecto Hailey Bieber glazed donut, micropolvo perlado o acentos franceses micro-lineales a mano alzada.",
+    tag: "Tendencia",
+    imgUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=900&q=80"
   },
   {
-    id: "e5",
-    name: "Tratamiento de Parafina & Masaje Sedoso",
-    price: 20,
-    duration: 15,
-    desc: "Nutrición con aceites de jojoba y guante térmico."
+    id: "pedi-spa",
+    name: "Pedicura Spa Jelly Relax",
+    category: "pedicura",
+    price: 44,
+    duration: 60,
+    desc: "Inmersión exfoliante en gelatina de aromas, retirada de durezas profunda y masaje con manteca de karité pura.",
+    tag: "Wellness",
+    imgUrl: "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "soft-gel",
+    name: "Extensiones Soft Gel / Tips Press-On",
+    category: "manicura",
+    price: 52,
+    duration: 90,
+    desc: "Alargamiento con cápsulas de gel empapable que respetan y no desgastan la lámina natural.",
+    tag: "Durabilidad",
+    imgUrl: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=900&q=80"
+  },
+  {
+    id: "trata-ibx",
+    name: "Tratamiento Reparador IBX System",
+    category: "tratamientos",
+    price: 22,
+    duration: 30,
+    desc: "Fusión molecular interna para uñas quebradizas, descamadas o dañadas por acrílicos agresivos.",
+    tag: "Terapéutico",
+    imgUrl: "https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?auto=format&fit=crop&w=900&q=80"
   }
 ];
 
-// Días de la Semana para el Calendario Semanal
-const WEEK_DAYS = [
-  { day: "Lunes", dateStr: "26 Oct", fullDate: "2026-10-26" },
-  { day: "Martes", dateStr: "27 Oct", fullDate: "2026-10-27" },
-  { day: "Miércoles", dateStr: "28 Oct", fullDate: "2026-10-28" },
-  { day: "Jueves", dateStr: "29 Oct", fullDate: "2026-10-29" },
-  { day: "Viernes", dateStr: "30 Oct", fullDate: "2026-10-30" },
-  { day: "Sábado", dateStr: "31 Oct", fullDate: "2026-10-31" },
-  { day: "Domingo", dateStr: "01 Nov", fullDate: "2026-11-01" },
+// Extras dinámicos que alteran duración y precio
+const EXTRAS: ExtraItem[] = [
+  { 
+    id: "retirada-previa", 
+    name: "Retirada de Acrílico / Gel Ajeno", 
+    price: 10, 
+    duration: 30, 
+    desc: "Retirada técnica sin torno abrasivo para no dañar tu uña." 
+  },
+  { 
+    id: "french-micro", 
+    name: "French Micro-Line en 10 uñas", 
+    price: 8, 
+    duration: 20, 
+    desc: "Línea francesa ultra-fina minimalista en tono blanco roto o metalizado." 
+  },
+  { 
+    id: "reparacion-una", 
+    name: "Reconstrucción Uña Rota (Seda/Gel)", 
+    price: 5, 
+    duration: 15, 
+    desc: "Rescate de uña fisurada sin tener que cortarlas todas." 
+  },
+  { 
+    id: "nailart-alzada", 
+    name: "Nail Art Personalizado (2 Uñas)", 
+    price: 9, 
+    duration: 20, 
+    desc: "Dibujo botánico, trazos abstractos o piedras Swarovski." 
+  },
+  { 
+    id: "masaje-vela", 
+    name: "Masaje Térmico con Vela de Cera Soja", 
+    price: 7, 
+    duration: 15, 
+    desc: "Hidratación profunda caliente para cutículas resecas." 
+  }
 ];
 
-export default function SammNailStudio() {
-  // Estado de Navegación de Vistas (Clienta vs Admin)
-  const [viewRole, setViewRole] = useState<"client" | "admin">("client");
+const WEEK_DAYS = [
+  { name: "Lun", date: "26 Oct", fullDate: "2026-10-26" },
+  { name: "Mar", date: "27 Oct", fullDate: "2026-10-27" },
+  { name: "Mié", date: "28 Oct", fullDate: "2026-10-28" },
+  { name: "Jue", date: "29 Oct", fullDate: "2026-10-29" },
+  { name: "Vie", date: "30 Oct", fullDate: "2026-10-30" },
+  { name: "Sáb", date: "31 Oct", fullDate: "2026-10-31" },
+  { name: "Dom", date: "01 Nov", fullDate: "2026-11-01" },
+];
 
-  // Estado de Reserva Clienta
-  const [selectedService, setSelectedService] = useState<Service>(SERVICES[0]);
-  const [selectedExtras, setSelectedExtras] = useState<Extra[]>([]);
-  const [selectedDayIndex, setSelectedDayIndex] = useState<number>(0);
-  const [selectedTimeSlot, setSelectedTimeSlot] = useState<string>("03:00 PM");
-  const [clientName, setClientName] = useState<string>("Valeria Silva");
-  const [clientPhone, setClientPhone] = useState<string>("987 654 321");
+const TIME_SLOTS = [
+  "09:30", "10:30", "11:30", "12:30", "14:00", "15:15", "16:30", "17:45", "19:00"
+];
 
-  // Estado de Ticket Confirmado
-  const [confirmedTicket, setConfirmedTicket] = useState<Appointment | null>(null);
+// Huecos pre-ocupados para realismo
+const BLOCKED_SLOTS: Record<string, string[]> = {
+  "2026-10-26": ["11:30", "16:30"],
+  "2026-10-27": ["10:30", "15:15", "17:45"],
+  "2026-10-28": ["09:30", "14:00"],
+  "2026-10-29": ["12:30", "19:00"],
+  "2026-10-30": ["10:30", "11:30", "16:30", "17:45"],
+  "2026-10-31": ["11:30", "12:30", "15:15"],
+  "2026-11-01": ["09:30", "10:30", "11:30", "12:30", "14:00", "15:15", "16:30", "17:45", "19:00"], // Domingo cerrado
+};
 
-  // Notificación Push en Pantalla
-  const [pushNotification, setPushNotification] = useState<string | null>(null);
+export default function HomePage() {
+  // Estado de navegación y vistas
+  const [activeTab, setActiveTab] = useState<"salon" | "reserva" | "iframe-hello">("salon");
+  const [categoryFilter, setCategoryFilter] = useState<string>("todos");
 
-  // Lista de Citas en el Dashboard de la Manicurista
-  const [appointments, setAppointments] = useState<Appointment[]>([
-    {
-      id: "app-1",
-      code: "SAMM-104",
-      clientName: "Lucía Benavides",
-      clientPhone: "912 345 678",
-      service: "Acrílicas Esculpidas de Autor",
-      extras: ["Retiro previo"],
-      date: "26 Oct",
-      time: "10:00 AM",
-      totalDuration: 150,
-      totalPrice: 135,
-      status: "confirmada"
-    },
-    {
-      id: "app-2",
-      code: "SAMM-209",
-      clientName: "Claudia Morales",
-      clientPhone: "987 111 222",
-      service: "Uñas Soft Gel Tips",
-      extras: ["Nail Art 2 uñas"],
-      date: "26 Oct",
-      time: "12:45 PM",
-      totalDuration: 105,
-      totalPrice: 100,
-      status: "confirmada"
-    }
-  ]);
+  // Estado del flujo de Reserva
+  const [selectedService, setSelectedService] = useState<ServiceItem>(SERVICES[0]);
+  const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string>("2026-10-27");
+  const [selectedTime, setSelectedTime] = useState<string>("11:30");
+  const [clientName, setClientName] = useState<string>("");
+  const [clientPhone, setClientPhone] = useState<string>("");
+  const [bookingConfirmed, setBookingConfirmed] = useState<Appointment | null>(null);
 
-  // Cálculo Dinámico de Tiempos y Precios (Base + Extras)
-  const extrasDuration = selectedExtras.reduce((acc, curr) => acc + curr.duration, 0);
-  const totalDurationMin = selectedService.duration + extrasDuration;
-  const extrasPrice = selectedExtras.reduce((acc, curr) => acc + curr.price, 0);
-  const totalPrice = selectedService.price + extrasPrice;
+  // Cálculos dinámicos
+  const totalDuration = useMemo(() => {
+    const base = selectedService.duration;
+    const extrasDuration = selectedExtras.reduce((acc, id) => {
+      const ex = EXTRAS.find(e => e.id === id);
+      return acc + (ex ? ex.duration : 0);
+    }, 0);
+    return base + extrasDuration;
+  }, [selectedService, selectedExtras]);
 
-  // Toggle de Selección de Extras
-  const toggleExtra = (extra: Extra) => {
-    if (selectedExtras.some(e => e.id === extra.id)) {
-      setSelectedExtras(selectedExtras.filter(e => e.id !== extra.id));
-    } else {
-      setSelectedExtras([...selectedExtras, extra]);
-    }
+  const totalPrice = useMemo(() => {
+    const base = selectedService.price;
+    const extrasPrice = selectedExtras.reduce((acc, id) => {
+      const ex = EXTRAS.find(e => e.id === id);
+      return acc + (ex ? ex.price : 0);
+    }, 0);
+    return base + extrasPrice;
+  }, [selectedService, selectedExtras]);
+
+  const toggleExtra = (id: string) => {
+    setSelectedExtras(prev => 
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    );
   };
 
-  // Franjas horarias con slots ocupados
-  const TIME_SLOTS = [
-    { time: "10:00 AM", occupied: true, occupant: "Lucía Benavides" },
-    { time: "11:30 AM", occupied: true, occupant: "Lucía (en cabina)" },
-    { time: "01:00 PM", occupied: false },
-    { time: "03:00 PM", occupied: false },
-    { time: "05:00 PM", occupied: false },
-    { time: "06:30 PM", occupied: false },
-    { time: "08:00 PM", occupied: false },
-  ];
+  const isSlotBlocked = (date: string, time: string) => {
+    return BLOCKED_SLOTS[date]?.includes(time) ?? false;
+  };
 
-  // Ejecución de Reserva en Web (Sin WhatsApp)
-  const handleConfirmBooking = () => {
-    const code = "SAMM-" + Math.floor(1000 + Math.random() * 9000);
+  const handleConfirmBooking = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!clientName.trim() || !clientPhone.trim()) return;
+
     const newAppointment: Appointment = {
-      id: "app-" + Date.now(),
-      code,
-      clientName: clientName || "Clienta Frecuente",
-      clientPhone: clientPhone || "999 000 000",
+      id: "apt-" + Date.now(),
+      code: "SN-" + Math.floor(1000 + Math.random() * 9000),
+      clientName,
+      clientPhone,
       service: selectedService.name,
-      extras: selectedExtras.map(e => e.name),
-      date: WEEK_DAYS[selectedDayIndex].dateStr,
-      time: selectedTimeSlot,
-      totalDuration: totalDurationMin,
-      totalPrice: totalPrice,
+      extras: selectedExtras.map(id => EXTRAS.find(e => e.id === id)?.name || ""),
+      date: selectedDate,
+      time: selectedTime,
+      totalDuration,
+      totalPrice,
       status: "confirmada"
     };
 
-    // 1. Mostrar modal de ticket a la clienta
-    setConfirmedTicket(newAppointment);
-
-    // 2. Insertar en la lista del admin
-    setAppointments(prev => [...prev, newAppointment]);
-
-    // 3. Disparar Notificación Push simulada con alerta sonora
-    const alertMsg = `¡Nueva Reserva Sincronizada! ${newAppointment.clientName} agendó ${newAppointment.service} (${totalDurationMin} min) por S/ ${totalPrice.toFixed(2)}`;
-    setPushNotification(alertMsg);
-
-    try {
-      const audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.frequency.value = 920;
-      gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-      osc.start();
-      osc.stop(audioCtx.currentTime + 0.18);
-    } catch {}
-
-    setTimeout(() => {
-      setPushNotification(null);
-    }, 6000);
+    setBookingConfirmed(newAppointment);
   };
 
-  // Métricas del Dashboard
-  const todayRevenue = appointments.reduce((acc, curr) => acc + curr.totalPrice, 0);
-  const totalCabinaHours = (appointments.reduce((acc, curr) => acc + curr.totalDuration, 0) / 60).toFixed(1);
+  const filteredServices = categoryFilter === "todos" 
+    ? SERVICES 
+    : SERVICES.filter(s => s.category === categoryFilter);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#fbf9f4] text-[#191614]">
+    <div className="min-h-screen bg-[#FDFBF7] text-[#221F1D] flex flex-col selection:bg-[#AB9677] selection:text-white">
       
-      {/* BARRA SUPERIOR DE CONMUTACIÓN DE ROLES (DEMO SWITCHER) */}
-      <div className="sticky top-0 z-50 bg-[#161311] text-white px-4 md:px-8 py-3 border-b border-[#c2883e]/40 flex items-center justify-between shadow-md">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#c2883e] to-[#ebd5b3] text-[#161311] flex items-center justify-center font-bold text-sm">
-            S
-          </div>
-          <div>
-            <span className="font-serif-title text-lg tracking-wide text-[#f7f1e5]">Samm Nail Studio</span>
-            <span className="hidden sm:inline-block ml-2 text-[10px] text-[#34d399] tracking-wider uppercase font-semibold">
-              ● Sincronización en Vivo (Lima)
+      {/* 1. BARRA SUPERIOR DE PROMOCIÓN & COMPROMISOS (Inspirada en Hello Nails) */}
+      <div className="bg-[#221F1D] text-[#F9F6F0] py-2 px-4 text-xs tracking-wider flex items-center justify-between border-b border-black/10">
+        <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <span className="flex items-center gap-1.5 font-medium">
+              <Leaf className="w-3.5 h-3.5 text-[#AB9677]" /> 
+              Fórmulas 20-Free & Veganas
+            </span>
+            <span className="hidden md:inline-flex items-center gap-1.5 text-white/70">
+              <Award className="w-3.5 h-3.5 text-[#AB9677]" />
+              Especialistas en Manicura Rusa Anatómica
             </span>
           </div>
-        </div>
 
-        <div className="flex bg-white/10 p-1 rounded-full text-xs">
-          <button
-            onClick={() => setViewRole("client")}
-            className={`px-4 py-1.5 rounded-full font-accent text-[11px] uppercase tracking-wider font-semibold transition-all ${
-              viewRole === "client" ? "bg-[#4a151b] text-white shadow-sm" : "text-stone-400 hover:text-white"
-            }`}
-          >
-            Vista Clienta
-          </button>
-          <button
-            onClick={() => setViewRole("admin")}
-            className={`px-4 py-1.5 rounded-full font-accent text-[11px] uppercase tracking-wider font-semibold transition-all flex items-center gap-1.5 ${
-              viewRole === "admin" ? "bg-[#4a151b] text-white shadow-sm" : "text-stone-400 hover:text-white"
-            }`}
-          >
-            Panel Admin (Dueña)
-            <span className="w-2 h-2 rounded-full bg-[#34d399] animate-pulse"></span>
-          </button>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setActiveTab("iframe-hello")}
+              className={`text-xs px-2.5 py-0.5 rounded border transition-colors flex items-center gap-1.5 ${
+                activeTab === "iframe-hello" 
+                  ? "bg-[#AB9677] text-white border-[#AB9677]" 
+                  : "border-white/20 hover:border-[#AB9677] text-white/80 hover:text-white"
+              }`}
+            >
+              <Eye className="w-3 h-3" />
+              Ver Referencia HelloNails.com
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* TOAST DE NOTIFICACIÓN PUSH */}
-      {pushNotification && (
-        <div className="fixed bottom-6 right-6 z-50 bg-[#191614] text-white border border-[#c2883e] rounded-xl p-4 shadow-2xl flex items-center gap-3 max-w-md animate-bounce">
-          <div className="w-10 h-10 rounded-full bg-[#4a151b] flex items-center justify-center text-[#ebd5b3] shrink-0">
-            <Bell className="w-5 h-5" />
+      {/* 2. HEADER PRINCIPAL */}
+      <header className="sticky top-0 z-40 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-[#221F1D]/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
+          
+          {/* Logo Studio */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-[#AB9677] text-white flex items-center justify-center font-serif text-xl tracking-tighter shadow-sm">
+              S
+            </div>
+            <div>
+              <span className="block font-serif text-2xl tracking-[0.18em] uppercase font-medium leading-none">
+                SAMM
+              </span>
+              <span className="block text-[10px] tracking-[0.3em] uppercase text-[#AB9677] font-semibold mt-1">
+                NAIL STUDIO · ATELIER
+              </span>
+            </div>
           </div>
-          <div>
-            <h4 className="font-accent text-xs tracking-wider uppercase text-[#c2883e] font-bold">¡Nueva Cita Confirmada!</h4>
-            <p className="text-xs text-stone-300 mt-0.5 leading-snug">{pushNotification}</p>
+
+          {/* Menú de Navegación */}
+          <nav className="hidden md:flex items-center gap-8 text-xs uppercase tracking-[0.18em] font-medium text-[#221F1D]/80">
+            <button 
+              onClick={() => setActiveTab("salon")}
+              className={`transition-colors py-2 border-b-2 ${
+                activeTab === "salon" 
+                  ? "border-[#AB9677] text-[#221F1D] font-semibold" 
+                  : "border-transparent hover:text-[#AB9677]"
+              }`}
+            >
+              Tratamientos & Carta
+            </button>
+            <button 
+              onClick={() => setActiveTab("reserva")}
+              className={`transition-colors py-2 border-b-2 ${
+                activeTab === "reserva" 
+                  ? "border-[#AB9677] text-[#221F1D] font-semibold" 
+                  : "border-transparent hover:text-[#AB9677]"
+              }`}
+            >
+              Agenda Online
+            </button>
+            <button 
+              onClick={() => setActiveTab("iframe-hello")}
+              className={`transition-colors py-2 border-b-2 flex items-center gap-1 ${
+                activeTab === "iframe-hello" 
+                  ? "border-[#AB9677] text-[#221F1D] font-semibold" 
+                  : "border-transparent hover:text-[#AB9677]"
+              }`}
+            >
+              Inspiración (Iframe)
+            </button>
+          </nav>
+
+          {/* Botón CTA Cita Directa */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setActiveTab("reserva")}
+              className="bg-[#AB9677] hover:bg-[#978163] text-white text-xs uppercase tracking-[0.16em] font-semibold px-5 py-3 rounded-full transition-all duration-200 shadow-sm hover:shadow flex items-center gap-2"
+            >
+              <CalendarIcon className="w-3.5 h-3.5" />
+              Reservar Cita
+            </button>
           </div>
         </div>
-      )}
+      </header>
 
-      {/* MODAL DE TICKET CONFIRMADO PARA LA CLIENTA */}
-      {confirmedTicket && (
-        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 text-center border-2 border-[#ebd5b3] shadow-2xl relative">
-            <div className="w-14 h-14 bg-emerald-100 text-emerald-800 rounded-full flex items-center justify-center mx-auto mb-3">
-              <CheckCircle2 className="w-8 h-8" />
+      {/* 3. VISTA MODAL / PESTAÑA: IFRAME EN VIVO DE HELLO NAILS */}
+      {activeTab === "iframe-hello" && (
+        <section className="max-w-7xl mx-auto w-full px-4 py-8 flex-1 flex flex-col">
+          <div className="bg-white rounded-2xl border border-black/10 shadow-lg overflow-hidden flex flex-col flex-1 min-h-[750px]">
+            <div className="bg-[#221F1D] text-white px-6 py-4 flex items-center justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-widest text-[#AB9677] font-semibold">Referencia Visual de Diseño</p>
+                <h3 className="font-serif text-lg tracking-wide text-[#FDFBF7]">Hello Nails Oficial (En vivo en Iframe)</h3>
+              </div>
+              <div className="flex items-center gap-3">
+                <a 
+                  href="https://hellonails.com/" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="text-xs bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-full flex items-center gap-1.5 transition-colors"
+                >
+                  Abrir pestaña externa <ExternalLink className="w-3 h-3" />
+                </a>
+                <button 
+                  onClick={() => setActiveTab("salon")}
+                  className="text-xs bg-[#AB9677] hover:bg-[#978163] text-white px-4 py-1.5 rounded-full font-medium transition-colors"
+                >
+                  Volver al Estudio
+                </button>
+              </div>
             </div>
             
-            <h3 className="font-serif-title text-3xl text-[#191614]">¡Cita Confirmada con Éxito!</h3>
-            <p className="text-xs text-stone-500 mt-1">Tu turno está blindado en la base de datos de Samm Studio.</p>
-
-            <div className="my-4 inline-block bg-[#f6f1e7] border border-[#ebd5b3] text-[#4a151b] px-4 py-1.5 rounded-lg font-accent font-bold tracking-widest text-sm">
-              CÓDIGO: {confirmedTicket.code}
-            </div>
-
-            <div className="bg-[#fbf9f4] border border-stone-200 rounded-xl p-4 text-left text-xs space-y-2 mb-5">
-              <div className="flex justify-between">
-                <span className="text-stone-500">Titular:</span>
-                <span className="font-semibold text-stone-900">{confirmedTicket.clientName}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-stone-500">Servicio Principal:</span>
-                <span className="font-semibold text-stone-900">{confirmedTicket.service}</span>
-              </div>
-              {confirmedTicket.extras.length > 0 && (
-                <div className="flex justify-between">
-                  <span className="text-stone-500">Extras:</span>
-                  <span className="font-semibold text-[#4a151b]">{confirmedTicket.extras.join(", ")}</span>
-                </div>
-              )}
-              <div className="flex justify-between">
-                <span className="text-stone-500">Tiempo total en cabina:</span>
-                <span className="font-semibold text-stone-900">{confirmedTicket.totalDuration} minutos</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-stone-500">Fecha y Hora:</span>
-                <span className="font-semibold text-stone-900">{confirmedTicket.date} · {confirmedTicket.time}</span>
-              </div>
-              <div className="border-t border-stone-200 pt-2 flex justify-between items-baseline">
-                <span className="font-bold text-stone-800">Total a abonar en el local:</span>
-                <span className="font-serif-title text-xl text-[#4a151b] font-bold">S/ {confirmedTicket.totalPrice.toFixed(2)}</span>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <button
-                onClick={() => {
-                  setConfirmedTicket(null);
-                  setViewRole("admin");
-                }}
-                className="w-full bg-[#4a151b] hover:bg-[#681f28] text-white py-3 rounded-xl font-accent text-xs uppercase tracking-widest font-bold transition-all shadow-md"
-              >
-                Ver Notificación en el Panel de la Dueña →
-              </button>
-              <button
-                onClick={() => setConfirmedTicket(null)}
-                className="w-full bg-stone-100 hover:bg-stone-200 text-stone-700 py-2.5 rounded-xl font-accent text-xs uppercase tracking-wider font-semibold"
-              >
-                Cerrar comprobante
-              </button>
+            <div className="w-full flex-1 bg-[#F9F9F9] relative">
+              <iframe 
+                src="https://hellonails.com/" 
+                title="Hello Nails Reference" 
+                className="w-full h-full min-h-[700px] border-0"
+                loading="lazy"
+              />
             </div>
           </div>
-        </div>
+        </section>
       )}
 
-      {/* =========================================================
-          VISTA 1: CLIENTA (RESERVA CON CALENDARIO SEMANAL & EXTRAS)
-          ========================================================= */}
-      {viewRole === "client" && (
-        <main className="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex-grow w-full">
+      {/* 4. VISTA PRINCIPAL: ESTUDIO & TRATAMIENTOS */}
+      {activeTab === "salon" && (
+        <main className="flex-1">
+          {/* HERO BANNER EDITORIAL */}
+          <section className="relative overflow-hidden bg-[#221F1D] text-[#FDFBF7] py-20 lg:py-28">
+            {/* Foto de Fondo CDN con overlay sutil */}
+            <div className="absolute inset-0 z-0 opacity-25">
+              <img 
+                src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=2000&q=80" 
+                alt="Nail Art Background"
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
+              <div className="max-w-2xl">
+                <span className="inline-block text-[#AB9677] font-semibold text-xs tracking-[0.25em] uppercase mb-4">
+                  Colección Otoño / Invierno 2026
+                </span>
+                <h1 className="font-serif text-4xl sm:text-6xl font-light tracking-tight leading-[1.1] mb-6">
+                  El arte de la precisión <br />
+                  <span className="italic font-normal text-[#E8DCC4]">en cada milímetro.</span>
+                </h1>
+                <p className="text-white/80 text-base leading-relaxed mb-8 max-w-xl font-light">
+                  Inspirados en la estética contemporánea de los mejores centros de Europa. 
+                  Protocolos rusos de cutícula limpia, esmaltes 20-Free de larga duración y cálculo exacto de tiempos para que tu agenda nunca sufra retrasos.
+                </p>
+
+                <div className="flex flex-wrap items-center gap-4">
+                  <button
+                    onClick={() => setActiveTab("reserva")}
+                    className="bg-[#AB9677] hover:bg-[#978163] text-white text-xs uppercase tracking-[0.16em] font-semibold px-8 py-4 rounded-full transition-all shadow-md hover:shadow-lg flex items-center gap-2"
+                  >
+                    <CalendarIcon className="w-4 h-4" />
+                    Reservar tu Tratamiento
+                  </button>
+
+                  <a 
+                    href="#carta-servicios"
+                    className="bg-white/10 hover:bg-white/15 text-white text-xs uppercase tracking-[0.16em] font-medium px-7 py-4 rounded-full transition-all border border-white/20"
+                  >
+                    Ver Catálogo
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* VALORES DE MARCA / BADGES DE CONFIANZA */}
+          <section className="border-b border-[#221F1D]/10 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-[#AB9677]/10 text-[#AB9677] flex items-center justify-center mb-3">
+                  <Leaf className="w-6 h-6" />
+                </div>
+                <h4 className="font-serif text-base font-semibold tracking-wide">Fórmula 20-Free</h4>
+                <p className="text-xs text-[#221F1D]/60 mt-1 max-w-[200px]">Sin químicos tóxicos ni sulfatos agresivos para la lámina.</p>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-[#AB9677]/10 text-[#AB9677] flex items-center justify-center mb-3">
+                  <Clock className="w-6 h-6" />
+                </div>
+                <h4 className="font-serif text-base font-semibold tracking-wide">Puntualidad Absoluta</h4>
+                <p className="text-xs text-[#221F1D]/60 mt-1 max-w-[200px]">Cálculo matemático de cada extra para cero esperas.</p>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-[#AB9677]/10 text-[#AB9677] flex items-center justify-center mb-3">
+                  <Award className="w-6 h-6" />
+                </div>
+                <h4 className="font-serif text-base font-semibold tracking-wide">Especialistas Tituladas</h4>
+                <p className="text-xs text-[#221F1D]/60 mt-1 max-w-[200px]">Técnicas certificadas en manicura rusa y nail art.</p>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 rounded-full bg-[#AB9677]/10 text-[#AB9677] flex items-center justify-center mb-3">
+                  <ShieldCheck className="w-6 h-6" />
+                </div>
+                <h4 className="font-serif text-base font-semibold tracking-wide">Esterilización Hospitalaria</h4>
+                <p className="text-xs text-[#221F1D]/60 mt-1 max-w-[200px]">Autoclave médico y sobres individuales para cada clienta.</p>
+              </div>
+            </div>
+          </section>
+
+          {/* CATÁLOGO DE TRATAMIENTOS INTERACTIVO */}
+          <section id="carta-servicios" className="max-w-7xl mx-auto px-4 sm:px-6 py-20">
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+              <div>
+                <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#AB9677]">
+                  Carta Exclusiva
+                </span>
+                <h2 className="font-serif text-3xl sm:text-4xl font-normal tracking-tight mt-2 text-[#221F1D]">
+                  Tratamientos de Uñas & Spa
+                </h2>
+              </div>
+
+              {/* Filtros de Categoría */}
+              <div className="flex flex-wrap gap-2 mt-6 md:mt-0">
+                {[
+                  { id: "todos", label: "Todos" },
+                  { id: "manicura", label: "Manicura" },
+                  { id: "pedicura", label: "Pedicura" },
+                  { id: "nailart", label: "Nail Art" },
+                  { id: "tratamientos", label: "Tratamientos" },
+                ].map(cat => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setCategoryFilter(cat.id)}
+                    className={`text-xs uppercase tracking-wider px-4 py-2 rounded-full font-medium transition-all ${
+                      categoryFilter === cat.id 
+                        ? "bg-[#221F1D] text-white" 
+                        : "bg-white text-[#221F1D]/70 border border-black/10 hover:border-[#AB9677] hover:text-[#221F1D]"
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Grid de Servicios */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredServices.map(service => (
+                <div 
+                  key={service.id}
+                  className="group bg-white rounded-2xl border border-black/8 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
+                >
+                  <div className="relative h-64 overflow-hidden bg-[#F6F1E7]">
+                    <img 
+                      src={service.imgUrl} 
+                      alt={service.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                    />
+                    {service.tag && (
+                      <span className="absolute top-4 left-4 bg-white/90 backdrop-blur-md text-[#221F1D] text-[10px] uppercase font-bold tracking-widest px-3 py-1 rounded-full shadow-sm">
+                        {service.tag}
+                      </span>
+                    )}
+                    <div className="absolute bottom-4 right-4 bg-[#221F1D]/80 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full font-medium flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-[#AB9677]" />
+                      {service.duration} min
+                    </div>
+                  </div>
+
+                  <div className="p-6 flex-1 flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-baseline justify-between mb-2">
+                        <h3 className="font-serif text-xl font-medium tracking-tight text-[#221F1D] group-hover:text-[#AB9677] transition-colors">
+                          {service.name}
+                        </h3>
+                        <span className="font-serif text-xl font-semibold text-[#221F1D]">
+                          {service.price}€
+                        </span>
+                      </div>
+                      <p className="text-xs text-[#221F1D]/70 leading-relaxed">
+                        {service.desc}
+                      </p>
+                    </div>
+
+                    <div className="pt-6 mt-6 border-t border-black/5 flex items-center justify-between">
+                      <span className="text-[11px] text-[#AB9677] font-semibold uppercase tracking-wider">
+                        Incluye limado y nutrición
+                      </span>
+                      <button
+                        onClick={() => {
+                          setSelectedService(service);
+                          setActiveTab("reserva");
+                        }}
+                        className="bg-[#AB9677] hover:bg-[#978163] text-white text-[11px] uppercase tracking-wider font-semibold px-4 py-2 rounded-full transition-colors flex items-center gap-1.5"
+                      >
+                        Reservar <ChevronRight className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* BANNER INFORMATIVO HELLO NAILS STYLE */}
+          <section className="bg-[#FAF7F2] border-y border-black/10 py-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-8">
+              <div className="max-w-xl">
+                <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#AB9677]">
+                  Diseño & Tecnología
+                </span>
+                <h3 className="font-serif text-3xl font-normal tracking-tight mt-1 text-[#221F1D]">
+                  ¿Quieres comparar con el diseño original?
+                </h3>
+                <p className="text-xs text-[#221F1D]/70 mt-3 leading-relaxed">
+                  Incorporamos la previsualización directa en iframe de la web de Hello Nails para que audites la composición tipográfica, la gama cromática y la experiencia de usuario en tiempo real.
+                </p>
+              </div>
+
+              <button
+                onClick={() => setActiveTab("iframe-hello")}
+                className="bg-[#221F1D] hover:bg-black text-white text-xs uppercase tracking-[0.16em] font-semibold px-8 py-4 rounded-full transition-all shadow-md flex items-center gap-2 shrink-0"
+              >
+                <Eye className="w-4 h-4 text-[#AB9677]" />
+                Abrir Iframe Hello Nails
+              </button>
+            </div>
+          </section>
+        </main>
+      )}
+
+      {/* 5. VISTA DE RESERVA ONLINE CON CALENDARIO SEMANAL Y EXTRAS */}
+      {activeTab === "reserva" && (
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex-1 w-full">
           
-          {/* Header Editorial */}
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="inline-block font-accent text-[11px] tracking-widest uppercase text-[#4a151b] bg-[#4a151b]/10 border border-[#4a151b]/20 px-3 py-1 rounded-full font-bold mb-3">
-              Estudio Miraflores · Agenda Semanal
+          {/* Notificación de Reserva Confirmada */}
+          {bookingConfirmed && (
+            <div className="mb-10 bg-[#FAF7F2] border-2 border-[#AB9677] rounded-2xl p-6 md:p-8 shadow-md">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-[#AB9677] text-white flex items-center justify-center">
+                    <CheckCircle2 className="w-7 h-7" />
+                  </div>
+                  <div>
+                    <span className="text-xs uppercase tracking-widest font-bold text-[#AB9677]">
+                      ¡Cita Reservada con Éxito!
+                    </span>
+                    <h2 className="font-serif text-2xl font-semibold text-[#221F1D]">
+                      Código de Cita: #{bookingConfirmed.code}
+                    </h2>
+                  </div>
+                </div>
+
+                <button 
+                  onClick={() => setBookingConfirmed(null)}
+                  className="text-xs text-[#221F1D]/50 hover:text-[#221F1D] p-2"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="mt-6 pt-6 border-t border-black/10 grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
+                <div>
+                  <span className="text-black/50 block">Clienta:</span>
+                  <span className="font-semibold text-sm">{bookingConfirmed.clientName}</span>
+                </div>
+                <div>
+                  <span className="text-black/50 block">Servicio:</span>
+                  <span className="font-semibold text-sm">{bookingConfirmed.service}</span>
+                </div>
+                <div>
+                  <span className="text-black/50 block">Día y Hora:</span>
+                  <span className="font-semibold text-sm">{bookingConfirmed.date} a las {bookingConfirmed.time}</span>
+                </div>
+                <div>
+                  <span className="text-black/50 block">Duración & Total:</span>
+                  <span className="font-semibold text-sm text-[#AB9677]">{bookingConfirmed.totalDuration} min · {bookingConfirmed.totalPrice}€</span>
+                </div>
+              </div>
+
+              {bookingConfirmed.extras.length > 0 && (
+                <div className="mt-4 pt-3 border-t border-black/5 text-xs text-black/70">
+                  <span className="font-medium text-black">Extras añadidos:</span> {bookingConfirmed.extras.join(", ")}
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="mb-8">
+            <span className="text-xs uppercase tracking-[0.2em] font-semibold text-[#AB9677]">
+              Paso a Paso
             </span>
-            <h1 className="font-serif-title text-4xl sm:text-5xl font-normal leading-tight text-[#191614]">
-              Elige tu técnica & tus extras, <em className="italic text-[#4a151b]">agenda tu tiempo real</em>
+            <h1 className="font-serif text-3xl sm:text-4xl font-normal tracking-tight mt-1 text-[#221F1D]">
+              Configura tu Cita & Extras
             </h1>
-            <p className="text-stone-600 text-sm mt-3 font-light leading-relaxed">
-              Calculamos la duración exacta según tus requerimientos para reservar el bloque adecuado en cabina sin retrasos.
+            <p className="text-xs text-[#221F1D]/70 mt-2">
+              Selecciona tu tratamiento base, añade los extras que necesites y el calendario calculará automáticamente el tiempo exacto en cabina.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
-            {/* Columna Izquierda: Selección de Servicios, Extras y Calendario */}
-            <div className="lg:col-span-2 space-y-6">
+            {/* COLUMNA IZQUIERDA: SERVICIO, EXTRAS Y CALENDARIO SEMANAL (8 COLS) */}
+            <div className="lg:col-span-8 space-y-8">
               
-              {/* PASO 1: SERVICIO BASE */}
-              <div className="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-accent text-xs tracking-wider uppercase font-bold text-stone-900 flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-[#191614] text-white flex items-center justify-center text-[10px]">1</span>
-                    Selecciona tu Servicio Base
-                  </h3>
-                  <span className="text-[11px] text-stone-500 font-medium">Precios en Soles (S/)</span>
-                </div>
+              {/* 1. Selector de Servicio Base */}
+              <div className="bg-white rounded-2xl border border-black/8 p-6 shadow-sm">
+                <h3 className="font-serif text-lg font-medium mb-4 flex items-center justify-between">
+                  <span>1. Selecciona Tratamiento Base</span>
+                  <span className="text-xs font-sans text-[#AB9677] font-semibold uppercase tracking-wider">Obligatorio</span>
+                </h3>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {SERVICES.map((srv) => {
-                    const isSelected = selectedService.id === srv.id;
-                    return (
-                      <div
-                        key={srv.id}
-                        onClick={() => setSelectedService(srv)}
-                        className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col justify-between ${
-                          isSelected
-                            ? "bg-[#fdfaf7] border-[#4a151b] ring-1 ring-[#4a151b]"
-                            : "bg-white border-stone-200 hover:border-stone-400"
-                        }`}
-                      >
-                        <div className="flex gap-3">
-                          <img src={srv.imgUrl} alt={srv.name} className="w-16 h-16 rounded-lg object-cover shrink-0" />
-                          <div className="flex-grow">
-                            <span className="text-[10px] font-accent uppercase tracking-wider text-[#c2883e] font-bold block">
-                              {srv.category}
-                            </span>
-                            <h4 className="font-serif-title text-base font-semibold text-stone-900 leading-tight">
-                              {srv.name}
-                            </h4>
-                            <span className="text-xs text-[#4a151b] font-bold font-accent mt-1 block">
-                              S/ {srv.price.toFixed(2)}
-                            </span>
-                          </div>
+                  {SERVICES.map(s => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => setSelectedService(s)}
+                      className={`p-4 rounded-xl text-left border transition-all flex flex-col justify-between ${
+                        selectedService.id === s.id 
+                          ? "border-[#AB9677] bg-[#FAF7F2] ring-1 ring-[#AB9677]" 
+                          : "border-black/10 hover:border-black/20 bg-white"
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-serif font-medium text-base text-[#221F1D]">{s.name}</span>
+                          <span className="font-semibold text-sm text-[#AB9677]">{s.price}€</span>
                         </div>
-                        <div className="flex items-center justify-between pt-2.5 mt-2 border-t border-stone-100 text-[11px] text-stone-500">
-                          <span className="flex items-center gap-1 font-medium">
-                            <Clock className="w-3 h-3" /> {srv.duration} min
-                          </span>
-                          <span className={`font-accent text-[10px] uppercase font-bold ${isSelected ? "text-[#4a151b]" : "text-stone-400"}`}>
-                            {isSelected ? "Seleccionado" : "Elegir"}
-                          </span>
-                        </div>
+                        <p className="text-[11px] text-[#221F1D]/60 line-clamp-2">{s.desc}</p>
                       </div>
-                    );
-                  })}
+                      <div className="mt-3 text-[10px] font-medium text-black/50 flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-[#AB9677]" /> Base: {s.duration} min
+                      </div>
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* PASO 2: EXTRAS (LOS QUE SUMAN TIEMPO REAL) */}
-              <div className="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm">
+              {/* 2. Selector de Extras Dinámicos */}
+              <div className="bg-white rounded-2xl border border-black/8 p-6 shadow-sm">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-accent text-xs tracking-wider uppercase font-bold text-stone-900 flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-[#191614] text-white flex items-center justify-center text-[10px]">2</span>
-                    Añade Extras & Adicionales (Suman tiempo en cabina)
+                  <h3 className="font-serif text-lg font-medium">
+                    2. Extras & Cuidados Adicionales
                   </h3>
-                  <span className="text-[11px] text-[#4a151b] font-semibold">
-                    +{extrasDuration} min acumulados
+                  <span className="text-xs text-black/50">
+                    Suma tiempo y previene solapamiento
                   </span>
                 </div>
 
                 <div className="space-y-2.5">
-                  {EXTRAS_LIST.map((ext) => {
-                    const isChecked = selectedExtras.some(e => e.id === ext.id);
+                  {EXTRAS.map(extra => {
+                    const isSelected = selectedExtras.includes(extra.id);
                     return (
                       <div
-                        key={ext.id}
-                        onClick={() => toggleExtra(ext)}
-                        className={`p-3 rounded-xl border flex items-center justify-between cursor-pointer transition-all ${
-                          isChecked 
-                            ? "bg-[#fbf6ee] border-[#c2883e] ring-1 ring-[#c2883e]" 
-                            : "bg-white border-stone-200 hover:border-stone-300"
+                        key={extra.id}
+                        onClick={() => toggleExtra(extra.id)}
+                        className={`p-3.5 rounded-xl border cursor-pointer transition-all flex items-center justify-between ${
+                          isSelected 
+                            ? "border-[#AB9677] bg-[#FAF7F2]" 
+                            : "border-black/10 hover:border-black/20 bg-white"
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`w-5 h-5 rounded flex items-center justify-center text-xs transition-colors ${
-                            isChecked ? "bg-[#4a151b] text-white" : "border border-stone-300 bg-white"
+                          <div className={`w-5 h-5 rounded flex items-center justify-center transition-colors ${
+                            isSelected ? "bg-[#AB9677] text-white" : "border border-black/20"
                           }`}>
-                            {isChecked && "✓"}
+                            {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
                           </div>
                           <div>
-                            <h4 className="text-xs font-semibold text-stone-900">{ext.name}</h4>
-                            <p className="text-[11px] text-stone-500 font-light">{ext.desc}</p>
+                            <span className="text-xs font-semibold text-[#221F1D] block">{extra.name}</span>
+                            <span className="text-[11px] text-black/50 block">{extra.desc}</span>
                           </div>
                         </div>
-                        <div className="text-right shrink-0 ml-3">
-                          <span className="text-xs font-bold text-stone-900 block font-accent">+S/ {ext.price.toFixed(2)}</span>
-                          <span className="text-[10px] text-stone-500 font-medium">+{ext.duration} min</span>
+
+                        <div className="text-right shrink-0">
+                          <span className="text-xs font-bold text-[#221F1D]">+{extra.price}€</span>
+                          <span className="text-[10px] text-[#AB9677] font-medium block">+{extra.duration} min</span>
                         </div>
                       </div>
                     );
@@ -507,325 +752,229 @@ export default function SammNailStudio() {
                 </div>
               </div>
 
-              {/* PASO 3: CALENDARIO SEMANAL & HORARIOS */}
-              <div className="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm">
+              {/* 3. Calendario Semanal y Horas Disponibles */}
+              <div className="bg-white rounded-2xl border border-black/8 p-6 shadow-sm">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-accent text-xs tracking-wider uppercase font-bold text-stone-900 flex items-center gap-2">
-                    <span className="w-5 h-5 rounded-full bg-[#191614] text-white flex items-center justify-center text-[10px]">3</span>
-                    Calendario Semanal & Huecos Disponibles
+                  <h3 className="font-serif text-lg font-medium flex items-center gap-2">
+                    <CalendarIcon className="w-4 h-4 text-[#AB9677]" /> 
+                    3. Agenda Semanal & Horas Libres
                   </h3>
-                  <span className="text-[11px] text-emerald-800 font-medium bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                    Calculando para {totalDurationMin} min libres
-                  </span>
+                  <span className="text-xs text-black/50">Semana del 26 Oct al 01 Nov</span>
                 </div>
 
-                {/* Navegador de Semana */}
-                <div className="flex items-center justify-between bg-[#fbf9f4] border border-stone-200 rounded-xl p-2.5 mb-4">
-                  <button className="p-1 hover:bg-stone-200 rounded-md text-stone-600 transition-colors">
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                  <span className="font-accent text-xs font-bold uppercase tracking-wider text-stone-800">
-                    Semana del 26 Oct al 01 Nov · 2026
-                  </span>
-                  <button className="p-1 hover:bg-stone-200 rounded-md text-stone-600 transition-colors">
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-
-                {/* Días de la semana */}
-                <div className="grid grid-cols-7 gap-1.5 text-center mb-5">
-                  {WEEK_DAYS.map((wd, idx) => {
-                    const isDaySelected = selectedDayIndex === idx;
+                {/* Días de la Semana */}
+                <div className="grid grid-cols-7 gap-2 mb-6">
+                  {WEEK_DAYS.map(day => {
+                    const isSelected = selectedDate === day.fullDate;
+                    const isSunday = day.name === "Dom";
                     return (
-                      <div
-                        key={idx}
-                        onClick={() => setSelectedDayIndex(idx)}
-                        className={`p-2 rounded-xl cursor-pointer transition-all border ${
-                          isDaySelected
-                            ? "bg-[#4a151b] text-white border-[#4a151b] shadow-sm"
-                            : "bg-white border-stone-200 hover:border-stone-400 text-stone-700"
+                      <button
+                        key={day.fullDate}
+                        disabled={isSunday}
+                        onClick={() => setSelectedDate(day.fullDate)}
+                        className={`p-2.5 rounded-xl text-center border transition-all ${
+                          isSunday 
+                            ? "opacity-40 cursor-not-allowed bg-black/5 border-transparent"
+                            : isSelected 
+                              ? "border-[#AB9677] bg-[#221F1D] text-white shadow-sm" 
+                              : "border-black/10 hover:border-[#AB9677] bg-white text-[#221F1D]"
                         }`}
                       >
-                        <span className={`block text-[9px] uppercase font-accent font-bold ${isDaySelected ? "text-stone-300" : "text-stone-400"}`}>
-                          {wd.day.slice(0, 3)}
+                        <span className="block text-[10px] uppercase font-bold tracking-wider opacity-70">
+                          {day.name}
                         </span>
-                        <span className="block font-serif-title text-base sm:text-lg font-bold leading-tight mt-0.5">
-                          {wd.dateStr.split(" ")[0]}
+                        <span className="block text-xs font-semibold mt-0.5">
+                          {day.date.split(" ")[0]}
                         </span>
-                      </div>
+                      </button>
                     );
                   })}
                 </div>
 
-                {/* Bloques de Hora */}
+                {/* Huecos Horarios */}
                 <div>
-                  <span className="block text-[11px] font-accent uppercase tracking-wider text-stone-500 font-semibold mb-2">
-                    Horarios con tiempo continuo suficiente ({totalDurationMin} min)
-                  </span>
-                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                    {TIME_SLOTS.map((slot, sIdx) => {
-                      const isChosen = selectedTimeSlot === slot.time && !slot.occupied;
+                  <div className="flex items-center justify-between mb-3 text-xs">
+                    <span className="font-medium text-[#221F1D]">Horas disponibles para el día seleccionado:</span>
+                    <div className="flex items-center gap-4 text-[11px] text-black/60">
+                      <span className="flex items-center gap-1">
+                        <span className="w-2.5 h-2.5 rounded-full bg-white border border-black/30"></span> Libre
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <span className="w-2.5 h-2.5 rounded-full bg-black/15"></span> Bloqueado
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-3 sm:grid-cols-5 gap-2.5">
+                    {TIME_SLOTS.map(slot => {
+                      const blocked = isSlotBlocked(selectedDate, slot);
+                      const isSelected = selectedTime === slot && !blocked;
+
                       return (
                         <button
-                          key={sIdx}
-                          disabled={slot.occupied}
-                          onClick={() => setSelectedTimeSlot(slot.time)}
-                          className={`py-2 px-1 rounded-lg text-xs font-accent font-semibold transition-all border ${
-                            slot.occupied
-                              ? "bg-stone-100 border-stone-200 text-stone-400 line-through cursor-not-allowed"
-                              : isChosen
-                              ? "bg-[#c2883e] text-white border-[#c2883e] shadow-sm font-bold"
-                              : "bg-white border-stone-200 hover:border-stone-400 text-stone-700"
+                          key={slot}
+                          type="button"
+                          disabled={blocked}
+                          onClick={() => setSelectedTime(slot)}
+                          className={`py-3 px-2 rounded-xl text-xs font-semibold border transition-all ${
+                            blocked 
+                              ? "bg-black/5 text-black/30 border-transparent cursor-not-allowed line-through" 
+                              : isSelected 
+                                ? "bg-[#AB9677] text-white border-[#AB9677] shadow-sm" 
+                                : "bg-white text-[#221F1D] border-black/10 hover:border-[#AB9677]"
                           }`}
                         >
-                          {slot.time}
-                          {slot.occupied && <span className="block text-[8px] no-underline font-normal text-rose-700">Ocupado</span>}
+                          {slot}
                         </button>
                       );
                     })}
                   </div>
                 </div>
               </div>
-
-              {/* PASO 4: DATOS DE LA CLIENTA */}
-              <div className="bg-white border border-stone-200 rounded-2xl p-6 shadow-sm">
-                <h3 className="font-accent text-xs tracking-wider uppercase font-bold text-stone-900 mb-4 flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-[#191614] text-white flex items-center justify-center text-[10px]">4</span>
-                  Tus Datos de Contacto
-                </h3>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-stone-600 mb-1">Nombre Completo</label>
-                    <div className="relative">
-                      <User className="w-4 h-4 text-stone-400 absolute left-3 top-3" />
-                      <input
-                        type="text"
-                        value={clientName}
-                        onChange={(e) => setClientName(e.target.value)}
-                        className="w-full bg-[#fbf9f4] border border-stone-200 rounded-xl pl-9 pr-3 py-2 text-xs text-stone-900 focus:outline-none focus:border-[#4a151b]"
-                        placeholder="Ej: Valeria Silva"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-stone-600 mb-1">Celular / WhatsApp (Perú)</label>
-                    <div className="relative">
-                      <Phone className="w-4 h-4 text-stone-400 absolute left-3 top-3" />
-                      <input
-                        type="tel"
-                        value={clientPhone}
-                        onChange={(e) => setClientPhone(e.target.value)}
-                        className="w-full bg-[#fbf9f4] border border-stone-200 rounded-xl pl-9 pr-3 py-2 text-xs text-stone-900 focus:outline-none focus:border-[#4a151b]"
-                        placeholder="987 654 321"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
             </div>
 
-            {/* Columna Derecha: Sticky Summary Card & Botón de Confirmación Web */}
-            <div className="sticky top-20">
-              <div className="bg-white border border-[#ebd5b3] rounded-2xl p-6 shadow-lg shadow-[#c2883e]/5">
-                <h3 className="font-serif-title text-2xl text-stone-900 pb-3 border-b border-stone-100">
-                  Resumen de tu Cita
+            {/* COLUMNA DERECHA: RESUMEN DE RESERVA Y CONFIRMACIÓN (4 COLS) */}
+            <div className="lg:col-span-4">
+              <div className="sticky top-28 bg-white rounded-2xl border border-black/10 p-6 shadow-md">
+                <span className="text-[10px] uppercase tracking-widest font-bold text-[#AB9677]">
+                  Tu Cita en Resumen
+                </span>
+                <h3 className="font-serif text-2xl font-medium tracking-tight text-[#221F1D] mt-1 mb-6">
+                  Ticket de Reserva
                 </h3>
 
-                <div className="space-y-3 py-4 text-xs border-b border-stone-100">
-                  <div className="flex justify-between items-start">
-                    <span className="text-stone-500">Servicio Base:</span>
-                    <span className="font-semibold text-stone-900 text-right">{selectedService.name}</span>
+                {/* Detalle Servicio */}
+                <div className="space-y-4 text-xs pb-6 border-b border-black/10">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <span className="font-semibold text-sm text-[#221F1D] block">{selectedService.name}</span>
+                      <span className="text-black/50 text-[11px]">Tratamiento Base · {selectedService.duration} min</span>
+                    </div>
+                    <span className="font-serif text-base font-semibold">{selectedService.price}€</span>
                   </div>
 
+                  {/* Extras Seleccionados */}
                   {selectedExtras.length > 0 && (
-                    <div className="flex justify-between items-start">
-                      <span className="text-stone-500">Extras ({selectedExtras.length}):</span>
-                      <span className="font-semibold text-[#4a151b] text-right max-w-[170px]">
-                        {selectedExtras.map(e => e.name).join(", ")}
+                    <div className="pt-2 space-y-2">
+                      <span className="text-[10px] uppercase tracking-wider text-black/40 font-bold block">
+                        Extras Incluidos:
                       </span>
+                      {selectedExtras.map(id => {
+                        const ex = EXTRAS.find(e => e.id === id);
+                        if (!ex) return null;
+                        return (
+                          <div key={id} className="flex items-center justify-between text-[11px] text-[#221F1D]/80">
+                            <span>+ {ex.name} ({ex.duration}m)</span>
+                            <span className="font-medium">+{ex.price}€</span>
+                          </div>
+                        );
+                      })}
                     </div>
                   )}
 
-                  <div className="flex justify-between items-center">
-                    <span className="text-stone-500">Tiempo total en cabina:</span>
-                    <span className="font-semibold text-stone-900">{totalDurationMin} minutos</span>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <span className="text-stone-500">Fecha agendada:</span>
-                    <span className="font-semibold text-stone-900">{WEEK_DAYS[selectedDayIndex].day}, {WEEK_DAYS[selectedDayIndex].dateStr}</span>
-                  </div>
-
-                  <div className="flex justify-between items-center">
-                    <span className="text-stone-500">Horario de inicio:</span>
-                    <span className="font-semibold text-[#c2883e] font-accent text-sm">{selectedTimeSlot}</span>
+                  {/* Horario y Fecha */}
+                  <div className="bg-[#FAF7F2] p-3 rounded-xl border border-black/5 mt-4 space-y-1 text-[11px]">
+                    <div className="flex justify-between">
+                      <span className="text-black/50">Fecha:</span>
+                      <span className="font-semibold">{selectedDate}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-black/50">Hora inicio:</span>
+                      <span className="font-semibold">{selectedTime} hrs</span>
+                    </div>
+                    <div className="flex justify-between text-[#AB9677] font-semibold pt-1 border-t border-black/5">
+                      <span>Tiempo total cabina:</span>
+                      <span>{totalDuration} minutos</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="py-4 flex justify-between items-baseline">
-                  <span className="font-accent text-xs uppercase font-bold text-stone-700">Total a abonar</span>
-                  <span className="font-serif-title text-3xl font-bold text-[#4a151b]">
-                    S/ {totalPrice.toFixed(2)}
-                  </span>
+                {/* Total Económico */}
+                <div className="py-4 border-b border-black/10 flex items-baseline justify-between">
+                  <span className="font-serif text-lg">Total Estimado</span>
+                  <div className="text-right">
+                    <span className="font-serif text-3xl font-bold text-[#AB9677]">{totalPrice}€</span>
+                    <span className="text-[10px] text-black/40 block">IVA 21% incluido</span>
+                  </div>
                 </div>
 
-                <div className="bg-[#fbf6ee] border border-[#ebd5b3] rounded-xl p-3 text-[11px] text-stone-700 leading-relaxed mb-5">
-                  🛡️ <strong>Confirmación 100% Web:</strong> Tu turno se reserva en la base de datos de inmediato. Pagas directamente en el estudio al terminar (Efectivo, Plin o Yape).
-                </div>
+                {/* Formulario de Datos de Contacto */}
+                <form onSubmit={handleConfirmBooking} className="mt-6 space-y-4">
+                  <div>
+                    <label className="block text-[11px] uppercase tracking-wider font-semibold text-black/70 mb-1">
+                      Nombre y Apellidos
+                    </label>
+                    <div className="relative">
+                      <User className="w-3.5 h-3.5 text-black/40 absolute left-3 top-3.5" />
+                      <input 
+                        type="text" 
+                        required
+                        placeholder="Ej. Valeria Montes"
+                        value={clientName}
+                        onChange={(e) => setClientName(e.target.value)}
+                        className="w-full pl-9 pr-3 py-2.5 text-xs bg-[#FDFBF7] border border-black/15 rounded-xl focus:outline-none focus:border-[#AB9677]"
+                      />
+                    </div>
+                  </div>
 
-                <button
-                  onClick={handleConfirmBooking}
-                  className="w-full bg-[#191614] hover:bg-[#4a151b] text-white py-3.5 rounded-xl font-accent text-xs uppercase tracking-widest font-bold transition-all shadow-md active:scale-95"
-                >
-                  Confirmar Reserva en la Web
-                </button>
+                  <div>
+                    <label className="block text-[11px] uppercase tracking-wider font-semibold text-black/70 mb-1">
+                      Teléfono WhatsApp
+                    </label>
+                    <div className="relative">
+                      <Phone className="w-3.5 h-3.5 text-black/40 absolute left-3 top-3.5" />
+                      <input 
+                        type="tel" 
+                        required
+                        placeholder="+34 600 000 000"
+                        value={clientPhone}
+                        onChange={(e) => setClientPhone(e.target.value)}
+                        className="w-full pl-9 pr-3 py-2.5 text-xs bg-[#FDFBF7] border border-black/15 rounded-xl focus:outline-none focus:border-[#AB9677]"
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full mt-2 bg-[#221F1D] hover:bg-black text-white text-xs uppercase tracking-[0.16em] font-semibold py-4 rounded-full transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                  >
+                    <CheckCircle2 className="w-4 h-4 text-[#AB9677]" />
+                    Confirmar Reserva ({totalPrice}€)
+                  </button>
+                </form>
+
+                <p className="text-[10px] text-center text-black/40 mt-4">
+                  Cancelación gratuita hasta 24h antes de la cita.
+                </p>
               </div>
             </div>
-
           </div>
         </main>
       )}
 
-      {/* =========================================================
-          VISTA 2: ADMIN DASHBOARD (CENTRO DE CONTROL DE LA DUEÑA)
-          ========================================================= */}
-      {viewRole === "admin" && (
-        <main className="max-w-6xl mx-auto px-4 sm:px-6 py-10 flex-grow w-full">
-          
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-stone-200 mb-8 gap-4">
+      {/* FOOTER MINIMALISTA */}
+      <footer className="bg-[#221F1D] text-white/70 py-12 border-t border-black/20 text-xs mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-[#AB9677] text-white flex items-center justify-center font-serif text-base">
+              S
+            </div>
             <div>
-              <span className="font-accent text-[11px] tracking-wider uppercase text-[#c2883e] font-bold">
-                Panel de Administración · Miraflores
-              </span>
-              <h1 className="font-serif-title text-3xl sm:text-4xl text-stone-900 mt-1">
-                Buenos días, Camila 💅
-              </h1>
-              <p className="text-xs text-stone-500 mt-1">Centro de control operativo con sincronización de citas en tiempo real.</p>
-            </div>
-
-            <div className="flex gap-2">
-              <button
-                onClick={() => setPushNotification("Simulación: Notificación push recibida desde la web.")}
-                className="bg-white border border-stone-300 hover:border-stone-400 text-stone-700 px-3 py-2 rounded-xl text-xs font-accent font-semibold flex items-center gap-1.5 transition-colors"
-              >
-                <Bell className="w-3.5 h-3.5 text-[#c2883e]" /> Probar Notificación
-              </button>
-              <button
-                onClick={() => alert("Función para bloquear turnos personales o descansos.")}
-                className="bg-[#191614] hover:bg-[#4a151b] text-white px-3.5 py-2 rounded-xl text-xs font-accent uppercase tracking-wider font-bold flex items-center gap-1.5 transition-colors shadow-sm"
-              >
-                <Plus className="w-3.5 h-3.5" /> Bloquear Horario
-              </button>
+              <span className="font-serif text-lg tracking-widest text-white block">SAMM NAIL STUDIO</span>
+              <span className="text-[10px] text-white/50 tracking-wider">Belleza de autor · Madrid / Lima</span>
             </div>
           </div>
 
-          {/* Tarjetas de Métricas del Día */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div className="bg-white border border-stone-200 rounded-xl p-4 shadow-sm">
-              <span className="block font-accent text-[10px] uppercase tracking-wider text-stone-400 font-bold mb-1">
-                Citas para hoy
-              </span>
-              <span className="font-serif-title text-3xl font-bold text-stone-900">{appointments.length}</span>
-              <span className="block text-[11px] text-emerald-800 mt-1 font-medium">● Todas confirmadas en web</span>
-            </div>
-
-            <div className="bg-white border border-stone-200 rounded-xl p-4 shadow-sm">
-              <span className="block font-accent text-[10px] uppercase tracking-wider text-stone-400 font-bold mb-1">
-                Caja proyectada (Hoy)
-              </span>
-              <span className="font-serif-title text-3xl font-bold text-emerald-800">S/ {todayRevenue.toFixed(2)}</span>
-              <span className="block text-[11px] text-stone-400 mt-1 font-medium">A cobrar en local</span>
-            </div>
-
-            <div className="bg-white border border-stone-200 rounded-xl p-4 shadow-sm">
-              <span className="block font-accent text-[10px] uppercase tracking-wider text-stone-400 font-bold mb-1">
-                Horas en Cabina
-              </span>
-              <span className="font-serif-title text-3xl font-bold text-stone-900">{totalCabinaHours} hrs</span>
-              <span className="block text-[11px] text-stone-400 mt-1 font-medium">Tiempo productivo</span>
-            </div>
-
-            <div className="bg-white border border-stone-200 rounded-xl p-4 shadow-sm">
-              <span className="block font-accent text-[10px] uppercase tracking-wider text-stone-400 font-bold mb-1">
-                Base de Datos
-              </span>
-              <span className="font-serif-title text-2xl font-bold text-emerald-800">EN VIVO</span>
-              <span className="block text-[11px] text-stone-400 mt-1 font-medium">0 huecos solapados</span>
-            </div>
+          <div className="flex items-center gap-6 text-[11px] tracking-wider uppercase">
+            <button onClick={() => setActiveTab("salon")} className="hover:text-white transition-colors">Carta</button>
+            <button onClick={() => setActiveTab("reserva")} className="hover:text-white transition-colors">Reserva Online</button>
+            <button onClick={() => setActiveTab("iframe-hello")} className="hover:text-white transition-colors">Ver Hello Nails</button>
           </div>
 
-          {/* Tabla de Agenda en Vivo */}
-          <div className="bg-white border border-stone-200 rounded-2xl overflow-hidden shadow-sm">
-            <div className="p-4 border-b border-stone-100 flex items-center justify-between bg-[#fdfcfb]">
-              <h3 className="font-accent text-xs uppercase tracking-wider font-bold text-stone-800">
-                Agenda Activa · Hoy 26 de Octubre
-              </h3>
-              <span className="text-[11px] text-emerald-800 font-semibold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                Sincronización Web Push Activa
-              </span>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead>
-                  <tr className="bg-stone-50 border-b border-stone-100 text-stone-500 font-accent uppercase text-[10px] tracking-wider">
-                    <th className="py-3 px-4">Horario</th>
-                    <th className="py-3 px-4">Código</th>
-                    <th className="py-3 px-4">Clienta</th>
-                    <th className="py-3 px-4">Servicio & Extras</th>
-                    <th className="py-3 px-4">Duración</th>
-                    <th className="py-3 px-4">Precio</th>
-                    <th className="py-3 px-4">Estado</th>
-                    <th className="py-3 px-4">Acción</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-stone-100">
-                  {appointments.map((app) => (
-                    <tr key={app.id} className="hover:bg-stone-50/60 transition-colors">
-                      <td className="py-3.5 px-4 font-bold text-stone-900">{app.time}</td>
-                      <td className="py-3.5 px-4 font-mono text-stone-500 text-[11px]">{app.code}</td>
-                      <td className="py-3.5 px-4">
-                        <span className="font-semibold text-stone-900 block">{app.clientName}</span>
-                        <span className="text-stone-400 text-[11px]">+51 {app.clientPhone}</span>
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <span className="font-medium text-stone-800 block">{app.service}</span>
-                        {app.extras && app.extras.length > 0 && (
-                          <span className="text-[10px] text-[#4a151b] font-medium block">
-                            +{app.extras.join(", ")}
-                          </span>
-                        )}
-                      </td>
-                      <td className="py-3.5 px-4 text-stone-600">{app.totalDuration} min</td>
-                      <td className="py-3.5 px-4 font-bold text-stone-900">S/ {app.totalPrice.toFixed(2)}</td>
-                      <td className="py-3.5 px-4">
-                        <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-accent uppercase font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">
-                          {app.status}
-                        </span>
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <button
-                          onClick={() => alert(`Cita ${app.code} marcada como completada y cobrada.`)}
-                          className="border border-stone-200 hover:border-emerald-700 hover:bg-emerald-50 hover:text-emerald-800 px-2.5 py-1 rounded text-[11px] font-accent font-semibold transition-colors"
-                        >
-                          ✓ Cobrada
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-        </main>
-      )}
-
-      {/* Footer Minimalista */}
-      <footer className="border-t border-stone-200 py-6 px-4 text-center text-xs text-stone-400 mt-auto bg-white">
-        Samm Nail Studio · Calle Esperanza 184, Miraflores, Lima · Atención por cita previa
+          <p className="text-[11px] text-white/40">
+            © 2026 Samm Nail Studio. Todos los derechos reservados.
+          </p>
+        </div>
       </footer>
 
     </div>
