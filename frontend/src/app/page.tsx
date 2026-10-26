@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { MotionNailsShowcase } from "@/components/MotionNailsShowcase";
 import { 
   Sparkles, 
   Calendar as CalendarIcon, 
@@ -64,67 +65,67 @@ interface PreReservation {
 }
 
 // Catálogo especializado 100% en uñas y derivados en Soles Peruanos (S/)
-// Fotos de alta resolución curadas bajo la paleta Milky Almond, Rosewood & Berry Glaze
+// Fotos de alta resolución curadas bajo la paleta Milky Almond, Rosewood & Berry Glaze (100% Manos, Uñas & Pedicura)
 const SERVICES: ServiceItem[] = [
   {
-    id: "mani-rusa",
-    name: "Manicura Rusa Anatómica Combinada",
+    id: "kapping-rubber",
+    name: "Kapping Gel & Rubber Base Fortalecedor",
     category: "manicura",
-    price: 75,
+    price: 70,
     duration: 120, // 2 horas cerrado
-    desc: "Limpieza anatómica milimétrica de cutícula con fresas de diamante, torno médico y esmaltado nivelado de alta precisión. Sesión cerrada de 2 horas.",
-    tag: "Bestseller Lima",
-    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80"
+    desc: "Capa protectora flexible de base Rubber sobre la uña natural para frenar roturas, estrías y permitir que crezca sana sin necesidad de tips. Incluye manicura anatómica y esmaltado nivelado.",
+    tag: "Salud Ungueal",
+    imgUrl: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=800&q=80"
+  },
+  {
+    id: "soft-gel-tips",
+    name: "Extensiones Soft Gel (Gel-X Full Tips)",
+    category: "acrilico",
+    price: 105,
+    duration: 120, // 2 horas cerrado
+    desc: "Cápsulas 100% de gel flexible adheridas con base estructural. Más livianas que el acrílico, cero limado abrasivo sobre la placa natural y secado express en lámpara LED.",
+    tag: "Tendencia Lima",
+    imgUrl: "https://images.unsplash.com/photo-1601244668565-afba8cbd2b51?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "unas-acrilicas",
     name: "Esculpidas en Acrílico Premium con Molde",
     category: "acrilico",
-    price: 130,
+    price: 125,
     duration: 120, // 2 horas cerrado
-    desc: "Estructura arquitectónica con acrílico de alta resistencia, ápice reforzado, limado estructural y acabado brillante espejo. Bloque de 2 horas.",
-    tag: "Durabilidad Extrema",
+    desc: "Estructura arquitectónica con monómero EMA certificado (sin MMA dañino) y polímero Mia Secret. Ápice reforzado, limado estructural y sellado cerámico resistente a impactos.",
+    tag: "Máxima Resistencia",
     imgUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "semi-summer",
-    name: "Esmaltado Semipermanente Summer Glazed",
+    name: "Esmaltado Semipermanente Glazed & Cromo",
     category: "manicura",
-    price: 60,
+    price: 55,
     duration: 120, // 2 horas cerrado
-    desc: "Nivelación con base rubber, esmaltes 20-Free tonos cálidos verano Lima y efecto nacarado/cromo con brillo cerámico. Sesión de 2 horas.",
-    tag: "Verano 2027",
+    desc: "Limpieza anatómica profunda, esmaltes Cherimoya / OPI 20-Free y efecto cromo perlado o glazed donut. Curado dual a 48W con brillo espejo garantizado por 21 días.",
+    tag: "Bestseller",
     imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80"
   },
   {
-    id: "soft-gel-tips",
-    name: "Extensiones Soft Gel / Tips Press-On Gel",
-    category: "acrilico",
-    price: 110,
-    duration: 120, // 2 horas cerrado
-    desc: "Cápsulas de gel flexible adheridas con base estructural. Cero limado agresivo sobre la uña natural. Sesión de 2 horas.",
-    tag: "Largo Natural",
-    imgUrl: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80"
-  },
-  {
     id: "nailart-editorial",
-    name: "Nail Art Verano Lima & Glow Solar",
+    name: "Nail Art de Autor & Aura Solar",
     category: "nailart",
-    price: 95,
+    price: 90,
     duration: 120, // 2 horas cerrado
-    desc: "Micro-french neón pastel, degradados veraniegos aura, efectos cromados solares y trazos a mano alzada. Sesión artística de 2 horas.",
-    tag: "Tendencia Solar",
-    imgUrl: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=800&q=80"
+    desc: "Composiciones a mano alzada, micro-french minimalista, degradados aura en tonos cálidos y detalles cromados de alta precisión sobre base nivelada.",
+    tag: "Diseño Exclusivo",
+    imgUrl: "https://images.unsplash.com/photo-1571290274554-6a2eaa771e5f?auto=format&fit=crop&w=800&q=80"
   },
   {
     id: "pedi-rusa",
-    name: "Pedicura Clínica Rusa & Esmaltado",
+    name: "Pedicura Clínica & Esmaltado en Gel",
     category: "pedicura",
-    price: 85,
+    price: 80,
     duration: 120, // 2 horas cerrado
-    desc: "Limpieza profunda de canales ungueales con fresas, retiro de asperezas y esmaltado de alta adherencia para sandalias de playa. 2 horas.",
-    tag: "Beach Ready",
-    imgUrl: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=800&q=80"
+    desc: "Tratamiento higiénico de canales ungueales con fresas estériles en autoclave médico, retiro suave de durezas y esmaltado de alta adherencia sin descascararse.",
+    tag: "Spa Clínico",
+    imgUrl: "https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=800&q=80"
   }
 ];
 
@@ -132,38 +133,45 @@ const SERVICES: ServiceItem[] = [
 const EXTRAS: ExtraItem[] = [
   { 
     id: "retirada-previa", 
-    name: "Retirada de Acrílico o Gel de Otro Salón (+30 min)", 
+    name: "Retiro Seguro de Acrílico o Gel de Otro Salón (+30 min)", 
     price: 25, 
     duration: 30, 
-    desc: "Retirada técnica segura con fresa cerámica suave sin debilitar la uña natural." 
+    desc: "Retiro técnico con fresa cerámica suave y removedor nutritivo sin limar la lámina ungueal." 
+  },
+  { 
+    id: "kapping-extra", 
+    name: "Refuerzo Kapping / Rubber Shield (+30 min)", 
+    price: 20, 
+    duration: 30, 
+    desc: "Capa adicional de goma elástica para clientas con uñas finas, quebradizas o propensas a fisuras." 
   },
   { 
     id: "french-micro", 
-    name: "French Micro-Line en las 10 uñas (+30 min)", 
+    name: "French Micro-Line en las 10 Uñas (+30 min)", 
     price: 20, 
     duration: 30, 
-    desc: "Línea francesa ultra-fina minimalista en blanco roto o colores de temporada." 
+    desc: "Línea francesa ultra-fina minimalista en blanco tiza, tonos pastel o cromo metálico." 
   },
   { 
     id: "reparacion-una", 
-    name: "Reconstrucción Uña Rota (Acrílico o Gel) (+30 min)", 
+    name: "Reconstrucción Quirúrgica de Uña Rota (+30 min)", 
     price: 15, 
     duration: 30, 
-    desc: "Rescate milimétrico de uña fisurada sin tener que cortarlas todas." 
+    desc: "Rescate de uña fisurada con parche de fibra o estructura acrílica para igualar el largo." 
   },
   { 
     id: "nailart-alzada", 
-    name: "Nail Art Personalizado (2 Uñas de Acento) (+30 min)", 
+    name: "Nail Art Mano Alzada (2 Uñas de Acento) (+30 min)", 
     price: 20, 
     duration: 30, 
-    desc: "Diseños de palmeras veraniegas, efecto aura o pedrería fina." 
+    desc: "Diseños personalizados, efecto ojo de gato (cat-eye), ondas abstractas o pedrería fina sellada." 
   },
   { 
-    id: "bano-aceite", 
-    name: "Nutrición Térmica con Aceite de Argán & Karité (+30 min)", 
+    id: "nutricion-termica", 
+    name: "Nutrición Térmica con Argán & Karité (+30 min)", 
     price: 15, 
     duration: 30, 
-    desc: "Hidratación profunda caliente post-playa para cutículas resecas." 
+    desc: "Masaje caliente reparador para cutículas maltratadas y sellado con sérum de queratina vegetal." 
   }
 ];
 
@@ -404,36 +412,47 @@ export default function HomePage() {
             />
           </div>
 
-          <nav className="hidden md:flex items-center gap-8 text-xs uppercase tracking-[0.2em] font-semibold text-[#7A3E48]">
+          <nav className="hidden md:flex items-center gap-2 text-xs uppercase tracking-[0.2em] font-semibold text-[#7A3E48]">
             <button 
-              onClick={() => setActiveTab("inicio")}
-              className={`transition-colors py-2 border-b-2 ${
+              onClick={() => {
+                setActiveTab("inicio");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className={`px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-1.5 cursor-pointer ${
                 activeTab === "inicio" 
-                  ? "border-[#C8927B] text-[#231C1A]" 
-                  : "border-transparent hover:text-[#C8927B]"
+                  ? "bg-[#7A3E48] text-white shadow-xs font-bold scale-[1.03]" 
+                  : "text-[#55504A] hover:text-[#7A3E48] hover:bg-[#FBF8F6]"
               }`}
             >
-              Inicio
+              <span>Inicio</span>
             </button>
             <button 
-              onClick={() => setActiveTab("tratamientos")}
-              className={`transition-colors py-2 border-b-2 ${
+              onClick={() => {
+                setActiveTab("tratamientos");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className={`px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-1.5 cursor-pointer ${
                 activeTab === "tratamientos" 
-                  ? "border-[#C8927B] text-[#231C1A]" 
-                  : "border-transparent hover:text-[#C8927B]"
+                  ? "bg-[#7A3E48] text-white shadow-xs font-bold scale-[1.03]" 
+                  : "text-[#55504A] hover:text-[#7A3E48] hover:bg-[#FBF8F6]"
               }`}
             >
-              Uñas & Carta
+              <Sparkles className="w-3.5 h-3.5 text-[#C8927B]" />
+              <span>Uñas & Carta</span>
             </button>
             <button 
-              onClick={() => setActiveTab("reserva")}
-              className={`transition-colors py-2 border-b-2 ${
+              onClick={() => {
+                setActiveTab("reserva");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              className={`px-4 py-2 rounded-full transition-all duration-300 flex items-center gap-1.5 cursor-pointer ${
                 activeTab === "reserva" 
-                  ? "border-[#C8927B] text-[#231C1A]" 
-                  : "border-transparent hover:text-[#C8927B]"
+                  ? "bg-[#7A3E48] text-white shadow-xs font-bold scale-[1.03]" 
+                  : "text-[#55504A] hover:text-[#7A3E48] hover:bg-[#FBF8F6]"
               }`}
             >
-              Citas & Agenda
+              <CalendarIcon className="w-3.5 h-3.5 text-[#C8927B]" />
+              <span>Citas & Agenda</span>
             </button>
           </nav>
 
@@ -449,7 +468,7 @@ export default function HomePage() {
 
       {/* 3. VISTA PRINCIPAL (INICIO): ESTÉTICA HELLO NAILS ADAPTADA A PERÚ / VERANO LIMA */}
       {activeTab === "inicio" && (
-        <main className="flex-1">
+        <main className="flex-1 animate-fade-in">
           
           {/* SECCIÓN 1: HERO CON EL FONDO EXACTO QUE DISTE (Botes de esmalte en estanterías doradas Unsplash OpjlRo-31SI) */}
           <section className="relative overflow-hidden border-b border-[#EFE2DC] py-20 lg:py-28 bg-[#FAF7F2]">
@@ -588,6 +607,26 @@ export default function HomePage() {
             </div>
           </section>
 
+          {/* SECCIÓN 2.5: PROTOCOLO TÉCNICO & SIMULADOR DE CABINA (MOTION CANVAS VÍTREO) */}
+          <section className="py-20 bg-[#FBF8F6] border-b border-[#EFE2DC]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <div className="text-center max-w-2xl mx-auto mb-12">
+                <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#C8927B] block">
+                  Ingeniería & Arte Ungueal
+                </span>
+                <h3 className="font-serif text-3xl sm:text-4xl font-bold text-[#231C1A] mt-1">
+                  Cómo Construimos Uñas de Alta Precisión
+                </h3>
+                <p className="text-xs text-[#8A8177] mt-2">
+                  Cero adivinanzas: conoce el proceso milimétrico de cabina con instrumental autoclave y polimerización LED dual.
+                </p>
+              </div>
+
+              {/* Render del Motion Artifact interactivo de Canvas */}
+              <MotionNailsShowcase />
+            </div>
+          </section>
+
           {/* SECCIÓN 3: SOBRE SAMM NAILS (CON FOCO EN LIMA / DEDICACIÓN EXCLUSIVA A UÑAS) */}
           <section className="py-20 bg-[#FAF7F2] border-b border-[#EFE2DC]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -707,7 +746,7 @@ export default function HomePage() {
                 <div className="rounded-2xl overflow-hidden border border-[#EFE2DC] shadow-xs group bg-white">
                   <div className="aspect-4/3 sm:aspect-16/10 overflow-hidden relative">
                     <img 
-                      src="https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=800&q=80" 
+                      src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80" 
                       alt="Colección Summer Jelly"
                       className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
@@ -725,7 +764,7 @@ export default function HomePage() {
                 <div className="rounded-2xl overflow-hidden border border-[#EFE2DC] shadow-xs group bg-white">
                   <div className="aspect-4/3 sm:aspect-16/10 overflow-hidden relative">
                     <img 
-                      src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=80" 
+                      src="https://images.unsplash.com/photo-1601244668565-afba8cbd2b51?auto=format&fit=crop&w=800&q=80" 
                       alt="Colección French Pastel"
                       className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
                     />
@@ -766,7 +805,7 @@ export default function HomePage() {
 
       {/* 4. VISTA DE TRATAMIENTOS (SIN PRECIOS, PRESENTACIONAL DE TÉCNICAS) */}
       {activeTab === "tratamientos" && (
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16 flex-1 w-full">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-16 flex-1 w-full animate-fade-in">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#C8927B]">
               Carta Especializada
@@ -782,35 +821,45 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {SERVICES.map(s => (
-              <div key={s.id} className="bg-white rounded-2xl border border-[#EFE2DC] overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+              <div 
+                key={s.id} 
+                className="bg-white rounded-3xl border border-[#EFE2DC] overflow-hidden shadow-xs hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
+              >
                 <div>
-                  <div className="h-60 relative overflow-hidden bg-[#FAF7F2]">
-                    <img src={s.imgUrl} alt={s.name} className="w-full h-full object-cover" />
+                  <div className="h-64 relative overflow-hidden bg-[#FAF7F2]">
+                    <img 
+                      src={s.imgUrl} 
+                      alt={s.name} 
+                      className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 ease-out" 
+                    />
                     {s.tag && (
-                      <span className="absolute top-3 left-3 bg-white/95 text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full text-[#231C1A] shadow-xs">
+                      <span className="absolute top-4 left-4 bg-white/95 backdrop-blur-md text-[10px] font-bold uppercase tracking-widest px-3.5 py-1 rounded-full text-[#7A3E48] border border-[#C8927B]/30 shadow-xs flex items-center gap-1">
+                        <Sparkles className="w-3 h-3 text-[#C8927B]" />
                         {s.tag}
                       </span>
                     )}
-                    <span className="absolute bottom-3 right-3 bg-[#7A3E48]/90 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full flex items-center gap-1 font-medium">
-                      <Clock className="w-3.5 h-3.5 text-[#EFE2DC]" /> 2 horas cerradas
+                    <span className="absolute bottom-4 right-4 bg-[#231C1A]/85 backdrop-blur-md text-white text-xs px-3.5 py-1.5 rounded-full flex items-center gap-1.5 font-medium border border-white/10 shadow-xs">
+                      <Clock className="w-3.5 h-3.5 text-[#C8927B]" /> 2 horas cerradas
                     </span>
                   </div>
-                  <div className="p-6">
-                    <h3 className="font-serif text-2xl font-bold text-[#231C1A]">{s.name}</h3>
-                    <p className="text-xs text-[#666059] mt-2 leading-relaxed">{s.desc}</p>
-                    <span className="inline-block mt-4 text-[11px] font-semibold text-[#C8927B] uppercase tracking-wider">
-                      Incluye esterilización y retirada anterior
-                    </span>
+                  <div className="p-7">
+                    <h3 className="font-serif text-2xl font-bold text-[#231C1A] group-hover:text-[#7A3E48] transition-colors">{s.name}</h3>
+                    <p className="text-xs text-[#666059] mt-2.5 leading-relaxed">{s.desc}</p>
+                    <div className="mt-4 flex items-center gap-2 text-[11px] font-semibold text-[#C8927B] uppercase tracking-wider">
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#C8927B]" />
+                      <span>Incluye esterilización & retirada</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="p-6 pt-0">
+                <div className="p-7 pt-0">
                   <button
                     onClick={() => {
                       setSelectedService(s);
                       setActiveTab("reserva");
+                      window.scrollTo({ top: 0, behavior: "smooth" });
                     }}
-                    className="w-full bg-[#7A3E48] hover:bg-[#5E2F37] text-white text-xs uppercase tracking-wider font-semibold py-3.5 rounded-xl transition-colors flex items-center justify-center gap-2"
+                    className="w-full bg-[#7A3E48] hover:bg-[#5E2F37] text-white text-xs uppercase tracking-wider font-semibold py-4 rounded-2xl transition-all shadow-sm hover:shadow-md hover:scale-[1.02] flex items-center justify-center gap-2 cursor-pointer"
                   >
                     Ver Tarifas & Agendar Cita <ChevronRight className="w-4 h-4" />
                   </button>
@@ -823,7 +872,7 @@ export default function HomePage() {
 
       {/* 5. VISTA DE RESERVA (PRESUPUESTO, 20% YAPE / PLIN EN SOLES, SEMÁFORO 3 COLORES) */}
       {activeTab === "reserva" && (
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex-1 w-full">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-12 flex-1 w-full animate-fade-in">
 
           {/* Banner de los 3 Colores */}
           <div className="mb-8 bg-[#FBF8F6] border border-[#EFE2DC] rounded-2xl p-5 shadow-xs">
@@ -1326,32 +1375,25 @@ export default function HomePage() {
       )}
 
       {/* FOOTER OFICIAL CON BRANDING & MARCO LEGAL PERÚ */}
-      <footer className="bg-[#231C1A] text-[#EFE2DC]/90 py-12 border-t border-[#C8927B]/30 text-xs mt-auto">
+      <footer className="bg-[#1A1413] text-[#EFE2DC]/90 py-12 border-t border-[#C8927B]/30 text-xs mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center pb-8 border-b border-white/10">
             
-            {/* Logo en footer */}
-            <div className="md:col-span-5 flex items-center gap-4">
+            {/* Logo y lema oficial en footer */}
+            <div className="md:col-span-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <img 
                 src="./samm-nailstudio-wordmark.svg" 
                 alt="samm. NAIL STUDIO" 
                 className="h-10 w-auto brightness-200"
               />
-              <div className="border-l border-white/20 pl-4">
+              <div className="sm:border-l sm:border-white/20 sm:pl-4">
                 <span className="text-[11px] text-[#C8927B] font-semibold tracking-wider block">LIMA ATELIER</span>
-                <span className="text-[10px] text-white/60 block">Servicios de Uñas & Cuidado Anatómico (2h)</span>
+                <span className="text-[10px] text-white/60 block">Servicios de Uñas de Grado Quirúrgico & Sesiones Cerradas de 2 Horas</span>
               </div>
             </div>
 
-            {/* Navegación footer sin enlace público a admin */}
-            <div className="md:col-span-4 flex flex-wrap items-center gap-5 text-[11px] tracking-wider uppercase font-medium">
-              <button onClick={() => setActiveTab("inicio")} className="hover:text-white transition-colors">Inicio</button>
-              <button onClick={() => setActiveTab("tratamientos")} className="hover:text-white transition-colors">Uñas & Carta</button>
-              <button onClick={() => setActiveTab("reserva")} className="hover:text-white transition-colors">Citas & Agenda</button>
-            </div>
-
             {/* Enlaces Legales & Libro de Reclamaciones */}
-            <div className="md:col-span-3 flex flex-col sm:flex-row md:flex-col items-start md:items-end gap-2 text-[11px]">
+            <div className="md:col-span-4 flex flex-col sm:flex-row md:flex-col items-start md:items-end gap-2 text-[11px]">
               <div className="flex items-center gap-4 text-white/70">
                 <button 
                   onClick={() => setLegalModal("terminos")} 
