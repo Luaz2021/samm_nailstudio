@@ -19,79 +19,112 @@ export function NavbarOlive({
 }: NavbarOliveProps) {
   return (
     <header className="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#EAE3DA] transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-2.5 md:py-0 md:h-20 flex flex-col md:flex-row md:items-center md:justify-between gap-2.5 md:gap-4">
         
-        {/* Lado Izquierdo: Logotipo Tipográfico Editorial */}
-        <div 
-          onClick={() => onChangeTab("inicio")} 
-          className="flex flex-col items-start cursor-pointer shrink-0"
-        >
-          <span 
-            className="text-2xl sm:text-3xl font-light tracking-tight text-[#2C2420]"
-            style={{ fontFamily: "var(--font-serif)" }}
+        {/* Fila Superior en Móvil / Izquierda-Derecha en Desktop */}
+        <div className="flex items-center justify-between w-full md:w-auto">
+          {/* Logotipo Tipográfico Editorial */}
+          <div 
+            onClick={() => onChangeTab("inicio")} 
+            className="flex flex-col items-start cursor-pointer shrink-0"
           >
-            samm.
-          </span>
-          <span className="text-[9px] uppercase tracking-[0.3em] font-semibold text-[#9E5742] -mt-1">
-            Nail Studio
-          </span>
+            <span 
+              className="text-2xl sm:text-3xl font-light tracking-tight text-[#2C2420] leading-none"
+              style={{ fontFamily: "var(--font-serif)" }}
+            >
+              samm.
+            </span>
+            <span
+              className="text-[8px] sm:text-[9px] uppercase tracking-[0.28em] font-semibold mt-0.5"
+              style={{ color: "var(--rosewood-chrome, #9E5742)" }}
+            >
+              Nail Studio
+            </span>
+          </div>
+
+          {/* Botones de Acción visibles en Móvil arriba a la derecha */}
+          <div className="flex md:hidden items-center gap-2">
+            <a
+              href="https://wa.me/51959716984"
+              target="_blank"
+              rel="noreferrer"
+              className="w-9 h-9 rounded-full bg-white border border-[#E2D8CE] flex items-center justify-center text-[#25D366]"
+              aria-label="WhatsApp"
+            >
+              <MessageCircle className="w-4 h-4" />
+            </a>
+
+            <button
+              onClick={onOpenDrawer}
+              className="relative flex items-center gap-1.5 px-3.5 py-2 rounded-full text-white transition-all text-xs font-semibold shadow-sm"
+              style={{ backgroundColor: "var(--rosewood-chrome, #9E5742)" }}
+              aria-label="Abrir agenda y resumen de cita"
+            >
+              <ShoppingBag className="w-3.5 h-3.5 text-[#FAF8F5]" />
+              <span>Mi Cita</span>
+              {cartCount > 0 && (
+                <span className="w-4 h-4 rounded-full bg-[#2C2420] text-white flex items-center justify-center text-[10px] font-bold">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
 
-        {/* Centro: Las 3 Pestañas Claras (Inicio, Uñas & Carta, Protocolo & Salud) */}
-        <nav className="flex items-center gap-1 sm:gap-2 p-1.5 bg-[#F2ECE4] rounded-full border border-[#E5DDD2] text-xs font-semibold">
+        {/* Centro: Las 3 Pestañas (Grid de 3 en móvil, Píldora centrada en Desktop) */}
+        <nav className="grid grid-cols-3 md:flex items-center gap-1 sm:gap-1.5 p-1 bg-[#F2ECE4] rounded-full border border-[#E5DDD2] text-[11px] sm:text-xs font-semibold w-full md:w-auto">
           
           {/* 1. Inicio */}
           <button
             type="button"
             onClick={() => onChangeTab("inicio")}
-            className={`px-3.5 sm:px-4 py-2 rounded-full transition-all flex items-center gap-1.5 ${
+            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "inicio"
                 ? "bg-[#2C2420] text-white shadow-xs font-bold"
                 : "text-[#6C5F57] hover:text-[#2C2420] hover:bg-black/5"
             }`}
           >
-            <Home className="w-3.5 h-3.5" />
+            <Home className="w-3.5 h-3.5 shrink-0" />
             <span>Inicio</span>
           </button>
 
-          {/* 2. Uñas & Carta */}
+          {/* 2. Servicios */}
           <button
             type="button"
             onClick={() => onChangeTab("tratamientos")}
-            className={`px-3.5 sm:px-4 py-2 rounded-full transition-all flex items-center gap-1.5 ${
+            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "tratamientos"
                 ? "bg-[#2C2420] text-white shadow-xs font-bold"
                 : "text-[#6C5F57] hover:text-[#2C2420] hover:bg-black/5"
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#C8927B]" />
-            <span>Uñas & Carta</span>
+            <Sparkles className="w-3.5 h-3.5 text-[#C8927B] shrink-0" />
+            <span>Servicios</span>
           </button>
 
-          {/* 3. Protocolo & Salud (Página Dedicada) */}
+          {/* 3. Sobre Nosotros */}
           <button
             type="button"
             onClick={() => onChangeTab("guia")}
-            className={`px-3.5 sm:px-4 py-2 rounded-full transition-all flex items-center gap-1.5 ${
+            className={`px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full transition-all flex items-center justify-center gap-1.5 ${
               activeTab === "guia"
                 ? "bg-[#2C2420] text-white shadow-xs font-bold"
                 : "text-[#6C5F57] hover:text-[#2C2420] hover:bg-black/5"
             }`}
           >
-            <ShieldCheck className="w-3.5 h-3.5 text-[#C8927B]" />
-            <span>Protocolo & Cuidados</span>
+            <ShieldCheck className="w-3.5 h-3.5 text-[#C8927B] shrink-0" />
+            <span className="truncate">Nosotros</span>
           </button>
 
         </nav>
 
-        {/* Lado Derecho: WhatsApp y Botón Carrito Sobrepuesto */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-          
+        {/* Lado Derecho en Desktop: WhatsApp y Botón Carrito Sobrepuesto */}
+        <div className="hidden md:flex items-center gap-2.5 shrink-0">
           <a
             href="https://wa.me/51959716984"
             target="_blank"
             rel="noreferrer"
-            className="hidden md:inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-[#E2D8CE] hover:border-[#9E5742] text-xs font-medium text-[#2C2420] transition-all"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-[#E2D8CE] hover:border-[#9E5742] text-xs font-medium text-[#2C2420] transition-all"
           >
             <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
             <span>Consultas</span>
@@ -99,7 +132,8 @@ export function NavbarOlive({
 
           <button
             onClick={onOpenDrawer}
-            className="relative flex items-center gap-2.5 px-4 sm:px-5 py-2.5 rounded-full bg-[#9E5742] text-white hover:bg-[#854533] transition-all text-xs font-semibold shadow-md shadow-[#9E5742]/20 group"
+            className="relative flex items-center gap-2.5 px-5 py-2.5 rounded-full text-white hover:opacity-95 transition-all text-xs font-semibold shadow-md group"
+            style={{ backgroundColor: "var(--rosewood-chrome, #9E5742)" }}
             aria-label="Abrir agenda y resumen de cita"
           >
             <ShoppingBag className="w-4 h-4 text-[#FAF8F5] transition-transform group-hover:scale-110" />
@@ -110,7 +144,6 @@ export function NavbarOlive({
               </span>
             )}
           </button>
-
         </div>
 
       </div>

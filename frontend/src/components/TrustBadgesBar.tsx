@@ -20,8 +20,8 @@ export function TrustBadgesBar() {
       icon: Award
     },
     {
-      title: "Atención Exclusiva de 2 Horas",
-      desc: "Turnos cerrados sin solapamientos, garantizando un acabado perfecto.",
+      title: "Atención Exclusiva & Dedicada",
+      desc: "Turnos individuales y sin prisas, garantizando un acabado impecable.",
       icon: HeartHandshake
     }
   ];

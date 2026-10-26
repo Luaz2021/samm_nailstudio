@@ -21,25 +21,9 @@ interface ServicesBentoProps {
 
 export function ServicesBento({ services, selectedServiceId, onSelectService }: ServicesBentoProps) {
   return (
-    <section className="py-12 bg-[#FBF8F6] text-[#2C2420]">
+    <section className="py-8 bg-[#FBF8F6] text-[#2C2420]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         
-        {/* Encabezado Limpio y Editorial */}
-        <div className="text-center max-w-2xl mx-auto mb-14 space-y-3">
-          <span className="text-xs uppercase font-bold tracking-[0.25em] text-[#9E5742]">
-            Carta de Especialidades
-          </span>
-          <h2 
-            className="text-3xl sm:text-5xl font-light tracking-tight text-[#2C2420]"
-            style={{ fontFamily: "var(--font-serif)" }}
-          >
-            Servicios & Tratamientos
-          </h2>
-          <p className="text-xs sm:text-sm text-[#7A6B62] leading-relaxed">
-            Cada tratamiento es un ritual pausado de 2 horas. Selecciona tu servicio para personalizar tu cita con extras y fecha en tu bolsa.
-          </p>
-        </div>
-
         {/* Bento Grid Estilo Siberia Salon */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((item) => {

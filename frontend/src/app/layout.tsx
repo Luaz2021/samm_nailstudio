@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Plus_Jakarta_Sans, Syne } from "next/font/google";
 import "./globals.css";
+import { SeasonThemeWatcher } from "@/components/SeasonThemeWatcher";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-serif",
@@ -23,7 +24,7 @@ const syne = Syne({
 
 export const metadata: Metadata = {
   title: "samm. NAIL STUDIO · Callao, Lima - Perú",
-  description: "Atelier de manicura y estética ungueal de alta precisión en Callao, Lima. Servicios cerrados de 2 horas con productos 20-Free y esterilización hospitalaria.",
+  description: "Atelier de manicura y estética ungueal de alta precisión en Callao, Lima. Cuidado anatómico con productos 20-Free y esterilización hospitalaria.",
 };
 
 export default function RootLayout({
@@ -34,6 +35,7 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${cormorant.variable} ${plusJakarta.variable} ${syne.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans bg-[#FBF8F6] text-[#231C1A]">
+        <SeasonThemeWatcher />
         {children}
       </body>
     </html>

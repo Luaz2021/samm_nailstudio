@@ -27,6 +27,7 @@ body {
   font-family: var(--font-sans), sans-serif;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 @keyframes fadeInSoft {
@@ -50,4 +51,17 @@ body {
 
 .font-accent {
   font-family: var(--font-title), sans-serif;
+}
+
+.text-brand-primary {
+  color: var(--rosewood-chrome);
+}
+.text-brand-accent {
+  color: var(--berry-glaze);
+}
+.bg-brand-primary {
+  background-color: var(--rosewood-chrome);
+}
+.bg-brand-accent {
+  background-color: var(--berry-glaze);
 }

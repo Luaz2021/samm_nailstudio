@@ -66,7 +66,7 @@ export function EditorialFooter({ onOpenTerms }: EditorialFooterProps) {
                 <div>
                   <p className="text-[#FAF8F5] font-medium">Lunes a Sábado</p>
                   <p>10:00 AM – 07:00 PM</p>
-                  <p className="text-[11px] text-[#C8927B] mt-0.5">Turnos cerrados de 2 horas</p>
+                  <p className="text-[11px] text-[#C8927B] mt-0.5">Atención bajo reserva</p>
                 </div>
               </div>
             </div>

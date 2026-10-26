@@ -1,12 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavbarOlive, NavTab } from "@/components/NavbarOlive";
 import { HeroCinematic } from "@/components/HeroCinematic";
 import { TrustBadgesBar } from "@/components/TrustBadgesBar";
-import { ServicesBento, ServiceItem } from "@/components/ServicesBento";
-import { ExtrasSection, ExtraItem } from "@/components/ExtrasSection";
-import { MotionNailsShowcase } from "@/components/MotionNailsShowcase";
+import { ServicesBento } from "@/components/ServicesBento";
 import { LookbookBlogSection } from "@/components/LookbookBlogSection";
 import { EditorialFooter } from "@/components/EditorialFooter";
 import { BookingDrawer, SelectedExtra, SelectedService } from "@/components/BookingDrawer";
@@ -17,108 +15,58 @@ import { HomeShowcase } from "@/components/HomeShowcase";
 import { HomeCareMaintenance } from "@/components/HomeCareMaintenance";
 import { CinematicVideoShowcase } from "@/components/CinematicVideoShowcase";
 import { GalleryCarousel } from "@/components/GalleryCarousel";
-
-// Catálogo curado en Soles peruanos (S/) con fotografías de alta resolución
-const SERVICES_DATA: ServiceItem[] = [
-  {
-    id: "kapping-rubber",
-    name: "Kapping Gel & Rubber Base Fortalecedor",
-    category: "manicura",
-    price: 70,
-    duration: 120, // 2 horas cerrado
-    desc: "Capa protectora flexible de base Rubber sobre la uña natural para frenar roturas, estrías y permitir que crezca sana sin necesidad de tips. Incluye manicura anatómica y esmaltado nivelado.",
-    tag: "Salud Ungueal",
-    imgUrl: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: "manicura-rusa-semi",
-    name: "Manicura Rusa Combinada & Semipermanente",
-    category: "manicura",
-    price: 60,
-    duration: 120, // 2 horas cerrado
-    desc: "Limpieza anatómica profunda de cutícula con fresas de diamante alemanas y esmaltado bajo cutícula de máxima precisión para alargar el crecimiento impecable por más de 3 semanas.",
-    tag: "Más Solicitado",
-    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: "soft-gel-tips",
-    name: "Extensiones Soft Gel & Full Cover Tips",
-    category: "acrilico",
-    price: 110,
-    duration: 150, // 2h 30m
-    desc: "Extensiones ligeras de gel premoldeado que se adhieren con base rubber sin dañar tu lecho ungueal. Resultado natural, resistente al agua y sin limados agresivos.",
-    tag: "Largo & Estructura",
-    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: "spa-pedicura-rusa",
-    name: "Pedicura Rusa Anatómica & Spa Jelly",
-    category: "pedicura",
-    price: 85,
-    duration: 120, // 2 horas cerrado
-    desc: "Tratamiento podo-estético intensivo. Retiro de durezas con disco podológico, exfoliación aromática, hidratación profunda y esmaltado semipermanente de larga duración.",
-    tag: "Bienestar",
-    imgUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: "reforzamiento-biab",
-    name: "BIAB Builder in a Bottle & Reparación",
-    category: "manicura",
-    price: 80,
-    duration: 120,
-    desc: "Gel constructor en botella de alta viscosidad para corregir uñas mordidas, curvadas hacia abajo o dañadas tras acrílicos anteriores.",
-    tag: "Tratamiento",
-    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: "polygel-esculpido",
-    name: "Esculpido Dual Polygel de Precisión",
-    category: "acrilico",
-    price: 130,
-    duration: 160,
-    desc: "La combinación perfecta entre acrílico y gel: fuerza extrema sin olor a monómero y máxima ligereza en tus manos.",
-    tag: "Alta Resistencia",
-    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80"
-  }
-];
-
-const EXTRAS_DATA: ExtraItem[] = [
-  {
-    id: "retiro-acrilico-otro",
-    name: "Retiro Seguro de Acrílico/Gel Ajeno",
-    price: 25,
-    duration: 30,
-    desc: "Remoción con torno médico sin limar tu uña natural para comenzar desde cero."
-  },
-  {
-    id: "nailart-minimal-mano",
-    name: "Nail Art Minimalista a Mano Alzada",
-    price: 20,
-    duration: 30,
-    desc: "Líneas fineline, flores sutiles, micro-puntos o efecto aura en 2 a 4 uñas."
-  },
-  {
-    id: "efecto-cromo-glaze",
-    name: "Efecto Glazed Donut / Cromo Perlado",
-    price: 15,
-    duration: 15,
-    desc: "Micropolvo de destellos iridiscentes sellado al horno en set completo."
-  },
-  {
-    id: "french-inverso-micro",
-    name: "Micro-Francesa Editorial o Reversa",
-    price: 20,
-    duration: 25,
-    desc: "Línea de sonrisa ultrafina de alta precisión geométrica."
-  }
-];
+import { AboutUsSection } from "@/components/AboutUsSection";
+import {
+  DEFAULT_SERVICES,
+  DEFAULT_EXTRAS,
+  ServiceItem,
+  ExtraItem,
+  getActiveLimaThemeState,
+  applySeasonTheme,
+  LimaTheme
+} from "@/data/catalog";
+import { Sparkles } from "lucide-react";
 
 export default function HomePage() {
   // Pestañas Principales en la Navbar ("inicio" | "tratamientos" | "guia")
   const [activeTab, setActiveTab] = useState<NavTab>("inicio");
+  const [services, setServices] = useState<ServiceItem[]>(DEFAULT_SERVICES);
+  const [availableExtras, setAvailableExtras] = useState<ExtraItem[]>(DEFAULT_EXTRAS);
+  const [activeTheme, setActiveTheme] = useState<LimaTheme>(() => getActiveLimaThemeState().activeTheme);
+
+  // Sincronización en tiempo real con el panel Admin (Servicios, Extras y Tema de Temporada Lima)
+  useEffect(() => {
+    try {
+      const syncAll = () => {
+        const storedServices = localStorage.getItem("samm_services_data");
+        if (storedServices) {
+          setServices(JSON.parse(storedServices));
+        }
+
+        const storedExtras = localStorage.getItem("samm_extras_data");
+        if (storedExtras) {
+          setAvailableExtras(JSON.parse(storedExtras));
+        }
+
+        const themeState = getActiveLimaThemeState();
+        setActiveTheme(themeState.activeTheme);
+        applySeasonTheme(themeState.activeTheme.colors);
+      };
+
+      syncAll();
+      window.addEventListener("storage", syncAll);
+      window.addEventListener("samm-theme-change", syncAll);
+      return () => {
+        window.removeEventListener("storage", syncAll);
+        window.removeEventListener("samm-theme-change", syncAll);
+      };
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
 
   // Estado de Selección de Cita (Olive & June Drawer)
-  const [selectedService, setSelectedService] = useState<SelectedService | null>(SERVICES_DATA[0]);
+  const [selectedService, setSelectedService] = useState<SelectedService | null>(DEFAULT_SERVICES[0]);
   const [selectedExtras, setSelectedExtras] = useState<SelectedExtra[]>([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
@@ -133,7 +81,7 @@ export default function HomePage() {
   // Manejadores
   const handleSelectService = (service: ServiceItem) => {
     setSelectedService(service);
-    setIsDrawerOpen(true); // Abre suavemente el resumen lateral estilo Olive & June
+    setIsDrawerOpen(true);
   };
 
   const handleToggleExtra = (extra: ExtraItem) => {
@@ -206,12 +154,17 @@ export default function HomePage() {
   const cartCount = (selectedService ? 1 : 0) + selectedExtras.length;
 
   return (
-    <div className="min-h-screen bg-[#FBF8F6] text-[#2C2420] flex flex-col selection:bg-[#EAD8CE] selection:text-[#2C2420]">
-      
+    <div
+      className="min-h-screen flex flex-col selection:bg-[#EAD8CE] selection:text-[#2C2420] transition-colors duration-500"
+      style={{
+        backgroundColor: activeTheme.colors.bg,
+        color: activeTheme.colors.dark
+      }}
+    >
       {/* Zona 0: Pop-up Promocional de Apertura (-15% de Descuento) */}
       <PromoPopup onClaim={handleClaimPromo} />
 
-      {/* Zona 1: Navbar con 2 pestañas ("Inicio" y "Uñas & Carta") + Carrito Sobrepuesto */}
+      {/* Zona 1: Navbar con 3 pestañas ("Inicio", "Servicios" y "Sobre Nosotros") + Carrito */}
       <NavbarOlive 
         activeTab={activeTab}
         onChangeTab={(tab) => {
@@ -222,19 +175,19 @@ export default function HomePage() {
         onOpenDrawer={() => setIsDrawerOpen(true)} 
       />
 
-      {/* VISTA 1: INICIO (Página de Portada Editorial, Limpia, Cero Formulario Clickeable) */}
+      {/* VISTA 1: INICIO (Home) */}
       {activeTab === "inicio" && (
         <main className="animate-fade-in flex flex-col">
-          {/* 1. Hero Cinematográfico con Video Loop estilo Nenha */}
+          {/* 1. Hero Cinematográfico Dinámico con Tema de Temporada */}
           <HeroCinematic 
             onOpenBooking={() => setIsDrawerOpen(true)}
             onExploreCatalog={handleExploreCatalog}
           />
 
-          {/* 2. Barra de Confianza & Logos de Alta Gama Estilo Paintbox EXACTO */}
+          {/* 2. Barra de Confianza & Logos de Alta Gama */}
           <TrustBadgesBar />
 
-          {/* 3. Vitrina de Especialidades (Filosofía de Cabina, sin textos de restaurante) */}
+          {/* 3. Vitrina de Especialidades (Filosofía de Cabina) */}
           <HomeShowcase 
             onGoToCatalog={() => {
               setActiveTab("tratamientos");
@@ -242,70 +195,90 @@ export default function HomePage() {
             }}
           />
 
-          {/* 4. Carrusel de Galería de Trabajos Reales (Llena el espacio visual con alta estética) */}
-          <GalleryCarousel />
+          {/* 4. Simulador Interactivo de Color & Estructura */}
+          <CinematicVideoShowcase onOpenBooking={() => setIsDrawerOpen(true)} />
 
-          {/* 5. Reproductor de Video Cinematográfico Iframe de Alta Calidad */}
-          <CinematicVideoShowcase />
-
-          {/* 6. Lookbook de Temporada & Artículos de Cuidado */}
+          {/* 5. Lookbook de Temporada & Artículos de Cuidado */}
           <LookbookBlogSection />
         </main>
       )}
 
-      {/* VISTA 2: UÑAS & CARTA (Catálogo Completo y Selección Limpia de Tratamiento) */}
+      {/* VISTA 2: SERVICIOS (Catálogo Completo, Selección y Galería de Resultados) */}
       {activeTab === "tratamientos" && (
         <main className="animate-fade-in flex flex-col py-12">
-          <div className="max-w-7xl mx-auto px-6 text-center mb-8">
-            <span className="text-xs uppercase font-bold tracking-[0.25em] text-[#9E5742]">
-              Carta Detallada de Precios
+          <div className="max-w-7xl mx-auto px-6 text-center mb-6">
+            <span
+              className="text-xs uppercase font-bold tracking-[0.25em]"
+              style={{ color: activeTheme.colors.primary }}
+            >
+              Servicios & Especialidades
             </span>
             <h1 
-              className="text-4xl sm:text-5xl font-light text-[#2C2420] mt-2"
-              style={{ fontFamily: "var(--font-serif)" }}
+              className="text-4xl sm:text-5xl font-light mt-2"
+              style={{ fontFamily: "var(--font-serif)", color: activeTheme.colors.dark }}
             >
               Uñas, Blindaje & Cuidado Anatómico
             </h1>
             <p className="text-xs sm:text-sm text-[#7A6B62] max-w-xl mx-auto mt-2">
-              Selecciona tu tratamiento. Al hacer clic se abrirá tu cita sobrepuesta donde podrás personalizar tus extras y elegir tu turno.
+              Selecciona tu tratamiento para ver los detalles, personalizar extras y agendar tu turno.
             </p>
+
+            {/* Banner sutil de Diseños Destacados de la Temporada/Evento actual en Lima */}
+            <div
+              className="mt-6 inline-flex flex-wrap items-center justify-center gap-2 px-5 py-2.5 rounded-2xl border border-[#EAE3DA] shadow-2xs"
+              style={{ backgroundColor: activeTheme.colors.surface }}
+            >
+              <span
+                className="text-[10px] uppercase font-bold tracking-widest flex items-center gap-1.5 mr-1"
+                style={{ color: activeTheme.colors.primary }}
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                {activeTheme.name}:
+              </span>
+              {activeTheme.featuredDesigns.map((d, idx) => (
+                <span
+                  key={idx}
+                  className="text-[11px] px-2.5 py-0.5 rounded-full bg-white border border-[#EAE3DA] font-medium"
+                  style={{ color: activeTheme.colors.dark }}
+                >
+                  {d}
+                </span>
+              ))}
+            </div>
           </div>
 
           <ServicesBento 
-            services={SERVICES_DATA}
+            services={services}
             selectedServiceId={selectedService?.id || null}
             onSelectService={handleSelectService}
           />
+
+          {/* Galería de Resultados en Cabina (Al final de la página de Servicios) */}
+          <div className="mt-8">
+            <GalleryCarousel />
+          </div>
         </main>
       )}
 
-      {/* VISTA 3: PROTOCOLO & SALUD (Página Dedicada: Reglas de Cabina y Mantenimiento en Casa) */}
+      {/* VISTA 3: SOBRE NOSOTROS (Nosotros) */}
       {activeTab === "guia" && (
-        <main className="animate-fade-in flex flex-col py-12">
-          <div className="max-w-7xl mx-auto px-6 text-center mb-6">
-            <span className="text-xs uppercase font-bold tracking-[0.25em] text-[#9E5742]">
-              Salud Ungueal & Mantenimiento
-            </span>
-            <h1 
-              className="text-4xl sm:text-5xl font-light text-[#2C2420] mt-2"
-              style={{ fontFamily: "var(--font-serif)" }}
-            >
-              Protocolo de Atelier & Cuidados
-            </h1>
-            <p className="text-xs sm:text-sm text-[#7A6B62] max-w-xl mx-auto mt-2">
-              Todo lo que necesitas saber antes de venir a tu cita y cómo prolongar tu set por más de 3 semanas.
-            </p>
-          </div>
-
+        <main className="animate-fade-in flex flex-col">
+          <AboutUsSection 
+            onOpenBooking={() => setIsDrawerOpen(true)}
+            onExploreServices={() => {
+              setActiveTab("tratamientos");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          />
           <SalonGuidelines onOpenBooking={() => setIsDrawerOpen(true)} />
-          <HomeCareMaintenance />
+          <HomeCareMaintenance onOpenBooking={() => setIsDrawerOpen(true)} />
         </main>
       )}
 
       {/* Zona 7: Footer Estructurado de 4 Columnas */}
       <EditorialFooter onOpenTerms={() => setIsTermsOpen(true)} />
 
-      {/* Modal de Términos, Condiciones y Políticas de Cancelación (4 horas / 20% seña) */}
+      {/* Modal de Términos, Condiciones y Políticas de Cancelación */}
       <TermsModal 
         isOpen={isTermsOpen}
         onClose={() => setIsTermsOpen(false)}
@@ -317,7 +290,7 @@ export default function HomePage() {
         onClose={() => setIsDrawerOpen(false)}
         service={selectedService}
         extras={selectedExtras}
-        allAvailableExtras={EXTRAS_DATA}
+        allAvailableExtras={availableExtras}
         onToggleExtra={handleToggleExtra}
         onRemoveExtra={handleRemoveExtra}
         selectedDate={selectedDate}

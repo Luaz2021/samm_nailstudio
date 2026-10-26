@@ -41,7 +41,7 @@ export function TermsModal({ isOpen, onClose }: TermsModalProps) {
               1. Seña de Reserva (20% No Reembolsable)
             </h4>
             <p>
-              Para bloquear un turno exclusivo de 2 horas en la agenda de Samm Nail Studio, es indispensable abonar el <strong>20% de adelanto</strong> vía Yape, Plin o transferencia bancaria.
+              Para bloquear un turno exclusivo en la agenda de Samm Nail Studio, es indispensable abonar el <strong>20% de adelanto</strong> vía Yape, Plin o transferencia bancaria.
             </p>
             <p className="text-[11px] text-[#7A6B62]">
               Este depósito garantiza que el horario quede cerrado para ti y no sea ofrecido a otra clienta, cubriendo los costos de preparación y esterilización previa del instrumental.
