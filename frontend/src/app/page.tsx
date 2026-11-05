@@ -195,7 +195,7 @@ export default function HomePage() {
             }}
           />
 
-          {/* 4. Simulador Interactivo de Color & Estructura */}
+          {/* 4. Reels de Manos y Pies (video) */}
           <CinematicVideoShowcase onOpenBooking={() => setIsDrawerOpen(true)} />
 
           {/* 5. Lookbook de Temporada & Artículos de Cuidado */}
