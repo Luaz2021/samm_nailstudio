@@ -40,6 +40,7 @@ export default function HomePage() {
 
   // Carrito Multitratamiento ("Mis Citas")
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [isCartLoaded, setIsCartLoaded] = useState(false);
   const [serviceToConfigure, setServiceToConfigure] = useState<ServiceItem | null>(null);
   const [isConfigModalOpen, setIsConfigModalOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -53,6 +54,66 @@ export default function HomePage() {
   const [clientPhone, setClientPhone] = useState("");
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isConsultModalOpen, setIsConsultModalOpen] = useState(false);
+
+  // 1. Cargar carrito, cupón y datos de cliente persistentes desde localStorage al iniciar
+  useEffect(() => {
+    try {
+      const storedCart = localStorage.getItem("samm_cart_items");
+      if (storedCart) {
+        const parsed = JSON.parse(storedCart);
+        if (Array.isArray(parsed)) setCartItems(parsed);
+      }
+      const storedDiscount = localStorage.getItem("samm_cart_discount");
+      if (storedDiscount) setDiscountCode(storedDiscount);
+
+      const storedClient = localStorage.getItem("samm_client_info");
+      if (storedClient) {
+        const { name, phone } = JSON.parse(storedClient);
+        if (name) setClientName(name);
+        if (phone) setClientPhone(phone);
+      }
+    } catch (e) {
+      console.error("Error al cargar carrito persistente:", e);
+    } finally {
+      setIsCartLoaded(true);
+    }
+  }, []);
+
+  // 2. Persistir carrito en cada actualización para no perderlo al recargar la web (F5)
+  useEffect(() => {
+    if (!isCartLoaded) return;
+    try {
+      localStorage.setItem("samm_cart_items", JSON.stringify(cartItems));
+    } catch (e) {
+      console.error("Error persistiendo carrito:", e);
+    }
+  }, [cartItems, isCartLoaded]);
+
+  // 3. Persistir cupón de descuento activo
+  useEffect(() => {
+    if (!isCartLoaded) return;
+    try {
+      if (discountCode) {
+        localStorage.setItem("samm_cart_discount", discountCode);
+      } else {
+        localStorage.removeItem("samm_cart_discount");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, [discountCode, isCartLoaded]);
+
+  // 4. Persistir datos de contacto del cliente
+  useEffect(() => {
+    if (!isCartLoaded) return;
+    try {
+      if (clientName || clientPhone) {
+        localStorage.setItem("samm_client_info", JSON.stringify({ name: clientName, phone: clientPhone }));
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, [clientName, clientPhone, isCartLoaded]);
 
   // Sincronización en tiempo real con el panel Admin (Servicios y Tema de Temporada Lima)
   useEffect(() => {
