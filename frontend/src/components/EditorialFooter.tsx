@@ -5,9 +5,10 @@ import { MessageCircle, MapPin, Clock, ShieldCheck, Heart, ArrowUpRight, Shield 
 
 interface EditorialFooterProps {
   onOpenTerms?: () => void;
+  onOpenConsult?: () => void;
 }
 
-export function EditorialFooter({ onOpenTerms }: EditorialFooterProps) {
+export function EditorialFooter({ onOpenTerms, onOpenConsult }: EditorialFooterProps) {
   return (
     <footer id="seccion-footer" className="bg-[#1C1815] text-[#D8CECA] pt-16 pb-12 border-t border-[#312A25]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -117,15 +118,15 @@ export function EditorialFooter({ onOpenTerms }: EditorialFooterProps) {
               Aceptamos pagos con Yape, Plin y transferencia bancaria directa (BCP / BBVA / Interbank) para señas y liquidación.
             </p>
             <div className="pt-2">
-              <a
-                href="https://wa.me/51959716984?text=Hola%20Samm,%20tengo%20una%20consulta%20sobre%20mi%20cita"
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#2A2420] hover:bg-[#3D342E] text-xs font-medium text-[#FAF8F5] transition-all border border-[#3D342E]"
+              <button
+                type="button"
+                onClick={onOpenConsult}
+                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#2A2420] hover:bg-[#3D342E] text-xs font-medium text-[#FAF8F5] transition-all border border-[#3D342E] cursor-pointer"
               >
+                <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
                 <span>Consultar por WhatsApp</span>
                 <ArrowUpRight className="w-3.5 h-3.5 text-[#C8927B]" />
-              </a>
+              </button>
             </div>
           </div>
 

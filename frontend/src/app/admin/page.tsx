@@ -34,8 +34,22 @@ import {
   CloudSnow,
   Wand2,
   ExternalLink,
-  Radio
+  Radio,
+  QrCode,
+  Smartphone
 } from "lucide-react";
+import QRCode from "qrcode";
+import { 
+  DEFAULT_WHATSAPP_PHONE, 
+  DEFAULT_WHATSAPP_MSG, 
+  getStoredWhatsAppPhone, 
+  getStoredWhatsAppMessage, 
+  saveWhatsAppConfig, 
+  formatWhatsAppPhone, 
+  getWhatsAppWebUrl, 
+  sanitizeWhatsAppPhone, 
+  getWhatsAppDirectUrl 
+} from "@/lib/whatsapp";
 import { getAssetPath } from "@/lib/assets";
 import { 
   DEFAULT_HERO_BG, 
@@ -316,9 +330,19 @@ export default function AdminPage() {
     ctaText: "RECLAMAR 15% DE DESCUENTO"
   });
 
+  // 6. Configuración de Canal WhatsApp & Consultas QR
+  const [whatsappPhone, setWhatsappPhone] = useState(DEFAULT_WHATSAPP_PHONE);
+  const [whatsappMsg, setWhatsappMsg] = useState(DEFAULT_WHATSAPP_MSG);
+  const [adminQrDataUrl, setAdminQrDataUrl] = useState("");
+
   // Inicializar estados persistentes desde localStorage
   useEffect(() => {
     try {
+      const storedPhone = getStoredWhatsAppPhone();
+      const storedMsg = getStoredWhatsAppMessage();
+      setWhatsappPhone(storedPhone);
+      setWhatsappMsg(storedMsg);
+
       const storedServices = localStorage.getItem("samm_services_data");
       if (storedServices) {
         setServices(JSON.parse(storedServices));
@@ -363,6 +387,25 @@ export default function AdminPage() {
       console.error(e);
     }
   }, []);
+
+  // Generador dinámico de QR para vista previa en el Admin
+  useEffect(() => {
+    let isMounted = true;
+    const directUrl = getWhatsAppDirectUrl(whatsappPhone, whatsappMsg);
+    QRCode.toDataURL(directUrl, {
+      width: 240,
+      margin: 1.5,
+      color: { dark: "#2C2420", light: "#FFFFFF" }
+    })
+      .then((url) => {
+        if (isMounted) setAdminQrDataUrl(url);
+      })
+      .catch((err) => console.error("Error QR preview:", err));
+
+    return () => {
+      isMounted = false;
+    };
+  }, [whatsappPhone, whatsappMsg]);
 
   const triggerSaveToast = (msg: string) => {
     setSaveAlert(msg);
@@ -1056,6 +1099,133 @@ export default function AdminPage() {
                   }}
                   className="w-full text-xs p-2.5 rounded-xl border border-[#EFE2DC] bg-[#FBF8F6] font-medium text-[#231C1A] focus:outline-none focus:border-[#7A3E48]"
                 />
+              </div>
+            </div>
+          </div>
+
+          {/* PANEL DE CONTROL DE CANAL WHATSAPP & CÓDIGO QR */}
+          <div className="bg-white border border-[#EFE2DC] rounded-3xl p-6 shadow-xs mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EFE2DC]">
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-widest text-[#7A3E48] block mb-1">
+                  CANAL DE ATENCIÓN DIRECTA & QR
+                </span>
+                <h3 className="font-serif text-2xl font-bold text-[#231C1A]">Línea Oficial de WhatsApp</h3>
+                <p className="text-xs text-[#8d7e78] mt-0.5">
+                  Edita la celda del número de WhatsApp para actualizar inmediatamente el código QR y los botones de consulta en la web.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-50 border border-emerald-200">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span className="text-xs font-bold text-emerald-800">
+                  Línea Activa: {formatWhatsAppPhone(whatsappPhone)}
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pt-5">
+              {/* Formulario y Controles (8 columnas) */}
+              <div className="lg:col-span-8 space-y-4">
+                <div>
+                  <label className="text-[10px] uppercase tracking-wider text-[#8d7e78] font-bold block mb-1.5">
+                    Número de Celular / WhatsApp (Perú o Internacional)
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={whatsappPhone}
+                      onChange={(e) => setWhatsappPhone(e.target.value)}
+                      placeholder="Ej: 959716984 o 51959716984"
+                      className="w-full text-sm font-semibold p-3 pl-11 rounded-2xl border border-[#EFE2DC] bg-[#FBF8F6] text-[#231C1A] focus:outline-none focus:border-[#7A3E48] transition-all"
+                    />
+                    <MessageCircle className="w-4 h-4 text-[#25D366] absolute left-4 top-1/2 -translate-y-1/2" />
+                  </div>
+                  <p className="text-[11px] text-[#8d7e78] mt-1.5">
+                    Si ingresas los 9 dígitos habituales de Lima (ej. <span className="font-mono text-[#231C1A]">959716984</span>), el sistema le asigna el código internacional <span className="font-mono text-[#231C1A]">+51</span> automáticamente.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="text-[10px] uppercase tracking-wider text-[#8d7e78] font-bold block mb-1.5">
+                    Mensaje Predeterminado del Chat
+                  </label>
+                  <input
+                    type="text"
+                    value={whatsappMsg}
+                    onChange={(e) => setWhatsappMsg(e.target.value)}
+                    placeholder="Mensaje con el que se inicia la conversación..."
+                    className="w-full text-xs p-3 rounded-2xl border border-[#EFE2DC] bg-[#FBF8F6] font-medium text-[#231C1A] focus:outline-none focus:border-[#7A3E48] transition-all"
+                  />
+                  <p className="text-[11px] text-[#8d7e78] mt-1.5">
+                    Texto precargado que verá la clienta al pulsar el botón o escanear el QR desde su teléfono.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const clean = sanitizeWhatsAppPhone(whatsappPhone);
+                      setWhatsappPhone(clean);
+                      saveWhatsAppConfig(clean, whatsappMsg);
+                      triggerSaveToast(`WhatsApp actualizado a ${formatWhatsAppPhone(clean)} en toda la web`);
+                    }}
+                    className="px-5 py-2.5 rounded-xl bg-[#7A3E48] hover:bg-[#9E5742] text-white text-xs font-bold transition-all shadow-xs flex items-center gap-2 cursor-pointer"
+                  >
+                    <Check className="w-3.5 h-3.5" />
+                    <span>Guardar Número en la Web</span>
+                  </button>
+
+                  <a
+                    href={getWhatsAppWebUrl(whatsappPhone, whatsappMsg)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2.5 rounded-xl bg-white border border-[#EFE2DC] hover:border-[#7A3E48] text-[#231C1A] text-xs font-semibold transition-all flex items-center gap-2"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5 text-[#7A3E48]" />
+                    <span>Probar en WhatsApp Web</span>
+                  </a>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setWhatsappPhone(DEFAULT_WHATSAPP_PHONE);
+                      setWhatsappMsg(DEFAULT_WHATSAPP_MSG);
+                      saveWhatsAppConfig(DEFAULT_WHATSAPP_PHONE, DEFAULT_WHATSAPP_MSG);
+                      triggerSaveToast("Número restablecido al teléfono oficial de Samm");
+                    }}
+                    className="px-3.5 py-2.5 rounded-xl text-[11px] font-medium text-[#8d7e78] hover:text-[#231C1A] transition-colors cursor-pointer"
+                  >
+                    Restablecer oficial
+                  </button>
+                </div>
+              </div>
+
+              {/* Vista previa en vivo del Código QR (4 columnas) */}
+              <div className="lg:col-span-4 flex flex-col items-center justify-center p-4 rounded-2xl bg-[#FBF8F6] border border-[#EFE2DC]">
+                <span className="text-[10px] uppercase font-bold tracking-widest text-[#8d7e78] mb-2 flex items-center gap-1.5">
+                  <QrCode className="w-3.5 h-3.5 text-[#7A3E48]" /> Vista Previa QR en Vivo
+                </span>
+                
+                <div className="p-3 bg-white rounded-2xl border border-[#EAE3DA] shadow-xs">
+                  {adminQrDataUrl ? (
+                    <img 
+                      src={adminQrDataUrl} 
+                      alt="Vista previa QR WhatsApp" 
+                      className="w-36 h-36 rounded-lg object-contain"
+                    />
+                  ) : (
+                    <div className="w-36 h-36 flex items-center justify-center text-xs text-[#8d7e78]">
+                      Generando QR...
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-2.5 flex items-center gap-1.5 text-center text-[10px] font-medium text-[#7A6B62]">
+                  <Smartphone className="w-3.5 h-3.5 text-[#7A3E48]" />
+                  <span>Escanea con tu celular para probar el enlace</span>
+                </div>
               </div>
             </div>
           </div>

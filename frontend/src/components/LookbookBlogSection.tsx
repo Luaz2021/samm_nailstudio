@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Sparkles, Calendar, BookOpen, Clock, ArrowRight, X, ShieldCheck } from "lucide-react";
+import { Sparkles, Calendar, BookOpen, Clock, ArrowRight, X, ShieldCheck, MessageCircle } from "lucide-react";
 import { DEFAULT_ARTICLES, ArticleItem } from "@/data/catalog";
 import { SwipeDots } from "@/components/SwipeDots";
 import { getAssetPath } from "@/lib/assets";
@@ -205,15 +205,19 @@ export function LookbookBlogSection() {
                   ← Volver a notas de atelier
                 </button>
 
-                <a
-                  href="https://wa.me/51959716984?text=Hola%20Samm,%20le%C3%AD%20tu%20art%C3%ADculo%20en%20la%20web%20y%20quiero%20agendar%20cita"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#2C2420] text-white hover:bg-[#453731] transition-all text-xs uppercase tracking-widest font-semibold flex items-center justify-center gap-2"
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof window !== "undefined") {
+                      window.dispatchEvent(new Event("samm-open-consult-modal"));
+                    }
+                  }}
+                  className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#2C2420] text-white hover:bg-[#453731] transition-all text-xs uppercase tracking-widest font-semibold flex items-center justify-center gap-2 cursor-pointer"
                 >
+                  <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
                   <span>Consultar por WhatsApp</span>
                   <ArrowRight className="w-3.5 h-3.5" />
-                </a>
+                </button>
               </div>
 
             </div>

@@ -9,6 +9,7 @@ interface NavbarOliveProps {
   onChangeTab: (tab: NavTab) => void;
   cartCount: number;
   onOpenDrawer: () => void;
+  onOpenConsult?: () => void;
 }
 
 export function NavbarOlive({
@@ -16,6 +17,7 @@ export function NavbarOlive({
   onChangeTab,
   cartCount,
   onOpenDrawer,
+  onOpenConsult,
 }: NavbarOliveProps) {
   return (
     <header className="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#EAE3DA] transition-all">
@@ -44,15 +46,14 @@ export function NavbarOlive({
 
           {/* Botones de Acción visibles en Móvil arriba a la derecha */}
           <div className="flex md:hidden items-center gap-2">
-            <a
-              href="https://wa.me/51959716984"
-              target="_blank"
-              rel="noreferrer"
-              className="w-9 h-9 rounded-full bg-white border border-[#E2D8CE] flex items-center justify-center text-[#25D366]"
-              aria-label="WhatsApp"
+            <button
+              type="button"
+              onClick={onOpenConsult}
+              className="w-9 h-9 rounded-full bg-white border border-[#E2D8CE] hover:border-[#9E5742] flex items-center justify-center text-[#25D366] transition-all cursor-pointer shadow-2xs"
+              aria-label="Abrir consultas por WhatsApp"
             >
               <MessageCircle className="w-4 h-4" />
-            </a>
+            </button>
 
             <button
               onClick={onOpenDrawer}
@@ -120,15 +121,14 @@ export function NavbarOlive({
 
         {/* Lado Derecho en Desktop: WhatsApp y Botón Carrito Sobrepuesto */}
         <div className="hidden md:flex items-center gap-2.5 shrink-0">
-          <a
-            href="https://wa.me/51959716984"
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-[#E2D8CE] hover:border-[#9E5742] text-xs font-medium text-[#2C2420] transition-all"
+          <button
+            type="button"
+            onClick={onOpenConsult}
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white border border-[#E2D8CE] hover:border-[#9E5742] text-xs font-medium text-[#2C2420] transition-all cursor-pointer shadow-2xs hover:shadow-xs"
           >
             <MessageCircle className="w-3.5 h-3.5 text-[#25D366]" />
             <span>Consultas</span>
-          </a>
+          </button>
 
           <button
             onClick={onOpenDrawer}

@@ -12,6 +12,8 @@ import { ServiceConfigModal } from "@/components/ServiceConfigModal";
 import { PromoPopup } from "@/components/PromoPopup";
 import { SalonGuidelines } from "@/components/SalonGuidelines";
 import { TermsModal } from "@/components/TermsModal";
+import { WhatsAppConsultModal } from "@/components/WhatsAppConsultModal";
+import { getStoredWhatsAppPhone } from "@/lib/whatsapp";
 import { HomeShowcase } from "@/components/HomeShowcase";
 import { HomeCareMaintenance } from "@/components/HomeCareMaintenance";
 import { CinematicVideoShowcase } from "@/components/CinematicVideoShowcase";
@@ -49,6 +51,7 @@ export default function HomePage() {
   const [clientName, setClientName] = useState("");
   const [clientPhone, setClientPhone] = useState("");
   const [isTermsOpen, setIsTermsOpen] = useState(false);
+  const [isConsultModalOpen, setIsConsultModalOpen] = useState(false);
 
   // Sincronización en tiempo real con el panel Admin (Servicios y Tema de Temporada Lima)
   useEffect(() => {
@@ -65,11 +68,14 @@ export default function HomePage() {
       };
 
       syncAll();
+      const handleOpenConsult = () => setIsConsultModalOpen(true);
       window.addEventListener("storage", syncAll);
       window.addEventListener("samm-theme-change", syncAll);
+      window.addEventListener("samm-open-consult-modal", handleOpenConsult);
       return () => {
         window.removeEventListener("storage", syncAll);
         window.removeEventListener("samm-theme-change", syncAll);
+        window.removeEventListener("samm-open-consult-modal", handleOpenConsult);
       };
     } catch (e) {
       console.error(e);
@@ -209,7 +215,8 @@ export default function HomePage() {
     ];
 
     const encodedMsg = encodeURIComponent(msgLines.join("\n"));
-    window.open(`https://wa.me/51959716984?text=${encodedMsg}`, "_blank");
+    const targetPhone = getStoredWhatsAppPhone();
+    window.open(`https://wa.me/${targetPhone}?text=${encodedMsg}`, "_blank");
   };
 
   const cartTotalCalculated = cartItems.reduce((acc, curr) => acc + curr.totalPrice, 0);
@@ -237,6 +244,7 @@ export default function HomePage() {
         }}
         cartCount={cartItems.length} 
         onOpenDrawer={() => setIsDrawerOpen(true)} 
+        onOpenConsult={() => setIsConsultModalOpen(true)}
       />
 
       {/* VISTA 1: INICIO (Home) */}
@@ -343,7 +351,16 @@ export default function HomePage() {
       )}
 
       {/* Zona 7: Footer */}
-      <EditorialFooter onOpenTerms={() => setIsTermsOpen(true)} />
+      <EditorialFooter 
+        onOpenTerms={() => setIsTermsOpen(true)} 
+        onOpenConsult={() => setIsConsultModalOpen(true)}
+      />
+
+      {/* Modal de Consulta y Código QR WhatsApp */}
+      <WhatsAppConsultModal
+        isOpen={isConsultModalOpen}
+        onClose={() => setIsConsultModalOpen(false)}
+      />
 
       {/* Modal de Términos, Condiciones y Políticas de Cancelación */}
       <TermsModal 
