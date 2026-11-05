@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Sparkles, ArrowRight, ArrowLeft, ShieldCheck, Check, Calendar, HeartHandshake } from "lucide-react";
 import { DEFAULT_CARE_STEPS, CareStepItem } from "@/data/catalog";
+import { getAssetPath } from "@/lib/assets";
 
 interface HomeCareMaintenanceProps {
   onOpenBooking?: () => void;
@@ -147,12 +148,12 @@ export function HomeCareMaintenance({ onOpenBooking }: HomeCareMaintenanceProps)
                 </p>
               </div>
 
-              {/* Tips de Samantha y Beneficio */}
+              {/* Tips de Sheyla y Beneficio */}
               <div className="space-y-2 pt-1">
                 <div className="p-3 sm:p-3.5 rounded-2xl bg-[#FAF6F2] border border-[#EBE2D8] flex items-start gap-2.5 text-xs text-[#2C2420]">
                   <Sparkles className="w-4 h-4 text-[#C8927B] shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-semibold block text-[#9E5742]">Consejo de Samantha:</span>
+                    <span className="font-semibold block text-[#9E5742]">Consejo de Sheyla:</span>
                     <span className="text-[#6C5F57]">{current.tip}</span>
                   </div>
                 </div>
@@ -206,7 +207,7 @@ export function HomeCareMaintenance({ onOpenBooking }: HomeCareMaintenanceProps)
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   key={current.imgUrl}
-                  src={current.imgUrl}
+                  src={getAssetPath(current.imgUrl)}
                   alt={current.title}
                   className="w-full h-full object-cover animate-fade-in transition-all duration-700"
                 />

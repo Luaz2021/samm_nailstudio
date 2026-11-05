@@ -447,7 +447,7 @@ export const DEFAULT_CARE_STEPS: CareStepItem[] = [
     detail: "Los químicos domésticos degradan gradualmente la película protectora del Top Coat y resecan la queratina natural, provocando opacidad y desprendimientos prematuros.",
     tip: "Ten siempre un par de guantes de látex o nitrilo en la cocina y otro en el baño.",
     impact: "Mantiene el brillo efecto espejo por 3 semanas completas",
-    imgUrl: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=1200&q=85"
+    imgUrl: "/images/cuidados/cuidado-1-guantes.webp"
   },
   {
     id: "care-2",
@@ -458,7 +458,7 @@ export const DEFAULT_CARE_STEPS: CareStepItem[] = [
     detail: "Hacer fuerza de torsión con el borde libre genera microfisuras internas en el gel nivelador o acrílico. Usa la yema de tus dedos o la ayuda de una cuchara para abrir paquetes.",
     tip: "Preserva el ápice y la curvatura C arquitectónica intacta.",
     impact: "Cero fisuras en los laterales ni roturas de estrés",
-    imgUrl: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=85"
+    imgUrl: "/images/cuidados/cuidado-2-joyas.webp"
   },
   {
     id: "care-3",
@@ -469,7 +469,7 @@ export const DEFAULT_CARE_STEPS: CareStepItem[] = [
     detail: "Arrancar el acrílico o gel a la fuerza daña las capas de queratina de tu uña natural, volviéndola débil y quebradiza. Si algo se levanta, ven al estudio para retirarlo con calma y de forma segura.",
     tip: "Protégelo con una vendita adhesiva limpia hasta acudir a tu cita.",
     impact: "Conserva la fuerza y salud de tu uña natural",
-    imgUrl: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=1200&q=85"
+    imgUrl: "/images/cuidados/cuidado-3-no-arrancar.webp"
   },
   {
     id: "care-4",
@@ -480,7 +480,7 @@ export const DEFAULT_CARE_STEPS: CareStepItem[] = [
     detail: "El aceite botánico de jojoba y almendras penetra la matriz ungueal, mantiene el eponiquio flexible e impide que se formen padrastros o grietas antiestéticas en los surcos laterales.",
     tip: "Aplica una gota en la base y masajea suavemente hacia la matriz.",
     impact: "Cutículas suaves, sin padrastros ni piel engrosada",
-    imgUrl: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=1200&q=85"
+    imgUrl: "/images/cuidados/cuidado-4-aceite.webp"
   },
   {
     id: "care-5",
@@ -491,7 +491,7 @@ export const DEFAULT_CARE_STEPS: CareStepItem[] = [
     detail: "A medida que la uña natural crece, el peso del ápice se traslada hacia adelante. Retocar a tiempo previene el efecto palanca que causa desgarros dolorosos en la base.",
     tip: "Asegura tu cita con anticipación para no perder la armonía de tus manos.",
     impact: "Estructura segura y simetría milimétrica continua",
-    imgUrl: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=85"
+    imgUrl: "/images/cuidados/cuidado-5-retoque.webp"
   }
 ];
 

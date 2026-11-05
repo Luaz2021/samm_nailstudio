@@ -12,6 +12,7 @@ public/images/
 ├── efectos/       # Efectos especiales (Aurora, Baby Boomer, etc.)
 ├── servicios/     # Fotos principales de cada servicio de la carta
 ├── galeria/       # Fotos reales de trabajos para el carrusel (galeria-1 a 8)
+├── cuidados/      # Guia de mantenimiento y cuidados posteriores (pasos 1 a 5)
 └── salon/         # Ambiente, cabina de atencion, foto de fundadora y bioseguridad
 ```
 
