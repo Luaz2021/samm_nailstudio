@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Heart, ZoomIn, ArrowRight, X } from "lucide-react";
 import { DEFAULT_GALLERY, GalleryPhotoItem } from "@/data/catalog";
+import { getAssetPath } from "@/lib/assets";
 
 export function GalleryCarousel() {
   const [activeFilter, setActiveFilter] = useState<string>("todos");
@@ -131,7 +132,7 @@ export function GalleryCarousel() {
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={item.url}
+                  src={getAssetPath(item.url)}
                   alt={item.title}
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108 group-hover:brightness-95"
                 />
@@ -191,7 +192,7 @@ export function GalleryCarousel() {
               <div className="md:col-span-7 h-[240px] sm:h-[360px] md:h-[520px] bg-black relative">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
-                  src={selectedPhoto.url} 
+                  src={getAssetPath(selectedPhoto.url)} 
                   alt={selectedPhoto.title} 
                   className="w-full h-full object-cover"
                 />

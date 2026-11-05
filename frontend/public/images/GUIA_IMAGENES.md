@@ -11,7 +11,8 @@ public/images/
 ├── disenos/       # Niveles de Nail Art (Nivel 1, 2 y 3)
 ├── efectos/       # Efectos especiales (Aurora, Baby Boomer, etc.)
 ├── servicios/     # Fotos principales de cada servicio de la carta
-└── salon/         # Ambiente, cabina de atencion y detalles del estudio
+├── galeria/       # Fotos reales de trabajos para el carrusel (galeria-1 a 8)
+└── salon/         # Ambiente, cabina de atencion, foto de fundadora y bioseguridad
 ```
 
 ---

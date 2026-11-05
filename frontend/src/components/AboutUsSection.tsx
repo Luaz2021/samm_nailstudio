@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { DEFAULT_ABOUT_PHOTO } from "@/data/catalog";
+import { getAssetPath } from "@/lib/assets";
 
 interface AboutUsSectionProps {
   onOpenBooking: () => void;
@@ -99,8 +100,8 @@ export function AboutUsSection({ onOpenBooking, onExploreServices }: AboutUsSect
           <div className="lg:col-span-6">
             <div className="relative rounded-3xl overflow-hidden shadow-xl border border-[#EAE3DA] bg-[#FAF8F5]">
               <img 
-                src={photoUrl} 
-                alt="Detalle de manicura cuidada y esmaltado en samm. NAIL STUDIO" 
+                src={getAssetPath(photoUrl)} 
+                alt="Sheyla Astrid Moreno Medina - Fundadora de samm. NAIL STUDIO" 
                 className="w-full h-[320px] sm:h-[460px] lg:h-[520px] object-cover object-center transition-transform duration-700 hover:scale-102"
               />
               <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6 bg-white/95 backdrop-blur-md rounded-2xl p-3 sm:p-4 border border-[#EAE3DA] shadow-sm flex items-center justify-between">
@@ -109,7 +110,7 @@ export function AboutUsSection({ onOpenBooking, onExploreServices }: AboutUsSect
                     className="text-[9px] sm:text-[10px] uppercase tracking-widest font-bold block"
                     style={{ color: "var(--rosewood-chrome, #9E5742)" }}
                   >
-                    SAMANTHA · FUNDADORA & MASTER NAIL ARTIST
+                    SHEYLA ASTRID · FUNDADORA & MASTER NAIL ARTIST
                   </span>
                   <span className="text-[11px] sm:text-xs text-[#2C2420] font-serif font-light italic">
                     "Tus uñas no son una herramienta, son tu carta de presentación."

@@ -302,7 +302,7 @@ export interface ArticleItem {
 }
 
 export const DEFAULT_HERO_BG = "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=1920&q=85";
-export const DEFAULT_ABOUT_PHOTO = "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=1200&q=85";
+export const DEFAULT_ABOUT_PHOTO = "/images/salon/sheyla-moreno.webp";
 
 export interface HomeShowcaseItem {
   id: string;
@@ -353,7 +353,7 @@ export interface GalleryPhotoItem {
 export const DEFAULT_GALLERY: GalleryPhotoItem[] = [
   {
     id: "g1",
-    url: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=1000&q=85",
+    url: "/images/galeria/galeria-1.webp",
     category: "kapping",
     title: "Kapping Rubber & Nivelación",
     tag: "Salud Ungueal",
@@ -362,7 +362,7 @@ export const DEFAULT_GALLERY: GalleryPhotoItem[] = [
   },
   {
     id: "g2",
-    url: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=1000&q=85",
+    url: "/images/galeria/galeria-2.webp",
     category: "glazed",
     title: "Glazed Donut Cromo Hailey Bieber",
     tag: "Efecto Cromo",
@@ -371,7 +371,7 @@ export const DEFAULT_GALLERY: GalleryPhotoItem[] = [
   },
   {
     id: "g3",
-    url: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=1000&q=85",
+    url: "/images/galeria/galeria-3.webp",
     category: "kapping",
     title: "Limpieza Profunda & Esmaltado Prolijo",
     tag: "Acabado Limpio",
@@ -380,7 +380,7 @@ export const DEFAULT_GALLERY: GalleryPhotoItem[] = [
   },
   {
     id: "g4",
-    url: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=1000&q=85",
+    url: "/images/galeria/galeria-4.webp",
     category: "softgel",
     title: "Soft Gel Tips & French Micro",
     tag: "Estructura Ligera",
@@ -389,7 +389,7 @@ export const DEFAULT_GALLERY: GalleryPhotoItem[] = [
   },
   {
     id: "g5",
-    url: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=1000&q=85",
+    url: "/images/galeria/galeria-5.webp",
     category: "diseño",
     title: "Baby Boomer & Toques Dorados",
     tag: "Nail Art Minimal",
@@ -398,7 +398,7 @@ export const DEFAULT_GALLERY: GalleryPhotoItem[] = [
   },
   {
     id: "g6",
-    url: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1000&q=85",
+    url: "/images/galeria/galeria-6.webp",
     category: "glazed",
     title: "Espresso Glaze & Cat Eye Magnético",
     tag: "Tendencia Velvet",
@@ -407,7 +407,7 @@ export const DEFAULT_GALLERY: GalleryPhotoItem[] = [
   },
   {
     id: "g7",
-    url: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=1000&q=85",
+    url: "/images/galeria/galeria-7.webp",
     category: "kapping",
     title: "Clean Girl Nails & Nude Translúcido",
     tag: "Acabado Natural",
@@ -416,7 +416,7 @@ export const DEFAULT_GALLERY: GalleryPhotoItem[] = [
   },
   {
     id: "g8",
-    url: "https://images.unsplash.com/photo-1583001809873-a128495da465?auto=format&fit=crop&w=1000&q=85",
+    url: "/images/galeria/galeria-8.webp",
     category: "diseño",
     title: "Aura Nails & Lilac Mist",
     tag: "Aerógrafo Editorial",
