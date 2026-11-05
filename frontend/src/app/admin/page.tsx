@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { 
   Calendar as CalendarIcon, 
   Clock, 
@@ -31,8 +32,11 @@ import {
   Scissors,
   Upload,
   CloudSnow,
-  Wand2
+  Wand2,
+  ExternalLink,
+  Radio
 } from "lucide-react";
+import { getAssetPath } from "@/lib/assets";
 import { 
   DEFAULT_HERO_BG, 
   DEFAULT_ABOUT_PHOTO,
@@ -55,7 +59,7 @@ import {
 } from "@/data/catalog";
 
 type AdminTab = "dashboard" | "servicios" | "articulos" | "multimedia" | "temporada";
-type MediaSectionFilter = "todos" | "home" | "servicios" | "nosotros";
+type MediaSectionFilter = "todos" | "home" | "servicios" | "galeria" | "cuidados" | "nosotros";
 
 interface AdminBooking {
   id: string;
@@ -77,7 +81,7 @@ interface AdminBooking {
 
 interface MediaItem {
   id: string;
-  section: "home" | "servicios" | "nosotros";
+  section: "home" | "servicios" | "galeria" | "cuidados" | "nosotros";
   slotName: string;
   title: string;
   activeUrl: string;
@@ -145,7 +149,7 @@ const INITIAL_BOOKINGS: AdminBooking[] = [
 
 const INITIAL_MEDIA_SLOTS: MediaItem[] = [
   // =========================================================================
-  // 1. PÁGINA 1: HOME (Portada Principal + 3 Especialidades Filosofía en Cabina)
+  // 1. HOME (Portada Principal + Filosofía en Cabina)
   // =========================================================================
   {
     id: "hero-main",
@@ -155,8 +159,8 @@ const INITIAL_MEDIA_SLOTS: MediaItem[] = [
     activeUrl: DEFAULT_HERO_BG,
     cloudHistory: [
       { id: "hero-h1", url: DEFAULT_HERO_BG, uploadedAt: "Portada Oficial", isActive: true },
-      { id: "hero-h2", url: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=1920&q=85", uploadedAt: "Preset Kapping Rosé", isActive: false },
-      { id: "hero-h3", url: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=1920&q=85", uploadedAt: "Preset Glazed Perlado", isActive: false }
+      { id: "hero-h2", url: "/images/servicios/acrilicas-tip.webp", uploadedAt: "Preset Uñas Acrílicas", isActive: false },
+      { id: "hero-h3", url: "/images/salon/sheyla-moreno.webp", uploadedAt: "Preset Fundadora Sheyla", isActive: false }
     ]
   },
   ...DEFAULT_HOME_SHOWCASE.map((item, idx) => ({
@@ -166,12 +170,12 @@ const INITIAL_MEDIA_SLOTS: MediaItem[] = [
     title: item.title,
     activeUrl: item.imgUrl,
     cloudHistory: [
-      { id: `${item.id}-h1`, url: item.imgUrl, uploadedAt: "Home Oficial", isActive: true }
+      { id: `${item.id}-h1`, url: item.imgUrl, uploadedAt: "Home Oficial WebP", isActive: true }
     ]
   })),
 
   // =========================================================================
-  // 2. PÁGINA 2: SERVICIOS (6 Tratamientos del Catálogo + 8 Fotos de Galería)
+  // 2. SERVICIOS (Tratamientos Reales del Catálogo)
   // =========================================================================
   ...DEFAULT_SERVICES.map((srv, idx) => ({
     id: srv.id,
@@ -180,43 +184,51 @@ const INITIAL_MEDIA_SLOTS: MediaItem[] = [
     title: srv.name,
     activeUrl: srv.imgUrl,
     cloudHistory: [
-      { id: `${srv.id}-h1`, url: srv.imgUrl, uploadedAt: "Catálogo Oficial", isActive: true }
-    ]
-  })),
-  ...DEFAULT_GALLERY.map((gal, idx) => ({
-    id: gal.id,
-    section: "servicios" as const,
-    slotName: `Servicios · Galería 0${idx + 1}`,
-    title: gal.title,
-    activeUrl: gal.url,
-    cloudHistory: [
-      { id: `${gal.id}-h1`, url: gal.url, uploadedAt: "Galería Oficial", isActive: true }
+      { id: `${srv.id}-h1`, url: srv.imgUrl, uploadedAt: "Catálogo Oficial WebP", isActive: true }
     ]
   })),
 
   // =========================================================================
-  // 3. PÁGINA 3: NOSOTROS (Retrato Principal + 5 Pasos Guía de Mantenimiento)
+  // 3. GALERÍA (Resultados Reales de Trabajos en Cabina)
+  // =========================================================================
+  ...DEFAULT_GALLERY.map((gal, idx) => ({
+    id: gal.id,
+    section: "galeria" as const,
+    slotName: `Galería · Trabajo 0${idx + 1}`,
+    title: gal.title,
+    activeUrl: gal.url,
+    cloudHistory: [
+      { id: `${gal.id}-h1`, url: gal.url, uploadedAt: "Galería Oficial WebP", isActive: true }
+    ]
+  })),
+
+  // =========================================================================
+  // 4. CUIDADOS (Guía de 5 Pasos para Manicura Duradera)
+  // =========================================================================
+  ...DEFAULT_CARE_STEPS.map((step) => ({
+    id: step.id,
+    section: "cuidados" as const,
+    slotName: `Cuidados · Paso ${step.num}`,
+    title: step.title,
+    activeUrl: step.imgUrl,
+    cloudHistory: [
+      { id: `${step.id}-h1`, url: step.imgUrl, uploadedAt: "Guía Cuidados WebP", isActive: true }
+    ]
+  })),
+
+  // =========================================================================
+  // 5. NOSOTROS (Retrato Principal de Fundadora)
   // =========================================================================
   {
     id: "about-sam",
     section: "nosotros",
     slotName: "Nosotros · Retrato Principal Atelier",
-    title: "Samantha · Fundadora & Master Nail Artist",
+    title: "Sheyla Astrid · Fundadora & Master Nail Artist",
     activeUrl: DEFAULT_ABOUT_PHOTO,
     cloudHistory: [
-      { id: "about-h1", url: DEFAULT_ABOUT_PHOTO, uploadedAt: "Atelier Oficial", isActive: true }
+      { id: "about-h1", url: DEFAULT_ABOUT_PHOTO, uploadedAt: "Retrato Oficial Full HD", isActive: true }
     ]
-  },
-  ...DEFAULT_CARE_STEPS.map((step) => ({
-    id: step.id,
-    section: "nosotros" as const,
-    slotName: `Nosotros · Guía Paso ${step.num}`,
-    title: step.title,
-    activeUrl: step.imgUrl,
-    cloudHistory: [
-      { id: `${step.id}-h1`, url: step.imgUrl, uploadedAt: "Guía Cuidado", isActive: true }
-    ]
-  }))
+  }
 ];
 
 export default function AdminPage() {
@@ -322,8 +334,8 @@ export default function AdminPage() {
         setArticles(JSON.parse(storedArticles));
       }
 
-      // Usamos v2 para limpiar cualquier caché vieja y fusionar todos los slots de las 3 páginas
-      const storedMedia = localStorage.getItem("samm_media_slots_v2");
+      // Usamos v3 para migrar slots a las fotos reales WebP de la web (servicios, galeria, cuidados, nosotros)
+      const storedMedia = localStorage.getItem("samm_media_slots_v3");
       if (storedMedia) {
         const parsed: MediaItem[] = JSON.parse(storedMedia);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -334,7 +346,8 @@ export default function AdminPage() {
           setMediaSlots(merged);
         }
       } else {
-        localStorage.setItem("samm_media_slots_v2", JSON.stringify(INITIAL_MEDIA_SLOTS));
+        localStorage.setItem("samm_media_slots_v3", JSON.stringify(INITIAL_MEDIA_SLOTS));
+        setMediaSlots(INITIAL_MEDIA_SLOTS);
       }
 
       const storedPromo = localStorage.getItem("samm_promo_settings");
@@ -528,7 +541,7 @@ export default function AdminPage() {
       return slot;
     });
     setMediaSlots(updatedMedia);
-    localStorage.setItem("samm_media_slots_v2", JSON.stringify(updatedMedia));
+    localStorage.setItem("samm_media_slots_v3", JSON.stringify(updatedMedia));
     window.dispatchEvent(new Event("storage"));
 
     setServiceModal(prev => ({ ...prev, isOpen: false }));
@@ -667,7 +680,7 @@ export default function AdminPage() {
       return slot;
     });
     setMediaSlots(updated);
-    localStorage.setItem("samm_media_slots_v2", JSON.stringify(updated));
+    localStorage.setItem("samm_media_slots_v3", JSON.stringify(updated));
 
     if (activatedUrl) {
       syncMediaToSite(slotId, activatedUrl);
@@ -716,6 +729,8 @@ export default function AdminPage() {
     todos: mediaSlots.length,
     home: mediaSlots.filter(m => m.section === "home").length,
     servicios: mediaSlots.filter(m => m.section === "servicios").length,
+    galeria: mediaSlots.filter(m => m.section === "galeria").length,
+    cuidados: mediaSlots.filter(m => m.section === "cuidados").length,
     nosotros: mediaSlots.filter(m => m.section === "nosotros").length
   };
 
@@ -745,9 +760,10 @@ export default function AdminPage() {
             <span className="text-emerald-400 flex items-center gap-1">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Tema Activo: {activeTheme.name}
             </span>
-            <a href="/" target="_blank" rel="noreferrer" className="text-[#C8927B] hover:text-white transition-colors underline font-semibold">
-              ← Ir a Web Clienta
-            </a>
+            <Link href="/" className="text-[#C8927B] hover:text-white transition-colors underline font-semibold inline-flex items-center gap-1">
+              <ExternalLink className="w-3 h-3" />
+              <span>Ver Web Principal</span>
+            </Link>
           </div>
         </div>
       </div>
@@ -759,7 +775,7 @@ export default function AdminPage() {
           {/* Logo y Subtítulo */}
           <div className="flex items-center gap-3">
             <img 
-              src="./samm-nailstudio-wordmark.svg" 
+              src={getAssetPath("/samm-nailstudio-wordmark.svg")} 
               alt="samm. NAIL STUDIO" 
               className="h-9 sm:h-11 w-auto object-contain"
             />
@@ -849,6 +865,14 @@ export default function AdminPage() {
 
           {/* Acciones Rápidas */}
           <div className="flex items-center gap-2">
+            <Link
+              href="/"
+              className="bg-[#2C2420] hover:bg-[#3D332D] text-white text-[11px] sm:text-xs font-semibold px-3.5 py-2 rounded-full transition-all shadow-xs flex items-center gap-1.5"
+            >
+              <ExternalLink className="w-3.5 h-3.5 text-[#C8927B]" />
+              <span className="hidden sm:inline">Ver Web</span>
+              <span className="sm:hidden">Web</span>
+            </Link>
             {activeTab === "servicios" && (
               <button
                 onClick={handleOpenNewServiceModal}
@@ -1239,7 +1263,7 @@ export default function AdminPage() {
                 {/* Imagen Cuadrada Superior */}
                 <div className="relative h-24 sm:h-28 w-full overflow-hidden bg-[#FAF6F2] shrink-0">
                   <img 
-                    src={item.imgUrl} 
+                    src={getAssetPath(item.imgUrl)} 
                     alt={item.name} 
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
@@ -1539,7 +1563,7 @@ export default function AdminPage() {
                     </div>
                     {serviceModal.data.imgUrl && (
                       <div className="mt-2 h-20 w-20 rounded-xl overflow-hidden border border-[#EFE2DC]">
-                        <img src={serviceModal.data.imgUrl} alt="Preview" className="w-full h-full object-cover" />
+                        <img src={getAssetPath(serviceModal.data.imgUrl)} alt="Preview" className="w-full h-full object-cover" />
                       </div>
                     )}
                   </div>
@@ -1734,7 +1758,7 @@ export default function AdminPage() {
                   {/* Foto del Artículo */}
                   <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-[#FAF6F2] mb-3">
                     <img 
-                      src={art.imgUrl} 
+                      src={getAssetPath(art.imgUrl)} 
                       alt={art.title} 
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
@@ -1895,7 +1919,7 @@ export default function AdminPage() {
                     </div>
                     {articleModal.data.imgUrl && (
                       <div className="mt-2 h-24 w-full rounded-xl overflow-hidden border border-[#EFE2DC]">
-                        <img src={articleModal.data.imgUrl} alt="Preview" className="w-full h-full object-cover" />
+                        <img src={getAssetPath(articleModal.data.imgUrl)} alt="Preview" className="w-full h-full object-cover" />
                       </div>
                     )}
                   </div>
@@ -1961,12 +1985,14 @@ export default function AdminPage() {
               </p>
             </div>
 
-            {/* Barra de Filtros por Página: Todas | Home | Servicios | Nosotros */}
-            <div className="grid grid-cols-2 sm:flex items-center gap-1.5 bg-white p-1.5 rounded-2xl sm:rounded-full border border-[#EFE2DC] text-xs shadow-2xs w-full md:w-auto">
+            {/* Barra de Filtros por Página: Todas | Home | Servicios | Galería | Cuidados | Nosotros */}
+            <div className="grid grid-cols-2 sm:flex items-center gap-1.5 bg-white p-1.5 rounded-2xl sm:rounded-full border border-[#EFE2DC] text-xs shadow-2xs w-full md:w-auto overflow-x-auto">
               {[
                 { id: "todos", label: `Todas (${countBySection.todos})` },
                 { id: "home", label: `Home (${countBySection.home})` },
                 { id: "servicios", label: `Servicios (${countBySection.servicios})` },
+                { id: "galeria", label: `Galería (${countBySection.galeria})` },
+                { id: "cuidados", label: `Cuidados (${countBySection.cuidados})` },
                 { id: "nosotros", label: `Nosotros (${countBySection.nosotros})` }
               ].map(f => (
                 <button
@@ -2005,7 +2031,7 @@ export default function AdminPage() {
                 {/* Previsualizador de la Foto Activa */}
                 <div className="relative aspect-[16/9] rounded-2xl overflow-hidden my-4 border border-[#EFE2DC] bg-[#FAF8F5]">
                   <img 
-                    src={slot.activeUrl} 
+                    src={getAssetPath(slot.activeUrl)} 
                     alt={slot.title} 
                     className="w-full h-full object-cover"
                   />
@@ -2030,7 +2056,7 @@ export default function AdminPage() {
                             : "border-transparent opacity-60 hover:opacity-100 hover:border-[#7A3E48]"
                         }`}
                       >
-                        <img src={item.url} alt="Nube" className="w-full h-full object-cover" />
+                        <img src={getAssetPath(item.url)} alt="Nube" className="w-full h-full object-cover" />
                         {item.isActive ? (
                           <div className="absolute inset-0 bg-emerald-900/30 flex items-center justify-center">
                             <CheckCheck className="w-5 h-5 text-white drop-shadow" />
@@ -2076,7 +2102,7 @@ export default function AdminPage() {
                                   return s;
                                 });
                                 setMediaSlots(updated);
-                                localStorage.setItem("samm_media_slots_v2", JSON.stringify(updated));
+                                localStorage.setItem("samm_media_slots_v3", JSON.stringify(updated));
                                 syncMediaToSite(slot.id, result);
                                 triggerSaveToast(`Nueva foto subida y sincronizada en ${slot.slotName}`);
                               }
@@ -2183,6 +2209,123 @@ export default function AdminPage() {
                   <span className="w-3.5 h-3.5 rounded-full border border-black/20" style={{ backgroundColor: activeTheme.colors.accent }} />
                   <span className="w-3.5 h-3.5 rounded-full border border-black/20" style={{ backgroundColor: activeTheme.colors.dark }} />
                   <span className="text-[10px] text-emerald-800 font-semibold ml-1">Paleta aplicada en vivo</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* PANEL DE TELEMETRÍA CROMÁTICA & PROPAGACIÓN INTEGRAL */}
+          <div className="bg-[#1C1816] text-[#FAF8F5] rounded-3xl p-6 sm:p-8 border border-white/10 shadow-lg space-y-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="w-3.5 h-3.5 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                <div>
+                  <h4 className="text-sm font-bold uppercase tracking-widest text-[#EAD8CE]">
+                    Monitor de Telemetría Cromática en Vivo
+                  </h4>
+                  <p className="text-[11px] text-[#A89C96] mt-0.5">
+                    Transmisión reactiva de variables CSS al DOM principal, localStorage e iframes incrustados.
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  applySeasonTheme(activeTheme.colors);
+                  window.dispatchEvent(new Event("storage"));
+                  window.dispatchEvent(new Event("samm-theme-change"));
+                  triggerSaveToast(`Telemetría transmitida: tema "${activeTheme.name}" propagado a toda la web e iframes.`);
+                }}
+                className="px-4 py-2 rounded-full bg-[#FAF8F5] hover:bg-white text-[#1C1816] font-semibold text-xs flex items-center gap-2 transition-all shadow-sm shrink-0 self-start md:self-auto"
+              >
+                <Radio className="w-3.5 h-3.5 text-[#9E5742]" />
+                <span>Forzar Telemetría & Propagar</span>
+              </button>
+            </div>
+
+            {/* Fila de Tokens de Color y Difusión */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                <span className="text-[9px] uppercase tracking-wider text-[#A89C96] block mb-1">Primario / Rosewood</span>
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full border border-white/20 shrink-0" style={{ backgroundColor: activeTheme.colors.primary }} />
+                  <span className="font-mono text-xs font-bold">{activeTheme.colors.primary}</span>
+                </div>
+                <span className="text-[10px] text-[#8A7B72] block mt-1 font-mono">--rosewood-chrome</span>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                <span className="text-[9px] uppercase tracking-wider text-[#A89C96] block mb-1">Canvas / Fondo</span>
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full border border-white/20 shrink-0" style={{ backgroundColor: activeTheme.colors.bg }} />
+                  <span className="font-mono text-xs font-bold">{activeTheme.colors.bg}</span>
+                </div>
+                <span className="text-[10px] text-[#8A7B72] block mt-1 font-mono">--milky-almond</span>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                <span className="text-[9px] uppercase tracking-wider text-[#A89C96] block mb-1">Acento / Berry</span>
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full border border-white/20 shrink-0" style={{ backgroundColor: activeTheme.colors.accent }} />
+                  <span className="font-mono text-xs font-bold">{activeTheme.colors.accent}</span>
+                </div>
+                <span className="text-[10px] text-[#8A7B72] block mt-1 font-mono">--berry-glaze</span>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                <span className="text-[9px] uppercase tracking-wider text-[#A89C96] block mb-1">Tinta / Texto</span>
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4 rounded-full border border-white/20 shrink-0" style={{ backgroundColor: activeTheme.colors.dark }} />
+                  <span className="font-mono text-xs font-bold">{activeTheme.colors.dark}</span>
+                </div>
+                <span className="text-[10px] text-[#8A7B72] block mt-1 font-mono">--espresso-ink</span>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10 col-span-2 sm:col-span-3 lg:col-span-1">
+                <span className="text-[9px] uppercase tracking-wider text-[#A89C96] block mb-1">Canal de Difusión</span>
+                <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-semibold">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Sincronía Activa</span>
+                </div>
+                <span className="text-[10px] text-[#8A7B72] block mt-1">postMessage + DOM root</span>
+              </div>
+            </div>
+
+            {/* Micro-Simulador de Interfaz en Vivo */}
+            <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
+              <span className="text-[10px] uppercase font-bold tracking-widest text-[#EAD8CE] block mb-2.5">
+                Previsualizador en Vivo de Componentes Web
+              </span>
+              <div 
+                className="p-5 rounded-2xl border transition-all"
+                style={{ 
+                  backgroundColor: activeTheme.colors.bg, 
+                  borderColor: activeTheme.colors.primary 
+                }}
+              >
+                <div className="flex items-center justify-between pb-3 border-b" style={{ borderColor: `${activeTheme.colors.dark}20` }}>
+                  <span className="font-serif text-lg font-bold" style={{ color: activeTheme.colors.dark }}>
+                    samm. NAIL STUDIO
+                  </span>
+                  <span 
+                    className="text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full text-white shadow-2xs"
+                    style={{ backgroundColor: activeTheme.colors.primary }}
+                  >
+                    {activeTheme.name}
+                  </span>
+                </div>
+                <div className="pt-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <p className="text-xs font-light max-w-md" style={{ color: activeTheme.colors.dark }}>
+                    {activeTheme.climateVibe}
+                  </p>
+                  <button
+                    type="button"
+                    className="px-4 py-2 rounded-full text-white text-xs font-bold shrink-0 shadow-xs transition-opacity hover:opacity-90"
+                    style={{ backgroundColor: activeTheme.colors.accent }}
+                  >
+                    Reservar Cita Ahora
+                  </button>
                 </div>
               </div>
             </div>

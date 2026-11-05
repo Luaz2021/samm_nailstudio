@@ -1219,18 +1219,88 @@ export function getActiveLimaThemeState(): {
   return { mode: "auto", ...auto };
 }
 
+export function hexToRgba(hex: string, alpha: number): string {
+  const clean = hex.replace("#", "");
+  if (clean.length === 3) {
+    const r = parseInt(clean[0] + clean[0], 16);
+    const g = parseInt(clean[1] + clean[1], 16);
+    const b = parseInt(clean[2] + clean[2], 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  if (clean.length === 6) {
+    const r = parseInt(clean.substring(0, 2), 16);
+    const g = parseInt(clean.substring(2, 4), 16);
+    const b = parseInt(clean.substring(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+  return hex;
+}
+
 export function applySeasonTheme(colors: { primary: string; bg: string; surface?: string; accent: string; dark: string }) {
   if (typeof document === "undefined") return;
   const root = document.documentElement;
+  const surface = colors.surface || colors.bg;
+  
+  // Variables maestras de tema y marca
   root.style.setProperty("--rosewood-chrome", colors.primary);
   root.style.setProperty("--milky-almond", colors.bg);
+  root.style.setProperty("--blush-gel", surface);
   root.style.setProperty("--berry-glaze", colors.accent);
   root.style.setProperty("--espresso-ink", colors.dark);
   root.style.setProperty("--canvas-vanilla", colors.bg);
+  root.style.setProperty("--surface-cream", "#ffffff");
+  root.style.setProperty("--surface-warm", surface);
   root.style.setProperty("--butter-accent", colors.primary);
-  root.style.setProperty("--burgundy-accent", colors.accent);
+  root.style.setProperty("--butter-light", hexToRgba(colors.primary, 0.18));
+  root.style.setProperty("--honey-gold", colors.primary);
   root.style.setProperty("--ink-primary", colors.dark);
-  root.style.setProperty("--theme-surface", colors.surface || colors.bg);
-  document.body.style.backgroundColor = colors.bg;
-  document.body.style.color = colors.dark;
+  root.style.setProperty("--ink-secondary", hexToRgba(colors.dark, 0.72));
+  root.style.setProperty("--ink-muted", hexToRgba(colors.dark, 0.52));
+  root.style.setProperty("--burgundy-accent", colors.accent);
+  root.style.setProperty("--theme-surface", surface);
+
+  if (document.body) {
+    document.body.style.backgroundColor = colors.bg;
+    document.body.style.color = colors.dark;
+  }
+
+  // Telemetria reactiva y propagacion hacia iframes (postMessage y DOM same-origin)
+  try {
+    const iframes = document.querySelectorAll("iframe");
+    iframes.forEach((iframe) => {
+      try {
+        iframe.contentWindow?.postMessage(
+          {
+            type: "SAMM_THEME_CHANGE",
+            colors,
+            timestamp: Date.now()
+          },
+          "*"
+        );
+
+        const doc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (doc?.documentElement) {
+          doc.documentElement.style.setProperty("--rosewood-chrome", colors.primary);
+          doc.documentElement.style.setProperty("--milky-almond", colors.bg);
+          doc.documentElement.style.setProperty("--blush-gel", surface);
+          doc.documentElement.style.setProperty("--berry-glaze", colors.accent);
+          doc.documentElement.style.setProperty("--espresso-ink", colors.dark);
+          doc.documentElement.style.setProperty("--canvas-vanilla", colors.bg);
+          doc.documentElement.style.setProperty("--surface-warm", surface);
+          doc.documentElement.style.setProperty("--butter-accent", colors.primary);
+          doc.documentElement.style.setProperty("--burgundy-accent", colors.accent);
+          doc.documentElement.style.setProperty("--ink-primary", colors.dark);
+          doc.documentElement.style.setProperty("--theme-surface", surface);
+          if (doc.body) {
+            doc.body.style.backgroundColor = colors.bg;
+            doc.body.style.color = colors.dark;
+          }
+        }
+      } catch {
+        // Fallback para iframes cross-origin
+      }
+    });
+  } catch (e) {
+    console.error("Error propagando tema a iframes:", e);
+  }
 }

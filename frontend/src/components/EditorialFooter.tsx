@@ -1,6 +1,7 @@
 "use client";
 
-import { MessageCircle, MapPin, Clock, ShieldCheck, Heart, ArrowUpRight } from "lucide-react";
+import Link from "next/link";
+import { MessageCircle, MapPin, Clock, ShieldCheck, Heart, ArrowUpRight, Shield } from "lucide-react";
 
 interface EditorialFooterProps {
   onOpenTerms?: () => void;
@@ -133,9 +134,18 @@ export function EditorialFooter({ onOpenTerms }: EditorialFooterProps) {
         {/* Fila Inferior de Copyright */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#7A6E67]">
           <p>© {new Date().getFullYear()} samm. NAIL STUDIO · Fundado por Sheyla Astrid Moreno Medina · Todos los derechos reservados.</p>
-          <div className="flex items-center gap-1">
-            <span>Uñas hermosas y cuidadas en Lima</span>
-            <Heart className="w-3 h-3 text-[#C8927B] fill-[#C8927B]" />
+          <div className="flex items-center gap-4">
+            <Link 
+              href="/admin" 
+              className="inline-flex items-center gap-1.5 text-[#9E8E87] hover:text-[#FAF8F5] transition-colors"
+            >
+              <Shield className="w-3 h-3 text-[#C8927B]" />
+              <span>Atelier Admin</span>
+            </Link>
+            <div className="flex items-center gap-1">
+              <span>Uñas hermosas y cuidadas en Lima</span>
+              <Heart className="w-3 h-3 text-[#C8927B] fill-[#C8927B]" />
+            </div>
           </div>
         </div>
 
