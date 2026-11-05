@@ -91,7 +91,7 @@ export const LENGTH_OPTIONS: LengthOption[] = [
     tag: "Incluido",
     measureCm: "1.2 – 1.6 cm",
     desc: "Largo natural o de oficina. Máxima comodidad para teclado y actividades diarias.",
-    imgUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80"
+    imgUrl: "/images/medidas/largo-1-3.webp"
   },
   {
     id: "len-4",
@@ -100,7 +100,7 @@ export const LENGTH_OPTIONS: LengthOption[] = [
     tag: "+S/ 8",
     measureCm: "1.8 – 2.0 cm",
     desc: "Medio estilizado. Alarga visiblemente los dedos manteniendo resistencia y firmeza.",
-    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80"
+    imgUrl: "/images/medidas/largo-4.webp"
   },
   {
     id: "len-5",
@@ -109,7 +109,7 @@ export const LENGTH_OPTIONS: LengthOption[] = [
     tag: "+S/ 15",
     measureCm: "2.2 – 2.5 cm",
     desc: "Largo salón glamuroso. Perfecto para lucir diseño elaborado y ápice pronunciado.",
-    imgUrl: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=600&q=80"
+    imgUrl: "/images/medidas/largo-5.webp"
   },
   {
     id: "len-6",
@@ -118,7 +118,7 @@ export const LENGTH_OPTIONS: LengthOption[] = [
     tag: "+S/ 22",
     measureCm: "2.8 – 3.2 cm",
     desc: "Extra largo editorial de alto impacto para clientas que buscan presencia y longitud extrema.",
-    imgUrl: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80"
+    imgUrl: "/images/medidas/largo-6.webp"
   },
 ];
 
@@ -129,7 +129,7 @@ export const SHAPE_OPTIONS: ShapeOption[] = [
     price: 0,
     tag: "Incluida",
     desc: "Bordes rectos simétricos o contorno oval suave anatómico.",
-    imgUrl: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=600&q=80"
+    imgUrl: "/images/formas/forma-clasica.webp"
   },
   {
     id: "shape-coffin",
@@ -137,7 +137,7 @@ export const SHAPE_OPTIONS: ShapeOption[] = [
     price: 5,
     tag: "+S/ 5",
     desc: "Silueta bailarina con laterales cónicos convergentes y punta recta perfecta.",
-    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80"
+    imgUrl: "/images/formas/forma-coffin.webp"
   },
   {
     id: "shape-stiletto",
@@ -145,7 +145,7 @@ export const SHAPE_OPTIONS: ShapeOption[] = [
     price: 5,
     tag: "+S/ 5",
     desc: "Vértice afilado en punta de aguja que estiliza la mano con estética vanguardista.",
-    imgUrl: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=600&q=80"
+    imgUrl: "/images/formas/forma-stiletto.webp"
   },
   {
     id: "shape-almond",
@@ -153,7 +153,7 @@ export const SHAPE_OPTIONS: ShapeOption[] = [
     price: 5,
     tag: "+S/ 5",
     desc: "Laterales estilizados con silueta almendrada suave que estiliza y alarga visualmente los dedos.",
-    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80"
+    imgUrl: "/images/formas/forma-almond.webp"
   },
 ];
 
@@ -164,7 +164,7 @@ export const EFFECT_OPTIONS_HANDS: EffectOption[] = [
     price: 0,
     duration: 0,
     desc: "Brillo Top Coat cristalino de alta duración.",
-    imgUrl: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=600&q=80"
+    imgUrl: "/images/efectos/color-entero.webp"
   },
   {
     id: "eff-aurora",
@@ -173,7 +173,7 @@ export const EFFECT_OPTIONS_HANDS: EffectOption[] = [
     duration: 15,
     tag: "+S/ 8",
     desc: "Polvo de perla cromo iridiscente al horno o partículas magnéticas terciopelo.",
-    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80"
+    imgUrl: "/images/efectos/aurora.webp"
   },
   {
     id: "eff-babyboomer",
@@ -182,7 +182,7 @@ export const EFFECT_OPTIONS_HANDS: EffectOption[] = [
     duration: 20,
     tag: "+S/ 12",
     desc: "Degradado suave sin cortes de blanco lechoso a nude translúcido.",
-    imgUrl: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=600&q=80"
+    imgUrl: "/images/efectos/babyboomer.webp"
   },
 ];
 
@@ -193,7 +193,7 @@ export const DESIGN_LEVELS: DesignLevel[] = [
     pricePerNail: 2.50,
     durationPerNail: 3,
     desc: "Stickers botánicos, puntitos minimalistas, líneas fineline, papel oro/foil o 1–2 piedritas en cutícula.",
-    imgUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80",
+    imgUrl: "/images/disenos/nivel-1.webp",
     examples: ["Stickers botánicos", "Pan de oro / Foil", "Líneas fineline", "1–2 Cristales en cutícula"]
   },
   {
@@ -202,7 +202,7 @@ export const DESIGN_LEVELS: DesignLevel[] = [
     pricePerNail: 5.00,
     durationPerNail: 5,
     desc: "Mano alzada artística: micro-flores, ondas fluidas, animal print, francesa doble/diseño, efecto Aura o encapsulado glitter.",
-    imgUrl: "https://images.unsplash.com/photo-1583001809873-a128495da465?auto=format&fit=crop&w=600&q=80",
+    imgUrl: "/images/disenos/nivel-2.webp",
     examples: ["Efecto Aura difuminado", "Flores a mano alzada", "Ondas fluidas pastel", "Francesa doble", "Glitter encapsulado"]
   },
   {
@@ -211,7 +211,7 @@ export const DESIGN_LEVELS: DesignLevel[] = [
     pricePerNail: 8.00,
     durationPerNail: 8,
     desc: "Relieve 3D con texturas de gel orgánicas, uña full pedrería/cristales de impacto o ilustraciones complejas.",
-    imgUrl: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=600&q=80",
+    imgUrl: "/images/disenos/nivel-3.webp",
     examples: ["Relieve 3D de autor", "Full cristales Swarovski", "Micro-pintura compleja", "Encapsulado 3D"]
   }
 ];

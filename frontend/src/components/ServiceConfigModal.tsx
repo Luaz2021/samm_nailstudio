@@ -217,7 +217,7 @@ export function ServiceConfigModal({
                 }`}
               >
                 <img
-                  src="https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=300&q=80"
+                  src={getAssetPath("/images/efectos/color-entero.webp")}
                   alt="Color Entero"
                   className="w-14 h-14 rounded-xl object-cover shrink-0"
                 />
@@ -241,7 +241,7 @@ export function ServiceConfigModal({
                 }`}
               >
                 <img
-                  src="https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=300&q=80"
+                  src={getAssetPath("/images/efectos/francesa.webp")}
                   alt="Francesa Clásica"
                   className="w-14 h-14 rounded-xl object-cover shrink-0"
                 />
