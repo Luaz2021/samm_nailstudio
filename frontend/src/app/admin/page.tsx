@@ -774,7 +774,7 @@ export default function AdminPage() {
           </div>
 
           {/* PESTAÑAS MAESTRAS: DASHBOARD, SERVICIOS, ARTÍCULOS, MULTIMEDIA, TEMPORADA */}
-          <nav className="flex items-center gap-1 p-1 bg-[#F2ECE4] rounded-full border border-[#E5DDD2] text-xs font-semibold overflow-x-auto max-w-full">
+          <nav className="flex items-center gap-1 p-1 bg-[#F2ECE4] rounded-full border border-[#E5DDD2] text-xs font-semibold overflow-x-auto max-w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             
             {/* 1. Dashboard */}
             <button
@@ -849,15 +849,6 @@ export default function AdminPage() {
 
           {/* Acciones Rápidas */}
           <div className="flex items-center gap-2">
-            {activeTab === "dashboard" && (
-              <button
-                onClick={handleCreateMockPreReservation}
-                className="bg-[#7A3E48] hover:bg-[#5E2F37] text-white text-[11px] sm:text-xs font-semibold px-3.5 py-2 rounded-full transition-all shadow-xs flex items-center gap-1.5"
-              >
-                <Plus className="w-3.5 h-3.5 text-[#C8927B]" /> 
-                Simular Pre-Reserva
-              </button>
-            )}
             {activeTab === "servicios" && (
               <button
                 onClick={handleOpenNewServiceModal}
@@ -876,15 +867,6 @@ export default function AdminPage() {
                 Nuevo Artículo
               </button>
             )}
-            <a 
-              href="/"
-              target="_blank"
-              rel="noreferrer"
-              className="bg-[#FBF8F6] hover:bg-[#EFE2DC] text-[#231C1A] text-[11px] sm:text-xs px-3.5 py-2 rounded-full transition-all font-semibold border border-[#EFE2DC] flex items-center gap-1.5"
-            >
-              <span>Ver Web</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-[#7A3E48]" />
-            </a>
           </div>
 
         </div>

@@ -15,13 +15,13 @@ const REELS = [
     src: "videos/samm-manos.mp4",
     poster: "videos/samm-manos-poster.jpg",
     label: "Manos",
-    title: "Manicura Rusa",
+    title: "Uñas Acrílicas & Gel",
   },
   {
     src: "videos/samm-pies.mp4",
     poster: "videos/samm-pies-poster.jpg",
     label: "Pies",
-    title: "Pedicura Spa",
+    title: "Pedigel & Acripie",
   },
 ] as const;
 
@@ -67,9 +67,9 @@ function ReelVideo({ src, poster, title }: { src: string; poster: string; title:
 }
 
 const BADGES = [
-  { icon: ShieldCheck, text: "Fórmulas 20-Free & HEMA-Free" },
-  { icon: Eye, text: "Técnica Rusa de Alta Definición" },
-  { icon: HeartHandshake, text: "Cuidado y Salud de la Uña Natural" },
+  { icon: ShieldCheck, text: "Marcas Profesionales (Mia Secret, OPI, Gelish)" },
+  { icon: Eye, text: "Limpieza Profunda & Acabado Impecable" },
+  { icon: HeartHandshake, text: "Uñas Fuertes sin Maltratar tu Uña Natural" },
 ];
 
 function BookingButton({ onOpenBooking }: CinematicVideoShowcaseProps) {
@@ -96,8 +96,11 @@ const REEL_SIZE =
 export function CinematicVideoShowcase({ onOpenBooking }: CinematicVideoShowcaseProps) {
   const carouselRef = useRef<HTMLDivElement>(null);
   return (
-    <section className="py-8 sm:py-12 lg:py-[6svh] bg-[#14100E] text-[#FAF8F5] relative overflow-hidden border-y border-white/10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 lg:flex lg:items-center lg:justify-center lg:gap-12 xl:gap-20">
+    <section
+      id="seccion-reels"
+      className="min-h-[calc(100svh-var(--header-h,81px))] flex flex-col justify-center py-10 sm:py-16 lg:py-12 bg-[#14100E] text-[#FAF8F5] relative overflow-hidden border-y border-white/10"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 lg:flex lg:items-center lg:justify-center lg:gap-12 xl:gap-20 w-full">
 
         {/* Texto: arriba y centrado en movil/tablet, columna izquierda en escritorio */}
         <div className="text-center lg:text-left max-w-2xl lg:max-w-sm xl:max-w-md mx-auto lg:mx-0 mb-6 sm:mb-10 lg:mb-0 space-y-3">
@@ -112,7 +115,7 @@ export function CinematicVideoShowcase({ onOpenBooking }: CinematicVideoShowcase
             Así Cuidamos Tus Manos y Pies
           </h2>
           <p className="hidden sm:block text-xs sm:text-sm text-[#C8BDB4] leading-relaxed max-w-xl mx-auto lg:mx-0">
-            Técnica rusa de alta definición, rituales de pedicura spa y acabados que duran semanas. Mira cómo trabajamos antes de tu cita.
+            Uñas acrílicas impecables, nivelación con rubber y pedicura completa que duran semanas. Mira cómo cuidamos cada detalle antes de tu cita.
           </p>
 
           <div className="hidden lg:block pt-5">

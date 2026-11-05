@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { DEFAULT_HOME_SHOWCASE, HomeShowcaseItem } from "@/data/catalog";
 import { SwipeDots } from "@/components/SwipeDots";
+import { getAssetPath } from "@/lib/assets";
 
 interface HomeShowcaseProps {
   onGoToCatalog: () => void;
@@ -52,14 +53,15 @@ export function HomeShowcase({ onGoToCatalog }: HomeShowcaseProps) {
 
   return (
     <section
-      className="py-10 md:py-[6svh] transition-colors duration-500"
+      id="seccion-vitrina"
+      className="min-h-[calc(100svh-var(--header-h,81px))] flex flex-col justify-center py-10 sm:py-16 lg:py-12 overflow-hidden transition-colors duration-500"
       style={{ backgroundColor: "var(--milky-almond, #FBF8F6)", color: "var(--espresso-ink, #2C2420)" }}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
         
         {/* Cabecera Editorial Elegante */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-10 gap-4 md:gap-6">
-          <div className="space-y-2">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-4 md:mb-6 gap-3 md:gap-6">
+          <div className="space-y-1.5">
             <span
               className="text-xs uppercase font-bold tracking-[0.25em]"
               style={{ color: "var(--rosewood-chrome, #9E5742)" }}
@@ -67,7 +69,7 @@ export function HomeShowcase({ onGoToCatalog }: HomeShowcaseProps) {
               Técnicas & Especialidades
             </span>
             <h2 
-              className="text-3xl sm:text-5xl font-light tracking-tight"
+              className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight"
               style={{ fontFamily: "var(--font-serif)" }}
             >
               Nuestra Filosofía en Cabina
@@ -76,7 +78,7 @@ export function HomeShowcase({ onGoToCatalog }: HomeShowcaseProps) {
           
           <button
             onClick={onGoToCatalog}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-white text-xs font-semibold transition-all shadow-sm group w-fit"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-white text-xs font-semibold transition-all shadow-sm group w-fit"
             style={{ backgroundColor: "var(--espresso-ink, #2C2420)" }}
           >
             <span>Ver Carta Completa & Reservar</span>
@@ -87,37 +89,37 @@ export function HomeShowcase({ onGoToCatalog }: HomeShowcaseProps) {
         {/* 3 Tarjetas Visuales: carrusel deslizable en movil, 3 columnas desde tablet */}
         <div
           ref={carouselRef}
-          className="-mx-6 px-6 md:mx-0 md:px-0 flex md:grid md:grid-cols-3 gap-4 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="-mx-6 px-6 md:mx-0 md:px-0 flex md:grid md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {previewWorks.map((item) => (
             <div
               key={item.id}
               className="snap-center shrink-0 w-[82%] md:w-auto rounded-3xl bg-white border border-[#EFE9E2] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col"
             >
-              <div className="relative aspect-[4/3] md:aspect-auto md:h-[clamp(160px,34svh,300px)] w-full overflow-hidden bg-[#FAF6F2]">
+              <div className="relative aspect-[4/3] md:aspect-auto md:h-[clamp(130px,24svh,210px)] w-full overflow-hidden bg-[#FAF6F2] glaze-shimmer">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={item.imgUrl}
+                  src={getAssetPath(item.imgUrl)}
                   alt={item.title}
                   className="w-full h-full object-cover"
                 />
                 <span
-                  className="absolute top-4 left-4 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] uppercase font-bold tracking-wider"
+                  className="absolute top-3.5 left-3.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] uppercase font-bold tracking-wider"
                   style={{ color: "var(--rosewood-chrome, #9E5742)" }}
                 >
                   {item.category}
                 </span>
               </div>
 
-              <div className="p-6 flex-1 flex flex-col justify-between space-y-3">
+              <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-1.5">
                 <div>
                   <h3 
-                    className="text-xl font-light text-[#2C2420]"
+                    className="text-lg sm:text-xl font-light text-[#2C2420]"
                     style={{ fontFamily: "var(--font-serif)" }}
                   >
                     {item.title}
                   </h3>
-                  <p className="text-xs text-[#7A6B62] leading-relaxed mt-2">
+                  <p className="text-xs text-[#7A6B62] leading-relaxed mt-1.5 line-clamp-2 sm:line-clamp-3">
                     {item.desc}
                   </p>
                 </div>
@@ -125,7 +127,7 @@ export function HomeShowcase({ onGoToCatalog }: HomeShowcaseProps) {
             </div>
           ))}
         </div>
-        <SwipeDots count={previewWorks.length} targetRef={carouselRef} className="mt-5 md:hidden" />
+        <SwipeDots count={previewWorks.length} targetRef={carouselRef} className="mt-4 md:hidden" />
 
       </div>
     </section>

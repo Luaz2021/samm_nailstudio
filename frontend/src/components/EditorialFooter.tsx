@@ -8,7 +8,7 @@ interface EditorialFooterProps {
 
 export function EditorialFooter({ onOpenTerms }: EditorialFooterProps) {
   return (
-    <footer className="bg-[#1C1815] text-[#D8CECA] pt-16 pb-12 border-t border-[#312A25]">
+    <footer id="seccion-footer" className="bg-[#1C1815] text-[#D8CECA] pt-16 pb-12 border-t border-[#312A25]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         
         {/* Fila Principal de 4 Columnas */}
@@ -17,13 +17,14 @@ export function EditorialFooter({ onOpenTerms }: EditorialFooterProps) {
           {/* Columna 1: Marca y Filosofía */}
           <div className="space-y-4">
             <div className="space-y-1">
-              <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-[#C8927B]">Atelier Privado</span>
+              <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-[#C8927B]">Nail Studio en Lima</span>
               <h3 className="text-2xl font-light text-[#FAF8F5] tracking-tight" style={{ fontFamily: "var(--font-serif)" }}>
                 samm. NAIL STUDIO
               </h3>
+              <p className="text-[11px] text-[#C8927B] font-medium">Por Sheyla Astrid Moreno Medina</p>
             </div>
             <p className="text-xs text-[#A89C96] leading-relaxed">
-              Especialistas en manicura rusa anatómica, blindaje con Kapping Rubber y extensiones de alta durabilidad. Cuidado de la salud natural de la uña con protocolos de esterilización hospitalaria.
+              Especialistas en uñas acrílicas con tip, polygel, nivelación rubber y pedicura completa en Lima. Acabados limpios, bioseguridad garantizada y diseños en tendencia que duran semanas.
             </p>
             <div className="pt-2 flex items-center gap-3">
               <a 
@@ -131,9 +132,9 @@ export function EditorialFooter({ onOpenTerms }: EditorialFooterProps) {
 
         {/* Fila Inferior de Copyright */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#7A6E67]">
-          <p>© {new Date().getFullYear()} samm. NAIL STUDIO · Todos los derechos reservados.</p>
+          <p>© {new Date().getFullYear()} samm. NAIL STUDIO · Fundado por Sheyla Astrid Moreno Medina · Todos los derechos reservados.</p>
           <div className="flex items-center gap-1">
-            <span>Diseñado con precisión estética para el cuidado ungueal</span>
+            <span>Uñas hermosas y cuidadas en Lima</span>
             <Heart className="w-3 h-3 text-[#C8927B] fill-[#C8927B]" />
           </div>
         </div>

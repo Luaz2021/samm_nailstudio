@@ -94,10 +94,10 @@ export function GalleryCarousel() {
         <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 text-xs font-medium scrollbar-none">
           {[
             { id: "todos", label: "Todos los Trabajos" },
-            { id: "kapping", label: "Kapping Rubber" },
+            { id: "acrilico", label: "Uñas Acrílicas & Tips" },
+            { id: "kapping", label: "Nivelación Rubber" },
             { id: "glazed", label: "Glazed & Cromo" },
-            { id: "rusa", label: "Manicura Rusa" },
-            { id: "softgel", label: "Soft Gel Tips" },
+            { id: "softgel", label: "Polygel & Tips" },
             { id: "diseño", label: "Nail Art & Aura" }
           ].map(f => (
             <button
@@ -231,15 +231,15 @@ export function GalleryCarousel() {
                   <div className="space-y-2 text-xs text-[#EAD8CE] bg-white/5 p-4 rounded-2xl border border-white/10">
                     <div className="flex justify-between">
                       <span className="text-white/60">Técnica:</span>
-                      <span className="font-semibold">Manicura Anatómica Rusa</span>
+                      <span className="font-semibold">Estructura & Limpieza Prolija</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-white/60">Química:</span>
-                      <span className="font-semibold">20-Free & HEMA-Free</span>
+                      <span className="text-white/60">Calidad:</span>
+                      <span className="font-semibold">Marcas Profesionales Top</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-white/60">Duración:</span>
-                      <span className="font-semibold">21+ días intacto</span>
+                      <span className="font-semibold">3+ semanas intactas</span>
                     </div>
                   </div>
                 </div>

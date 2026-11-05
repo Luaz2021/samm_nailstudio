@@ -37,7 +37,8 @@ export function HeroCinematic({ onOpenBooking, onExploreCatalog }: HeroCinematic
 
   return (
     <section
-      className="relative min-h-[72vh] sm:min-h-[85vh] lg:min-h-[calc(100svh_-_var(--header-h,81px))] flex items-center justify-center overflow-hidden text-[#FAF8F5] transition-colors duration-700"
+      id="seccion-hero"
+      className="relative min-h-[72vh] sm:min-h-[85vh] lg:min-h-[calc(100svh_-_var(--header-h,81px))] flex items-center justify-center overflow-hidden text-[#FAF8F5] transition-colors duration-700 py-12 lg:py-0"
       style={{ backgroundColor: activeTheme.colors.dark }}
     >
       {/* Background de Portada Dinámico */}
@@ -73,12 +74,12 @@ export function HeroCinematic({ onOpenBooking, onExploreCatalog }: HeroCinematic
           className="text-3xl sm:text-5xl lg:text-7xl font-light text-[#FAF8F5] tracking-tight leading-[1.1] mb-4 sm:mb-6 max-w-4xl"
           style={{ fontFamily: "var(--font-serif)" }}
         >
-          El arte de la manicura rusa y el cuidado anatómico de tus uñas.
+          Tus uñas impecables, resistentes y con el diseño que amas.
         </h1>
 
         {/* Bajada Descriptiva */}
         <p className="text-xs sm:text-base lg:text-lg text-[#D2C5BE] max-w-2xl leading-relaxed font-light mb-6 sm:mb-8 px-1">
-          Atención personalizada, dedicada y sin prisas. Sin cortes agresivos ni fórmulas dañinas: fortalecimiento con Rubber, Kapping y acabados de alta costura ungueal.
+          Atención personalizada por <strong>Sheyla Astrid Moreno Medina</strong> en Lima. Uñas acrílicas, polygel, nivelación con rubber y nail art en tendencia con acabado limpio que dura semanas sin maltratar tu uña natural.
         </p>
 
         {/* Píldoras de Diseños Destacados de la Temporada / Festividad Activa */}
@@ -118,7 +119,7 @@ export function HeroCinematic({ onOpenBooking, onExploreCatalog }: HeroCinematic
         {/* Micro-sello de confianza inferior */}
         <div className="mt-8 sm:mt-12 inline-flex items-center gap-2 text-[11px] sm:text-xs text-[#A89C96]">
           <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" style={{ color: activeTheme.colors.primary }} />
-          <span>Reserva con 20% de seña para asegurar exclusividad del horario</span>
+          <span>Reserva con 20% de seña (Yape o Plin) para asegurar tu turno exclusivo</span>
         </div>
 
       </div>

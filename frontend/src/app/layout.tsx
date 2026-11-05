@@ -23,8 +23,8 @@ const syne = Syne({
 });
 
 export const metadata: Metadata = {
-  title: "samm. NAIL STUDIO · Callao, Lima - Perú",
-  description: "Atelier de manicura y estética ungueal de alta precisión en Callao, Lima. Cuidado anatómico con productos 20-Free y esterilización hospitalaria.",
+  title: "samm. NAIL STUDIO · Uñas Acrílicas, Gel & Pedicura en Lima",
+  description: "Estudio de uñas por Sheyla Astrid Moreno Medina en Lima y Callao. Especialistas en uñas acrílicas con tip, polygel, nivelación rubber y pedicura con bioseguridad garantizada.",
 };
 
 export default function RootLayout({

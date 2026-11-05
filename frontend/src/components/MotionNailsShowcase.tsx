@@ -14,42 +14,42 @@ export function MotionNailsShowcase({ className = "" }: MotionNailsShowcaseProps
 
   const steps = [
     {
-      title: "1. Limpieza Anatómica & Cutícula",
-      subtitle: "Torno Médico & Fresas de Diamante",
-      detail: "Micro-fresado cónico de diamante a 15,000 RPM. Eliminación milimétrica de pterigión y piel muerta sin alicates agresivos ni cortes. Pliegues 100% limpios para que el color crezca desde dentro.",
+      title: "1. Limpieza de Cutículas & Preparación",
+      subtitle: "Torno Suave & Lima Descartable",
+      detail: "Limpieza detallada con fresas suaves a velocidad controlada. Retiro suave de cutícula y preparación de la uña sin dolor ni cortes para que el esmaltado nazca limpio y dure semanas.",
       time: "Fase 01 · 25 min",
-      tool: "Fresa cónica suave",
-      result: "Bolsillo ungueal libre de cutícula",
+      tool: "Fresas suaves & lima nueva",
+      result: "Cutículas limpias y prolijas",
       accent: "#C8927B",
       photoPreview: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=400&q=80"
     },
     {
-      title: "2. Preparación Química & Rubber Shield",
-      subtitle: "Kapping Elástico Autonivelante",
-      detail: "Deshidratación de grasa con Nail Prep y fijación molecular con Bonder no ácido. Aplicación de Rubber Base autonivelante con refuerzo de ápice para amortiguar golpes sin quebrar la uña natural.",
+      title: "2. Estructura & Nivelación",
+      subtitle: "Acrílico, Polygel o Rubber Base",
+      detail: "Aplicación de deshidratador y primer no ácido. Modelado de acrílico con tip, polygel o rubber nivelador para otorgar resistencia y forma estilizada protegiendo tu uña natural.",
       time: "Fase 02 · 30 min",
-      tool: "Rubber Gel viscoso",
-      result: "Ápice reforzado contra quiebres",
+      tool: "Acrílico / Rubber Profesional",
+      result: "Uña firme y protegida",
       accent: "#D97706",
       photoPreview: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=400&q=80"
     },
     {
-      title: "3. Curado LED/UV 48W & Glaze Solar",
-      subtitle: "Polimerización Dual & Cromo Perlado",
-      detail: "Secado express con 30 diodos LED en longitud de onda dual (365+405nm). Pigmentos 20-Free y frotado de micropolvo aurora/cromo para el efecto Glazed Donut reflectivo bajo luz solar.",
+      title: "3. Esmaltado & Nail Art",
+      subtitle: "Color Entero, Francesa o Diseños",
+      detail: "Esmaltado en gel curado en lámpara LED. Tonos vibrantes, efectos en tendencia (aurora, ojo de gato, glazed) o diseño a mano alzada según tu estilo favorito.",
       time: "Fase 03 · 35 min",
-      tool: "Lámpara SunUV 48W",
-      result: "Brillo nacarado sin capas gruesas",
+      tool: "Lámpara LED & Esmaltes Top",
+      result: "Diseño prolijo de alta fijación",
       accent: "#7A3E48",
       photoPreview: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=400&q=80"
     },
     {
-      title: "4. Sellado Top No-Wipe & Brillo Cerámico",
-      subtitle: "Escudo Vítreo de Larga Duración",
-      detail: "Capa superior Top Coat Diamond sin residuos pegajosos. Sellado hermético en punta y bordes laterales para resistir piscina, agua de mar limeña y uso diario por más de 21 días intactos.",
+      title: "4. Sellado Top Coat & Brillo Extremo",
+      subtitle: "Brillo Cristalino de Larga Duración",
+      detail: "Capa superior Top Coat Diamond de ultra brillo. Sellado hermético en puntas y laterales para resistir el ritmo del día a día por más de 3 semanas intactas.",
       time: "Fase 04 · 30 min",
       tool: "Top Coat Diamond No-Wipe",
-      result: "Resistencia extrema a impactos",
+      result: "Brillo cristalino resistente",
       accent: "#8C6D4C",
       photoPreview: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=400&q=80"
     }
@@ -210,7 +210,7 @@ export function MotionNailsShowcase({ className = "" }: MotionNailsShowcaseProps
         <div className="flex items-center gap-3">
           <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></div>
           <span className="text-xs uppercase tracking-[0.25em] font-semibold text-[#EFE2DC]">
-            Simulador de Cabina & Protocolo Quirúrgico
+            El Paso a Paso en Cabina · Samm Nail Studio
           </span>
         </div>
 
@@ -309,9 +309,9 @@ export function MotionNailsShowcase({ className = "" }: MotionNailsShowcaseProps
 
           <div className="pt-4 border-t border-white/10 mt-5 flex items-center justify-between text-[11px] text-white/70">
             <span className="flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Autoclave Clase B
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" /> Bioseguridad al 100%
             </span>
-            <span className="text-[#C8927B] font-semibold text-[10px]">Atelier Lima</span>
+            <span className="text-[#C8927B] font-semibold text-[10px]">Por Sheyla Astrid Moreno</span>
           </div>
         </div>
       </div>

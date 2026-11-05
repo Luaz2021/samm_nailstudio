@@ -7,7 +7,245 @@ export interface ServiceItem {
   desc: string;
   tag?: string;
   imgUrl: string;
+  includedNotes?: string;
+  supportsLength?: boolean;
+  supportsShape?: boolean;
+  supportsPediExtras?: boolean;
 }
+
+export interface LengthOption {
+  id: string;
+  name: string;
+  price: number;
+  tag?: string;
+  measureCm?: string;
+  desc?: string;
+  imgUrl?: string;
+}
+
+export interface ShapeOption {
+  id: string;
+  name: string;
+  price: number;
+  tag?: string;
+  desc?: string;
+  imgUrl?: string;
+}
+
+export interface EffectOption {
+  id: string;
+  name: string;
+  price: number;
+  duration: number;
+  tag?: string;
+  desc?: string;
+  imgUrl?: string;
+}
+
+export interface DesignLevel {
+  id: string;
+  name: string;
+  pricePerNail: number;
+  durationPerNail: number;
+  desc: string;
+  imgUrl: string;
+  examples: string[];
+}
+
+export interface RemovalOption {
+  id: string;
+  name: string;
+  price: number;
+  duration: number;
+  desc?: string;
+}
+
+export interface CartItem {
+  id: string;
+  serviceId: string;
+  name: string;
+  category: "manicura" | "pedicura";
+  basePrice: number;
+  baseDuration: number;
+  imgUrl: string;
+  finish: "color_entero" | "francesa";
+  length?: LengthOption;
+  shape?: ShapeOption;
+  effect?: EffectOption;
+  designN1: number;
+  designN2: number;
+  designN3: number;
+  removal: RemovalOption;
+  reconstructedToes?: number;
+  pediEffect?: boolean;
+  pediDesignToes?: boolean;
+  totalPrice: number;
+  totalDuration: number;
+}
+
+export const LENGTH_OPTIONS: LengthOption[] = [
+  {
+    id: "len-1-3",
+    name: "Largo #1, #2 o #3",
+    price: 0,
+    tag: "Incluido",
+    measureCm: "1.2 – 1.6 cm",
+    desc: "Largo natural o de oficina. Máxima comodidad para teclado y actividades diarias.",
+    imgUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "len-4",
+    name: "Largo #4",
+    price: 8,
+    tag: "+S/ 8",
+    measureCm: "1.8 – 2.0 cm",
+    desc: "Medio estilizado. Alarga visiblemente los dedos manteniendo resistencia y firmeza.",
+    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "len-5",
+    name: "Largo #5",
+    price: 15,
+    tag: "+S/ 15",
+    measureCm: "2.2 – 2.5 cm",
+    desc: "Largo salón glamuroso. Perfecto para lucir diseño elaborado y ápice pronunciado.",
+    imgUrl: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "len-6",
+    name: "Largo #6 (XL)",
+    price: 22,
+    tag: "+S/ 22",
+    measureCm: "2.8 – 3.2 cm",
+    desc: "Extra largo editorial de alto impacto para clientas que buscan presencia y longitud extrema.",
+    imgUrl: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80"
+  },
+];
+
+export const SHAPE_OPTIONS: ShapeOption[] = [
+  {
+    id: "shape-classic",
+    name: "Forma Clásica (Cuadrada / Oval / Redonda)",
+    price: 0,
+    tag: "Incluida",
+    desc: "Bordes rectos simétricos o contorno oval suave anatómico.",
+    imgUrl: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "shape-coffin",
+    name: "Punta Coffin Marcada",
+    price: 5,
+    tag: "+S/ 5",
+    desc: "Silueta bailarina con laterales cónicos convergentes y punta recta perfecta.",
+    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "shape-stiletto",
+    name: "Punta Stiletto",
+    price: 5,
+    tag: "+S/ 5",
+    desc: "Vértice afilado en punta de aguja que estiliza la mano con estética vanguardista.",
+    imgUrl: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "shape-almond",
+    name: "Punta Almendra",
+    price: 5,
+    tag: "+S/ 5",
+    desc: "Laterales estilizados con silueta almendrada suave que estiliza y alarga visualmente los dedos.",
+    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=600&q=80"
+  },
+];
+
+export const EFFECT_OPTIONS_HANDS: EffectOption[] = [
+  {
+    id: "eff-none",
+    name: "Sin efecto adicional",
+    price: 0,
+    duration: 0,
+    desc: "Brillo Top Coat cristalino de alta duración.",
+    imgUrl: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "eff-aurora",
+    name: "Efecto Aurora / Glaseado / Espejo / Ojo de Gato (10 uñas)",
+    price: 8,
+    duration: 15,
+    tag: "+S/ 8",
+    desc: "Polvo de perla cromo iridiscente al horno o partículas magnéticas terciopelo.",
+    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=600&q=80"
+  },
+  {
+    id: "eff-babyboomer",
+    name: "Técnica Baby Boomer / Ombré Difuminado (10 uñas)",
+    price: 12,
+    duration: 20,
+    tag: "+S/ 12",
+    desc: "Degradado suave sin cortes de blanco lechoso a nude translúcido.",
+    imgUrl: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=600&q=80"
+  },
+];
+
+export const DESIGN_LEVELS: DesignLevel[] = [
+  {
+    id: "des-n1",
+    name: "Nivel 1 (Básico)",
+    pricePerNail: 2.50,
+    durationPerNail: 3,
+    desc: "Stickers botánicos, puntitos minimalistas, líneas fineline, papel oro/foil o 1–2 piedritas en cutícula.",
+    imgUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=600&q=80",
+    examples: ["Stickers botánicos", "Pan de oro / Foil", "Líneas fineline", "1–2 Cristales en cutícula"]
+  },
+  {
+    id: "des-n2",
+    name: "Nivel 2 (Intermedio)",
+    pricePerNail: 5.00,
+    durationPerNail: 5,
+    desc: "Mano alzada artística: micro-flores, ondas fluidas, animal print, francesa doble/diseño, efecto Aura o encapsulado glitter.",
+    imgUrl: "https://images.unsplash.com/photo-1583001809873-a128495da465?auto=format&fit=crop&w=600&q=80",
+    examples: ["Efecto Aura difuminado", "Flores a mano alzada", "Ondas fluidas pastel", "Francesa doble", "Glitter encapsulado"]
+  },
+  {
+    id: "des-n3",
+    name: "Nivel 3 (Avanzado / 3D)",
+    pricePerNail: 8.00,
+    durationPerNail: 8,
+    desc: "Relieve 3D con texturas de gel orgánicas, uña full pedrería/cristales de impacto o ilustraciones complejas.",
+    imgUrl: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=600&q=80",
+    examples: ["Relieve 3D de autor", "Full cristales Swarovski", "Micro-pintura compleja", "Encapsulado 3D"]
+  }
+];
+
+export const REMOVAL_OPTIONS: RemovalOption[] = [
+  {
+    id: "rem-none",
+    name: "Uñas limpias (Sin material previo)",
+    price: 0,
+    duration: 0,
+    desc: "Tus uñas vienen listas sin restos de esmalte ni acrílico."
+  },
+  {
+    id: "rem-gel",
+    name: "Retiro de Esmaltado en Gel o Rubber",
+    price: 8,
+    duration: 20,
+    desc: "Retiro con microfresa suave respetando el grosor biológico."
+  },
+  {
+    id: "rem-studio",
+    name: "Retiro Acrílico / Polygel / Builder (De Samm)",
+    price: 15,
+    duration: 30,
+    desc: "Remoción médica de set realizado previamente en nuestro estudio."
+  },
+  {
+    id: "rem-foreign",
+    name: "Retiro Acrílico / Polygel / Builder (De otro salón)",
+    price: 20,
+    duration: 35,
+    desc: "Remoción minuciosa y detox de material colocado en salón ajeno."
+  }
+];
 
 export interface ExtraItem {
   id: string;
@@ -78,27 +316,27 @@ export interface HomeShowcaseItem {
 export const DEFAULT_HOME_SHOWCASE: HomeShowcaseItem[] = [
   {
     id: "home-1",
-    title: "Kapping Gel & Rubber Base",
-    category: "Salud Ungueal",
+    title: "Uñas Acrílicas con Tip",
+    category: "Estructura & Largo",
     time: "2 horas",
-    imgUrl: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=800&q=80",
-    desc: "Refuerzo elástico invisible que detiene quiebres y permite el crecimiento natural de la uña."
+    imgUrl: "/images/servicios/acrilicas-tip.webp",
+    desc: "Set completo hasta largo #3 con color entero o francesa. Estilizadas, resistentes y con acabado prolijo."
   },
   {
     id: "home-2",
-    title: "Manicura Rusa & Semipermanente",
-    category: "Técnica Anatómica",
-    time: "2 horas",
-    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80",
-    desc: "Limpieza profunda de cutículas con microfresas de diamante y esmaltado bajo pliegue."
+    title: "Nivelación Rubber Gel",
+    category: "Uña Natural",
+    time: "1h 30m",
+    imgUrl: "/images/servicios/nivelacion-rubber.webp",
+    desc: "Fortalecimiento sobre tu propia uña natural. Corrige imperfecciones y permite que crezcan sanas sin quebrarse."
   },
   {
     id: "home-3",
-    title: "Extensiones Soft Gel & Glazed",
-    category: "Alta Durabilidad",
-    time: "2h 30m",
-    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80",
-    desc: "Tips premoldeados de gel con acabado perlado cromo y resistencia total al agua."
+    title: "Pedigel & Acripie",
+    category: "Pies Impecables",
+    time: "1h 30m",
+    imgUrl: "/images/servicios/pedigel-acripie.webp",
+    desc: "Pedicura estética completa con esmaltado en gel o acrílico en los 10 dedos para máxima duración."
   }
 ];
 
@@ -134,10 +372,10 @@ export const DEFAULT_GALLERY: GalleryPhotoItem[] = [
   {
     id: "g3",
     url: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=1000&q=85",
-    category: "rusa",
-    title: "Manicura Rusa Anatómica Pura",
-    tag: "Técnica Alemana",
-    desc: "Fresado milimétrico con brocas de diamante y esmaltado bajo pliegue que dura 21+ días.",
+    category: "kapping",
+    title: "Limpieza Profunda & Esmaltado Prolijo",
+    tag: "Acabado Limpio",
+    desc: "Preparación suave de cutículas y esmaltado impecable desde la raíz que dura 3+ semanas.",
     likes: 189
   },
   {
@@ -170,7 +408,7 @@ export const DEFAULT_GALLERY: GalleryPhotoItem[] = [
   {
     id: "g7",
     url: "https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?auto=format&fit=crop&w=1000&q=85",
-    category: "rusa",
+    category: "kapping",
     title: "Clean Girl Nails & Nude Translúcido",
     tag: "Acabado Natural",
     desc: "Esmaltado lechoso semitransparente que resalta la salud y luminosidad natural.",
@@ -209,7 +447,7 @@ export const DEFAULT_CARE_STEPS: CareStepItem[] = [
     detail: "Los químicos domésticos degradan gradualmente la película protectora del Top Coat y resecan la queratina natural, provocando opacidad y desprendimientos prematuros.",
     tip: "Ten siempre un par de guantes de látex o nitrilo en la cocina y otro en el baño.",
     impact: "Mantiene el brillo efecto espejo por 3 semanas completas",
-    imgUrl: "https://images.unsplash.com/photo-1584634731339-252c581abfc5?auto=format&fit=crop&w=1200&q=85"
+    imgUrl: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=1200&q=85"
   },
   {
     id: "care-2",
@@ -220,7 +458,7 @@ export const DEFAULT_CARE_STEPS: CareStepItem[] = [
     detail: "Hacer fuerza de torsión con el borde libre genera microfisuras internas en el gel nivelador o acrílico. Usa la yema de tus dedos o la ayuda de una cuchara para abrir paquetes.",
     tip: "Preserva el ápice y la curvatura C arquitectónica intacta.",
     impact: "Cero fisuras en los laterales ni roturas de estrés",
-    imgUrl: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=1200&q=85"
+    imgUrl: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?auto=format&fit=crop&w=1200&q=85"
   },
   {
     id: "care-3",
@@ -228,10 +466,10 @@ export const DEFAULT_CARE_STEPS: CareStepItem[] = [
     tag: "SALUD UNGUEAL",
     title: "Jamás arranques el producto levantado",
     short: "Si se desprende un lateral, jamás lo jales ni lo muerdas.",
-    detail: "Arrancar el gel a la fuerza arranca hasta 4 capas dorsales de queratina de tu uña biológica viva, volviéndola delgada como papel y dolorosa al calor de la lámpara UV/LED.",
-    tip: "Protégelo con una vendita adhesiva limpia hasta acudir a la cabina.",
-    impact: "Conserva el 100% del grosor natural de tu lámina ungueal",
-    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=1200&q=85"
+    detail: "Arrancar el acrílico o gel a la fuerza daña las capas de queratina de tu uña natural, volviéndola débil y quebradiza. Si algo se levanta, ven al estudio para retirarlo con calma y de forma segura.",
+    tip: "Protégelo con una vendita adhesiva limpia hasta acudir a tu cita.",
+    impact: "Conserva la fuerza y salud de tu uña natural",
+    imgUrl: "https://images.unsplash.com/photo-1599940824399-b87987ceb72a?auto=format&fit=crop&w=1200&q=85"
   },
   {
     id: "care-4",
@@ -242,7 +480,7 @@ export const DEFAULT_CARE_STEPS: CareStepItem[] = [
     detail: "El aceite botánico de jojoba y almendras penetra la matriz ungueal, mantiene el eponiquio flexible e impide que se formen padrastros o grietas antiestéticas en los surcos laterales.",
     tip: "Aplica una gota en la base y masajea suavemente hacia la matriz.",
     impact: "Cutículas suaves, sin padrastros ni piel engrosada",
-    imgUrl: "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=1200&q=85"
+    imgUrl: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=1200&q=85"
   },
   {
     id: "care-5",
@@ -253,153 +491,215 @@ export const DEFAULT_CARE_STEPS: CareStepItem[] = [
     detail: "A medida que la uña natural crece, el peso del ápice se traslada hacia adelante. Retocar a tiempo previene el efecto palanca que causa desgarros dolorosos en la base.",
     tip: "Asegura tu cita con anticipación para no perder la armonía de tus manos.",
     impact: "Estructura segura y simetría milimétrica continua",
-    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=1200&q=85"
+    imgUrl: "https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=85"
   }
 ];
 
 export const DEFAULT_SERVICES: ServiceItem[] = [
+  // --- 1. SERVICIOS BASE - MANOS (Elige tu base) ---
   {
-    id: "kapping-rubber",
-    name: "Kapping Gel & Rubber Base Fortalecedor",
+    id: "acrilicas-tip",
+    name: "Uñas Acrílicas (con tip)",
+    category: "manicura",
+    price: 65,
+    duration: 120,
+    desc: "Estructura acrílica clásica de alta durabilidad con tip. Color entero o francesa clásica incluido hasta largo #3.",
+    tag: "Más Solicitado",
+    imgUrl: "/images/servicios/unas-acrilicas.webp",
+    includedNotes: "Color entero o francesa | Hasta #3 incluido",
+    supportsLength: true,
+    supportsShape: true
+  },
+  {
+    id: "sistema-polygel",
+    name: "Sistema Polygel",
+    category: "manicura",
+    price: 65,
+    duration: 120,
+    desc: "Híbrido liviano y flexible que combina la resistencia del acrílico con la pureza del gel sin olor a monómero.",
+    tag: "Ultra Ligero",
+    imgUrl: "/images/servicios/sistema-polygel.webp",
+    includedNotes: "Color entero o francesa | Hasta #3 incluido",
+    supportsLength: true,
+    supportsShape: true
+  },
+  {
+    id: "sistema-builder-gel",
+    name: "Sistema Builder Gel",
     category: "manicura",
     price: 70,
     duration: 120,
-    desc: "Capa protectora flexible de base Rubber sobre la uña natural para frenar roturas, estrías y permitir que crezca sana sin necesidad de tips. Incluye manicura anatómica y esmaltado nivelado.",
-    tag: "Salud Ungueal",
-    imgUrl: "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=800&q=80"
+    desc: "Gel constructor autonivelante de alta densidad. Fuerza elástica ideal para uñas con tendencia a quebrarse.",
+    tag: "Fuerza & Flexibilidad",
+    imgUrl: "/images/servicios/sistema-builder-gel.webp",
+    includedNotes: "Color entero o francesa | Hasta #3 incluido",
+    supportsLength: true,
+    supportsShape: true
   },
   {
-    id: "manicura-rusa-semi",
-    name: "Manicura Rusa Combinada & Semipermanente",
+    id: "esculpidas-molde",
+    name: "Uñas Esculpidas (con molde)",
     category: "manicura",
-    price: 60,
-    duration: 120,
-    desc: "Limpieza anatómica profunda de cutícula con fresas de diamante alemanas y esmaltado bajo cutícula de máxima precisión para alargar el crecimiento impecable por más de 3 semanas.",
-    tag: "Más Solicitado",
-    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80"
+    price: 90,
+    duration: 140,
+    desc: "Esculpido a mano con molde sin tips. Estructura personalizada a la medida de tus dedos con máxima resistencia y acabado fino.",
+    tag: "Esculpido Personalizado",
+    imgUrl: "/images/servicios/unas-esculpidas.webp",
+    includedNotes: "Color entero o francesa | Hasta #3 incluido",
+    supportsLength: true,
+    supportsShape: true
   },
   {
-    id: "soft-gel-tips",
-    name: "Extensiones Soft Gel & Full Cover Tips",
-    category: "acrilico",
-    price: 110,
-    duration: 150,
-    desc: "Extensiones ligeras de gel premoldeado que se adhieren con base rubber sin dañar tu lecho ungueal. Resultado natural, resistente al agua y sin limados agresivos.",
-    tag: "Largo & Estructura",
-    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80"
+    id: "rubber-gel",
+    name: "Nivelación Rubber Gel (Uña natural)",
+    category: "manicura",
+    price: 55,
+    duration: 90,
+    desc: "Refuerzo y nivelación con base rubber sobre tu uña natural. Corrige imperfecciones y fortalece para que crezcan sanas sin quebrarse.",
+    tag: "Fortalecimiento Natural",
+    imgUrl: "/images/servicios/nivelacion-rubber.webp",
+    includedNotes: "Color entero o francesa en uña natural",
+    supportsLength: false,
+    supportsShape: false
   },
   {
-    id: "spa-pedicura-rusa",
-    name: "Pedicura Rusa Anatómica & Spa Jelly",
+    id: "esmaltado-gel",
+    name: "Esmaltado en Gel (Uña natural)",
+    category: "manicura",
+    price: 45,
+    duration: 60,
+    desc: "Limpieza detallada de cutículas y esmaltado en gel curado en lámpara LED con brillo cristalino que dura 3+ semanas.",
+    tag: "Clásico Duradero",
+    imgUrl: "/images/servicios/esmaltado-gel.webp",
+    includedNotes: "Color entero o francesa en uña natural",
+    supportsLength: false,
+    supportsShape: false
+  },
+  {
+    id: "reconstruccion-suelta",
+    name: "Alargamiento / Reconstrucción (por uña)",
+    category: "manicura",
+    price: 8,
+    duration: 20,
+    desc: "Reparación y reconstrucción individual para uñas rotas, mordidas o desparejadas antes de tu tratamiento.",
+    tag: "Reparación SOS",
+    imgUrl: "/images/servicios/alargamiento-reconstruccion.webp",
+    includedNotes: "Desde S/ 8 c/u (según largo)",
+    supportsLength: true,
+    supportsShape: true
+  },
+
+  // --- 2. SERVICIOS BASE - PIES ---
+  {
+    id: "pedigel",
+    name: "Pedigel",
     category: "pedicura",
-    price: 85,
-    duration: 120,
-    desc: "Tratamiento podo-estético intensivo. Retiro de durezas con disco podológico, exfoliación aromática, hidratación profunda y esmaltado semipermanente de larga duración.",
-    tag: "Bienestar",
-    imgUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=800&q=80"
+    price: 50,
+    duration: 75,
+    desc: "Limpieza profunda de pies, exfoliación estética y esmaltado en gel de alta duración sobre uña natural.",
+    tag: "Pies Impecables",
+    imgUrl: "/images/servicios/pedigel.webp",
+    includedNotes: "Color entero o francesa en uña natural",
+    supportsLength: false,
+    supportsShape: false,
+    supportsPediExtras: true
   },
   {
-    id: "reforzamiento-biab",
-    name: "BIAB Builder in a Bottle & Reparación",
-    category: "manicura",
+    id: "acripie",
+    name: "Acripie",
+    category: "pedicura",
     price: 80,
-    duration: 120,
-    desc: "Gel constructor en botella de alta viscosidad para corregir uñas mordidas, curvadas hacia abajo o dañadas tras acrílicos anteriores.",
-    tag: "Tratamiento",
-    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=800&q=80"
-  },
-  {
-    id: "polygel-esculpido",
-    name: "Esculpido Dual Polygel de Precisión",
-    category: "acrilico",
-    price: 130,
-    duration: 160,
-    desc: "La combinación perfecta entre acrílico y gel: fuerza extrema sin olor a monómero y máxima ligereza en tus manos.",
-    tag: "Alta Resistencia",
-    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=800&q=80"
+    duration: 90,
+    desc: "Sistema acrílico completo en los 10 dedos de los pies para máxima duración, simetría y brillo inalterable.",
+    tag: "Máxima Duración",
+    imgUrl: "/images/servicios/acripie.webp",
+    includedNotes: "Color entero o francesa en los 10 dedos",
+    supportsLength: false,
+    supportsShape: false,
+    supportsPediExtras: true
   }
 ];
 
 export const DEFAULT_ARTICLES: ArticleItem[] = [
   {
     id: "kapping-vs-acrilico",
-    title: "Kapping Rubber vs Acrílico Tradicional: ¿Cuál necesita tu uña?",
-    category: "Salud Ungueal",
+    title: "Nivelación Rubber vs Uñas Acrílicas: ¿Cuál necesita tu uña?",
+    category: "Guía de Cuidado",
     date: "Guía de Estudio",
     readTime: "3 min de lectura",
-    imgUrl: "https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=1000&q=85",
-    desc: "Descubre cómo el refuerzo flexible de base Rubber permite que tus uñas respiren y crezcan largas sin desprendimientos ni limados agresivos.",
+    imgUrl: "/images/servicios/nivelacion-rubber.webp",
+    desc: "Descubre las diferencias entre reforzar tu uña natural con Rubber Gel o elegir la longitud y resistencia de las Uñas Acrílicas.",
     content: {
-      intro: "Durante años, el acrílico fue la única alternativa para lucir uñas largas y resistentes. Sin embargo, en el atelier de Samm apostamos por la preservación de la lámina biológica natural mediante técnicas europeas modernas.",
+      intro: "Si tienes dudas entre lucir un set largo o cuidar el crecimiento de tu uña natural, en samm. NAIL STUDIO te asesoramos para elegir la técnica perfecta según tus actividades y tu estilo de vida.",
       points: [
         {
-          subtitle: "1. Flexibilidad y amortiguación biológica",
-          text: "La base Rubber posee una formulación con alta elasticidad molecular. Ante un golpe o palanca accidental, la uña flexiona en vez de quebrarse en el lecho vivo."
+          subtitle: "1. Uñas Acrílicas con Tip: Resistencia y largo inmediato",
+          text: "Ideales si buscas lucir un largo definido desde el primer momento (#1 al #6 XL) o para ocasiones especiales. Soportan el ajetreo diario y mantienen su forma estilizada por semanas."
         },
         {
-          subtitle: "2. Adherencia sin limado destructivo",
-          text: "No es necesario limar agresivamente la queratina natural para que el gel ancle. Una microporosidad suave es suficiente para garantizar más de 3 semanas de retención intacta."
+          subtitle: "2. Nivelación Rubber Gel: Tu uña natural más fuerte",
+          text: "Si tus uñas se quiebran o doblan fácilmente, la base rubber aporta una capa elástica que las refuerza sin necesidad de alargarlas, permitiendo que crezcan sanas y fuertes."
         },
         {
-          subtitle: "3. Nivelación del Ápice Anatómico",
-          text: "Se moldea una gota arquitectónica en el tercio medio de la uña para reforzar el centro de gravedad mientras tu propia uña gana longitud de manera saludable."
+          subtitle: "3. Retiros seguros sin dañar la uña",
+          text: "Nunca te arranques las uñas postizas ni las forces. En el estudio realizamos el retiro con suavidad y paciencia para que tu uña natural quede intacta e hidratada."
         }
       ],
-      conclusion: "Si tus uñas son quebradizas, se abren en capas o buscas recuperar el grosor natural tras años de acrílico tradicional, el Kapping Rubber es tu mejor opción clínica."
+      conclusion: "Conversa con nosotras al iniciar tu cita en cabina y evaluaremos juntas qué servicio se adapta mejor a lo que necesitas."
     }
   },
   {
     id: "tendencias-glazed-cromo",
-    title: "Tendencias de Primavera-Verano: Tonos Glazed y Cromo Perlado",
-    category: "Lookbook Editorial",
-    date: "Colección 2026",
-    readTime: "4 min de lectura",
-    imgUrl: "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=1000&q=85",
-    desc: "Inspirado en el minimalismo de Nueva York y Madrid: destellos sutiles sobre bases milky y nude con acabados espejo de alta durabilidad.",
+    title: "Tendencias de Nail Art en Lima: Glazed Donut, Cat Eye y Mano Alzada",
+    category: "Tendencias 2026",
+    date: "Colección Lima",
+    readTime: "3 min de lectura",
+    imgUrl: "/images/disenos/tendencias-nail-art.webp",
+    desc: "Efectos aperlados virales, destellos magnéticos de terciopelo y arte a mano alzada para inspirar tu próxima cita.",
     content: {
-      intro: "El maximalismo recargado da paso a la estética 'Clean Girl Aesthetic' de alta gama: uñas cortas a medianas, formas almendradas precisas y efectos de luz que parecen joyas líquidas.",
+      intro: "El estilo clean girl aesthetic y los efectos visuales son los grandes favoritos de nuestras clientas en Lima: acabados finos, elegantes y que combinan con todo.",
       points: [
         {
-          subtitle: "1. Polvos de perla ultrafina",
-          text: "Aplicados sobre una base translúcida Milky Almond o Nude Blush antes de sellar con Top Coat sin capa de dispersión, generando un halo nacarado que cambia según el ángulo del sol."
+          subtitle: "1. Efecto Glazed Donut & Polvos Aurora",
+          text: "El acabado aperlado viral. Sobre una base nude o lechosa se aplica un polvo perlado que refleja destellos de luz con cada movimiento de tus manos."
         },
         {
-          subtitle: "2. Micro French invertido y acentos metálicos",
-          text: "Líneas de 1 milímetro en plata líquida o pan de oro 24K que abrazan la cutícula en lugar de la punta, alargando visualmente los dedos."
+          subtitle: "2. Velvet Cat Eye (Ojo de Gato)",
+          text: "Micropartículas magnéticas trabajadas con imán antes de curar en lámpara LED, logrando un brillo de terciopelo en tonos nude, café o rosa empolvado."
         },
         {
-          subtitle: "3. Velvet Cat Eye en tonos neutros",
-          text: "Lejos de los colores oscuros de invierno, el efecto ojo de gato se reinventa en bases beige, champán y rosa empolvado para el día a día."
+          subtitle: "3. Nail Art a Mano Alzada",
+          text: "Flores minimalistas, ondas fluidas, francesas dobles y toques de papel oro. Trae la foto que guardaste en Instagram o Pinterest y la recreamos para ti."
         }
       ],
-      conclusion: "Un estilo versátil que combina impecablemente tanto para una reunión ejecutiva como para un fin de semana en la playa."
+      conclusion: "Elige desde un detalle sutil en una uña hasta un set completo con efectos. Diseñamos a tu gusto."
     }
   },
   {
     id: "protocolo-esterilizacion-autoclave",
-    title: "Protocolo de Esterilización: Por qué exigimos autoclave en cada sesión",
-    category: "Seguridad Clínica",
-    date: "Transparencia Samm",
+    title: "Bioseguridad & Cuidado: Por qué tu salud es nuestra prioridad",
+    category: "Bioseguridad",
+    date: "Compromiso Samm",
     readTime: "2 min de lectura",
-    imgUrl: "https://images.unsplash.com/photo-1519014816548-bf5fe059798b?auto=format&fit=crop&w=1000&q=85",
-    desc: "Nuestro instrumental metálico pasa por desinfección enzimática y esterilización por calor húmedo en bolsas grado quirúrgico que se abren delante de ti.",
+    imgUrl: "/images/salon/bioseguridad.webp",
+    desc: "En samm. NAIL STUDIO aplicamos protocolos estrictos de desinfección, instrumental esterilizado y limas descartables para cada cita.",
     content: {
-      intro: "Tu salud no es negociable. En muchos salones convencionales, las fresas y alicates solo se rocían con alcohol al 70%. En samm. NAIL STUDIO aplicamos estándares hospitalarios.",
+      intro: "Tu tranquilidad es lo primero. En el estudio privado de Sheyla Astrid Moreno Medina cuidamos cada paso de bioseguridad para que disfrutes de tu momento de engreimiento sin preocupaciones.",
       points: [
         {
-          subtitle: "Paso 1: Desinfección enzimática por inmersión",
-          text: "Elimina residuos biológicos microscópicos en tinas ultrasónicas con detergente bactericida de grado médico."
+          subtitle: "Paso 1: Instrumental Desinfectado y Esterilizado",
+          text: "Todas las herramientas metálicas pasan por desinfección profunda y esterilización para garantizar cero riesgos y máxima higiene en cabina."
         },
         {
-          subtitle: "Paso 2: Ensobrado hermético individual",
-          text: "Cada set de instrumental (fresas de diamante, empujador y tijera anatómica) se sella en bolsas con indicador químico termosensible."
+          subtitle: "Paso 2: Limas y Pulidores Descartables",
+          text: "Cada clienta cuenta con limas y bloques pulidores de uso individual que se desechan al terminar la sesión."
         },
         {
-          subtitle: "Paso 3: Autoclave a 134°C bajo presión",
-          text: "El calor húmedo destruye al 100% esporas, hongos y virus. La bolsa cambia de color de rosa a marrón oscuro y se abre exclusivamente frente a tus ojos al iniciar tu turno."
+          subtitle: "Paso 3: Marcas Profesionales de Calidad",
+          text: "Trabajamos con insumos reconocidos en el rubro (Mia Secret, OPI, Gelish) que cuidan la queratina natural y garantizan semanas de adherencia."
         }
       ],
-      conclusion: "Disfruta de tu sesión de belleza con la absoluta tranquilidad de que cada herramienta está 100% estéril y virgen para tus manos."
+      conclusion: "Disfruta de tu cita con la seguridad de que tus manos y pies están en las mejores manos profesionales."
     }
   }
 ];
@@ -438,7 +738,7 @@ export const LIMA_SEASONS: LimaTheme[] = [
       "Corales & Tonos Neón",
       "Diseños Marinos & Conchitas",
       "Aura Nails Luminosas",
-      "Pedicura Rusa de Playa"
+      "Pedigel & Acripie de Playa"
     ],
     colors: {
       primary: "#E07A5F", // Coral cálido
@@ -590,7 +890,7 @@ export const LIMA_EVENTS: LimaTheme[] = [
     featuredDesigns: [
       "Tonos Lila & Lavanda Suave",
       "Neutros Elegantes Ejecutivos",
-      "Manicura Rusa & Spa Hidratante",
+      "Nivelación Rubber & Spa Hidratante",
       "Amatista Translúcido"
     ],
     colors: {
@@ -753,8 +1053,8 @@ export const LIMA_EVENTS: LimaTheme[] = [
     type: "evento",
     name: "Temporada de Graduaciones y Bodas",
     dateRangeLabel: "10 al 30 de noviembre",
-    climateVibe: "Gala y alta costura en Lima: novias, promociones y fiestas de etiqueta.",
-    heroBadge: "TEMPORADA DE BODAS & GALA · ALTA COSTURA UNGUEAL",
+    climateVibe: "Diseños elegantes para ocasiones especiales en Lima: novias, graduaciones y eventos.",
+    heroBadge: "TEMPORADA DE BODAS & GRADUACIONES · DISEÑOS EXCLUSIVOS",
     featuredDesigns: [
       "Efecto Perla (Chrome White)",
       "Baby Boomer Clásico de Novia",

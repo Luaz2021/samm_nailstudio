@@ -37,22 +37,22 @@ export function AboutUsSection({ onOpenBooking, onExploreServices }: AboutUsSect
               className="text-[10px] sm:text-[11px] uppercase tracking-[0.25em] font-bold mb-2.5"
               style={{ color: "var(--rosewood-chrome, #9E5742)" }}
             >
-              ATELIER & FILOSOFÍA
+              EL ESTUDIO & NUESTRA ESENCIA
             </span>
 
             <h1 
               className="text-3xl sm:text-5xl lg:text-6xl font-light text-[#2C2420] tracking-tight leading-[1.1] mb-4 sm:mb-6"
               style={{ fontFamily: "var(--font-serif)" }}
             >
-              El cuidado que tus uñas <span className="italic font-normal" style={{ color: "var(--rosewood-chrome, #9E5742)" }}>siempre merecieron.</span>
+              Uñas perfectas diseñadas para <span className="italic font-normal" style={{ color: "var(--rosewood-chrome, #9E5742)" }}>acompañar tu estilo.</span>
             </h1>
 
             <div className="space-y-3.5 text-xs sm:text-base text-[#6C5F57] leading-relaxed mb-6 sm:mb-8 font-light">
               <p>
-                En <strong>samm. NAIL STUDIO</strong> entendemos que unas uñas hermosas nacen de una base sana. Dejamos atrás las técnicas agresivas, los limados excesivos y los tiempos acelerados para crear un espacio de calma y precisión.
+                En <strong>samm. NAIL STUDIO</strong>, fundado por <strong>Sheyla Astrid Moreno Medina</strong>, sabemos que hacerte las uñas es tu momento de engreimiento y desconexión. Dejamos atrás las citas apuradas y los limados agresivos para brindarte una atención personalizada, cercana y con acabados impecables.
               </p>
               <p>
-                Cada sesión se realiza con instrumental esterilizado en autoclave médico, fórmulas libres de químicos nocivos (HEMA-Free) y técnicas rusas combinadas adaptadas a la anatomía natural de tus manos.
+                Especialistas en uñas acrílicas con tip, polygel, nivelación rubber y pedicura spa. Trabajamos con productos profesionales (Mia Secret, OPI, Gelish) y bioseguridad al 100% para que luzcas un set resistente, limpio y que dure semanas cuidando siempre tu uña natural.
               </p>
             </div>
 
@@ -82,15 +82,15 @@ export function AboutUsSection({ onOpenBooking, onExploreServices }: AboutUsSect
             <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-7 sm:pt-10 mt-7 sm:mt-10 border-t border-[#EAE3DA] w-full text-center">
               <div>
                 <span className="block text-lg sm:text-2xl font-light text-[#2C2420]" style={{ fontFamily: "var(--font-serif)" }}>100%</span>
-                <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-[#8A7B72] font-medium">Uña Natural</span>
+                <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-[#8A7B72] font-medium">Bioseguridad</span>
               </div>
               <div>
-                <span className="block text-lg sm:text-2xl font-light text-[#2C2420]" style={{ fontFamily: "var(--font-serif)" }}>Autoclave</span>
-                <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-[#8A7B72] font-medium">Grado Médico</span>
+                <span className="block text-lg sm:text-2xl font-light text-[#2C2420]" style={{ fontFamily: "var(--font-serif)" }}>3+ Semanas</span>
+                <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-[#8A7B72] font-medium">Duración Real</span>
               </div>
               <div>
-                <span className="block text-lg sm:text-2xl font-light text-[#2C2420]" style={{ fontFamily: "var(--font-serif)" }}>HEMA-Free</span>
-                <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-[#8A7B72] font-medium">Cero Alergias</span>
+                <span className="block text-lg sm:text-2xl font-light text-[#2C2420]" style={{ fontFamily: "var(--font-serif)" }}>Lima, Perú</span>
+                <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-[#8A7B72] font-medium">Atención 1 a 1</span>
               </div>
             </div>
           </div>

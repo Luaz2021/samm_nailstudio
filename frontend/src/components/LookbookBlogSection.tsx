@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Sparkles, Calendar, BookOpen, Clock, ArrowRight, X, ShieldCheck } from "lucide-react";
 import { DEFAULT_ARTICLES, ArticleItem } from "@/data/catalog";
 import { SwipeDots } from "@/components/SwipeDots";
+import { getAssetPath } from "@/lib/assets";
 
 export function LookbookBlogSection() {
   const [selectedArticle, setSelectedArticle] = useState<ArticleItem | null>(null);
@@ -30,17 +31,20 @@ export function LookbookBlogSection() {
   }, []);
 
   return (
-    <section className="py-10 md:py-[6svh] bg-white border-t border-[#EAE4DC] text-[#2C2420]">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section
+      id="seccion-revista"
+      className="min-h-[calc(100svh-var(--header-h,81px))] flex flex-col justify-center py-10 sm:py-16 lg:py-12 overflow-hidden bg-white border-t border-[#EAE4DC] text-[#2C2420]"
+    >
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full">
 
         {/* Encabezado */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-10 gap-6">
-          <div className="space-y-2">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-4 md:mb-6 gap-4">
+          <div className="space-y-1.5">
             <span className="text-xs uppercase font-bold tracking-[0.25em] text-[#9E5742]">
               Revista & Cuidados
             </span>
             <h2 
-              className="text-3xl sm:text-5xl font-light tracking-tight text-[#2C2420]"
+              className="text-3xl sm:text-4xl lg:text-5xl font-light tracking-tight text-[#2C2420]"
               style={{ fontFamily: "var(--font-serif)" }}
             >
               Lookbook & Notas de Atelier
@@ -54,27 +58,27 @@ export function LookbookBlogSection() {
         {/* 3 articulos: carrusel deslizable en movil, 3 columnas desde tablet */}
         <div
           ref={carouselRef}
-          className="-mx-6 px-6 md:mx-0 md:px-0 flex md:grid md:grid-cols-3 gap-4 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="-mx-6 px-6 md:mx-0 md:px-0 flex md:grid md:grid-cols-3 gap-4 md:gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {articles.map((art) => (
             <article
               key={art.id}
               onClick={() => setSelectedArticle(art)}
-              className="snap-center shrink-0 w-[82%] md:w-auto group cursor-pointer flex flex-col space-y-4 rounded-3xl p-3 hover:bg-[#FAF8F5] transition-all duration-300 border border-transparent hover:border-[#EAE4DC]"
+              className="snap-center shrink-0 w-[82%] md:w-auto group cursor-pointer flex flex-col space-y-2.5 rounded-3xl p-2.5 sm:p-3 hover:bg-[#FAF8F5] transition-all duration-300 border border-transparent hover:border-[#EAE4DC]"
             >
-              <div className="relative aspect-[16/10] md:aspect-auto md:h-[clamp(150px,28svh,260px)] w-full overflow-hidden rounded-2xl bg-[#F5EFEB]">
+              <div className="relative aspect-[16/10] md:aspect-auto md:h-[clamp(120px,22svh,190px)] w-full overflow-hidden rounded-2xl bg-[#F5EFEB] glaze-shimmer">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
-                  src={art.imgUrl} 
+                  src={getAssetPath(art.imgUrl)} 
                   alt={art.title} 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <span className="absolute top-4 left-4 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] uppercase font-bold tracking-widest text-[#2C2420] shadow-xs">
+                <span className="absolute top-3.5 left-3.5 px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] uppercase font-bold tracking-widest text-[#2C2420] shadow-xs">
                   {art.category}
                 </span>
               </div>
 
-              <div className="space-y-2 px-1">
+              <div className="space-y-1.5 px-1">
                 <div className="flex items-center gap-3 text-xs text-[#8A7B72]">
                   <span>{art.date}</span>
                   <span>•</span>
@@ -84,18 +88,18 @@ export function LookbookBlogSection() {
                 </div>
 
                 <h3 
-                  className="text-xl font-light text-[#2C2420] group-hover:text-[#9E5742] transition-colors leading-snug"
+                  className="text-lg sm:text-xl font-light text-[#2C2420] group-hover:text-[#9E5742] transition-colors leading-snug line-clamp-1"
                   style={{ fontFamily: "var(--font-serif)" }}
                 >
                   {art.title}
                 </h3>
 
-                <p className="text-xs text-[#7A6B62] leading-relaxed line-clamp-3">
+                <p className="text-xs text-[#7A6B62] leading-relaxed line-clamp-2">
                   {art.desc}
                 </p>
 
-                <div className="pt-2">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#9E5742] group-hover:gap-2.5 transition-all">
+                <div className="pt-1">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#9E5742] group-hover:gap-2 transition-all">
                     <span>Leer artículo completo</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </span>
@@ -139,9 +143,9 @@ export function LookbookBlogSection() {
             <div className="p-6 sm:p-10 space-y-6">
               
               {/* Imagen Portada */}
-              <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden shadow-md">
+              <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden shadow-md glaze-shimmer">
                 <img 
-                  src={selectedArticle.imgUrl} 
+                  src={getAssetPath(selectedArticle.title ? selectedArticle.imgUrl : "")} 
                   alt={selectedArticle.title} 
                   className="w-full h-full object-cover"
                 />

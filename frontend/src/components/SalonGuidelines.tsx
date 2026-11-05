@@ -32,16 +32,16 @@ export function SalonGuidelines({ onOpenBooking }: SalonGuidelinesProps) {
         {/* Cabecera de la Sección */}
         <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
           <span className="text-xs uppercase font-bold tracking-[0.25em] text-[#9E5742]">
-            Protocolo & Salud Ungueal
+            Pautas del Estudio & Cuidados
           </span>
           <h2 
             className="text-3xl sm:text-5xl font-light tracking-tight text-[#2C2420]"
             style={{ fontFamily: "var(--font-serif)" }}
           >
-            Guía para una Cita y Manicura Impecable
+            Guía para una Cita y Uñas Impecables
           </h2>
           <p className="text-xs sm:text-sm text-[#7A6B62] leading-relaxed">
-            Para brindarte un servicio de alta precisión y proteger la salud de tus uñas naturales, ten en cuenta estas pautas del atelier.
+            Para brindarte una atención 1 a 1 dedicada y garantizar que tus uñas duren semanas intactas, ten en cuenta estas sencillas pautas.
           </p>
         </div>
 

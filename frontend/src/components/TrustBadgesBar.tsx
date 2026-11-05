@@ -5,31 +5,34 @@ import { ShieldCheck, Award, Sparkles, HeartHandshake } from "lucide-react";
 export function TrustBadgesBar() {
   const badges = [
     {
-      title: "Manicura Rusa Anatómica",
-      desc: "Limpieza milimétrica con torno y fresas de diamante sin cortes agresivos.",
+      title: "Limpieza Profunda & Prolija",
+      desc: "Preparación suave de cutículas para que el esmaltado nazca impecable desde la raíz.",
       icon: Sparkles
     },
     {
-      title: "Esterilización en Autoclave",
-      desc: "Instrumental quirúrgico abierto en bolsa estéril frente a ti en cada cita.",
+      title: "Bioseguridad & Limas Nuevas",
+      desc: "Instrumental 100% esterilizado y limas descartables exclusivas para cada clienta.",
       icon: ShieldCheck
     },
     {
-      title: "Fórmulas 20-Free & HEMA-Free",
-      desc: "Libres de químicos nocivos para proteger la queratina de la uña natural.",
+      title: "Marcas Profesionales Top",
+      desc: "Trabajamos con Mia Secret, OPI y Gelish para máxima adherencia, duración y brillo.",
       icon: Award
     },
     {
-      title: "Atención Exclusiva & Dedicada",
-      desc: "Turnos individuales y sin prisas, garantizando un acabado impecable.",
+      title: "Atención 1 a 1 sin Apuros",
+      desc: "Cita privada y dedicada en un ambiente cómodo para que te relajes y disfrutes.",
       icon: HeartHandshake
     }
   ];
 
   return (
-    <section className="bg-white border-y border-[#EAE3DA]">
+    <section 
+      id="seccion-garantias"
+      className="min-h-[calc(100svh-var(--header-h,81px))] flex flex-col justify-between overflow-hidden bg-white border-y border-[#EAE3DA]"
+    >
       {/* 1. Tira de 4 Sellos de Garantía con diseño aireado */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 sm:py-14">
+      <div className="flex-1 flex flex-col justify-center max-w-7xl mx-auto px-6 lg:px-8 py-6 sm:py-8 lg:py-10 w-full">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
           {badges.map((b, idx) => {
             const Icon = b.icon;
@@ -49,12 +52,12 @@ export function TrustBadgesBar() {
       </div>
 
       {/* 2. Franja Editorial Estilo Paintbox EXACTA ("As Seen In" / Marcas de Prestigio) */}
-      <div className="border-t border-[#F2ECE4] py-8 sm:py-10 bg-[#FAF8F5]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col items-center">
+      <div className="border-t border-[#F2ECE4] py-6 sm:py-8 lg:py-10 bg-[#FAF8F5] shrink-0 w-full flex items-center">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col items-center w-full">
           
           {/* Título en Serif Italiana Centrado estilo Paintbox */}
           <span 
-            className="text-lg sm:text-xl font-light italic text-[#7A6B62] mb-8 tracking-wide"
+            className="text-base sm:text-lg lg:text-xl font-light italic text-[#7A6B62] mb-5 sm:mb-6 tracking-wide"
             style={{ fontFamily: "var(--font-serif)" }}
           >
             Insumos & Marcas de Alta Gama

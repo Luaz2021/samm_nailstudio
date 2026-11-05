@@ -14,7 +14,7 @@ export function PromoPopup({ onClaim }: PromoPopupProps) {
     discountCode: "SAMM15",
     badgeText: "BIENVENIDA EXCLUSIVA",
     headline: "15% OFF en tu Primera Cita",
-    description: "Válido para cualquier servicio de Manicura Rusa, Kapping Gel o Soft Gel agendado en línea.",
+    description: "Válido para cualquier servicio de Uñas Acrílicas, Polygel, Rubber o Pedigel agendado en la web.",
     ctaText: "RECLAMAR 15% DE DESCUENTO"
   });
 
