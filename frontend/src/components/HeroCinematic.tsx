@@ -37,7 +37,7 @@ export function HeroCinematic({ onOpenBooking, onExploreCatalog }: HeroCinematic
 
   return (
     <section
-      className="relative min-h-[72vh] sm:min-h-[85vh] lg:min-h-[90vh] flex items-center justify-center overflow-hidden text-[#FAF8F5] transition-colors duration-700"
+      className="relative min-h-[72vh] sm:min-h-[85vh] lg:min-h-[calc(100svh_-_var(--header-h,81px))] flex items-center justify-center overflow-hidden text-[#FAF8F5] transition-colors duration-700"
       style={{ backgroundColor: activeTheme.colors.dark }}
     >
       {/* Background de Portada Dinámico */}
@@ -58,7 +58,7 @@ export function HeroCinematic({ onOpenBooking, onExploreCatalog }: HeroCinematic
       </div>
 
       {/* Contenido Editorial Flotante */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center py-12 sm:py-20 lg:py-28 flex flex-col items-center">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center py-12 sm:py-20 lg:py-[6svh] flex flex-col items-center">
         
         {/* Badge Superior Dinámico según Estación o Evento de Lima */}
         <div

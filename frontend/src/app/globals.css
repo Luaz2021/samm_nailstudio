@@ -65,3 +65,15 @@ body {
 .bg-brand-accent {
   background-color: var(--berry-glaze);
 }
+
+/* Enganche de scroll por secciones (solo en la portada: page.tsx añade .snap-sections a <html>).
+   proximity: se cuadra al acercarse a una seccion sin bloquear el scroll libre.
+   --header-h lo mide page.tsx (barra fija: ~81px escritorio, ~107px movil). */
+html.snap-sections {
+  scroll-snap-type: y proximity;
+  scroll-padding-top: var(--header-h, 81px);
+}
+html.snap-sections main > section,
+html.snap-sections footer {
+  scroll-snap-align: start;
+}

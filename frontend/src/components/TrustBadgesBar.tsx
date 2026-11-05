@@ -29,18 +29,18 @@ export function TrustBadgesBar() {
   return (
     <section className="bg-white border-y border-[#EAE3DA]">
       {/* 1. Tira de 4 Sellos de Garantía con diseño aireado */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8 sm:py-14">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-8">
           {badges.map((b, idx) => {
             const Icon = b.icon;
             return (
-              <div key={idx} className="flex items-start gap-4">
+              <div key={idx} className="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-2.5 sm:gap-4">
                 <div className="w-11 h-11 rounded-2xl bg-[#FAF6F2] border border-[#E9DFD5] flex items-center justify-center shrink-0 text-[#9E5742] shadow-xs">
                   <Icon className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-xs uppercase font-bold tracking-wider text-[#2C2420]">{b.title}</h4>
-                  <p className="text-xs text-[#7A6B62] mt-1.5 leading-relaxed">{b.desc}</p>
+                  <h4 className="text-[11px] sm:text-xs uppercase font-bold tracking-wider text-[#2C2420]">{b.title}</h4>
+                  <p className="hidden sm:block text-xs text-[#7A6B62] mt-1.5 leading-relaxed">{b.desc}</p>
                 </div>
               </div>
             );
@@ -49,7 +49,7 @@ export function TrustBadgesBar() {
       </div>
 
       {/* 2. Franja Editorial Estilo Paintbox EXACTA ("As Seen In" / Marcas de Prestigio) */}
-      <div className="border-t border-[#F2ECE4] py-10 bg-[#FAF8F5]">
+      <div className="border-t border-[#F2ECE4] py-8 sm:py-10 bg-[#FAF8F5]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col items-center">
           
           {/* Título en Serif Italiana Centrado estilo Paintbox */}

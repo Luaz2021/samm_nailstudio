@@ -65,6 +65,25 @@ export default function HomePage() {
     }
   }, []);
 
+  // Enganche de scroll por secciones: activa .snap-sections y publica la altura de la barra fija
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.add("snap-sections");
+    const header = document.querySelector("header");
+    const measure = () => {
+      if (header) root.style.setProperty("--header-h", `${Math.round(header.getBoundingClientRect().height)}px`);
+    };
+    measure();
+    const observer = new ResizeObserver(measure);
+    if (header) observer.observe(header);
+    window.addEventListener("resize", measure);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", measure);
+      root.classList.remove("snap-sections");
+    };
+  }, []);
+
   // Estado de Selección de Cita (Olive & June Drawer)
   const [selectedService, setSelectedService] = useState<SelectedService | null>(DEFAULT_SERVICES[0]);
   const [selectedExtras, setSelectedExtras] = useState<SelectedExtra[]>([]);

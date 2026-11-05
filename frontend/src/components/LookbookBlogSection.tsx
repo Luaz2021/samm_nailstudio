@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Sparkles, Calendar, BookOpen, Clock, ArrowRight, X, ShieldCheck } from "lucide-react";
 import { DEFAULT_ARTICLES, ArticleItem } from "@/data/catalog";
+import { SwipeDots } from "@/components/SwipeDots";
 
 export function LookbookBlogSection() {
   const [selectedArticle, setSelectedArticle] = useState<ArticleItem | null>(null);
   const [articles, setArticles] = useState<ArticleItem[]>(DEFAULT_ARTICLES);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     try {
@@ -28,11 +30,11 @@ export function LookbookBlogSection() {
   }, []);
 
   return (
-    <section className="py-24 bg-white border-t border-[#EAE4DC] text-[#2C2420]">
+    <section className="py-10 md:py-[6svh] bg-white border-t border-[#EAE4DC] text-[#2C2420]">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        
+
         {/* Encabezado */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-10 gap-6">
           <div className="space-y-2">
             <span className="text-xs uppercase font-bold tracking-[0.25em] text-[#9E5742]">
               Revista & Cuidados
@@ -44,20 +46,23 @@ export function LookbookBlogSection() {
               Lookbook & Notas de Atelier
             </h2>
           </div>
-          <p className="text-xs sm:text-sm text-[#7A6B62] max-w-md leading-relaxed">
+          <p className="hidden md:block text-xs sm:text-sm text-[#7A6B62] max-w-md leading-relaxed">
             Consejos de mantenimiento, tendencias internacionales y educación sobre el cuidado de la uña natural.
           </p>
         </div>
 
-        {/* Grid de 3 Columnas Estilo Siberia Salon */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* 3 articulos: carrusel deslizable en movil, 3 columnas desde tablet */}
+        <div
+          ref={carouselRef}
+          className="-mx-6 px-6 md:mx-0 md:px-0 flex md:grid md:grid-cols-3 gap-4 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
           {articles.map((art) => (
-            <article 
+            <article
               key={art.id}
               onClick={() => setSelectedArticle(art)}
-              className="group cursor-pointer flex flex-col space-y-4 rounded-3xl p-3 hover:bg-[#FAF8F5] transition-all duration-300 border border-transparent hover:border-[#EAE4DC]"
+              className="snap-center shrink-0 w-[82%] md:w-auto group cursor-pointer flex flex-col space-y-4 rounded-3xl p-3 hover:bg-[#FAF8F5] transition-all duration-300 border border-transparent hover:border-[#EAE4DC]"
             >
-              <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-[#F5EFEB]">
+              <div className="relative aspect-[16/10] md:aspect-auto md:h-[clamp(150px,28svh,260px)] w-full overflow-hidden rounded-2xl bg-[#F5EFEB]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src={art.imgUrl} 
@@ -99,6 +104,7 @@ export function LookbookBlogSection() {
             </article>
           ))}
         </div>
+        <SwipeDots count={articles.length} targetRef={carouselRef} className="mt-4 md:hidden" />
 
       </div>
 

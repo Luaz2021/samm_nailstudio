@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { DEFAULT_HOME_SHOWCASE, HomeShowcaseItem } from "@/data/catalog";
+import { SwipeDots } from "@/components/SwipeDots";
 
 interface HomeShowcaseProps {
   onGoToCatalog: () => void;
@@ -10,6 +11,7 @@ interface HomeShowcaseProps {
 
 export function HomeShowcase({ onGoToCatalog }: HomeShowcaseProps) {
   const [previewWorks, setPreviewWorks] = useState<HomeShowcaseItem[]>(DEFAULT_HOME_SHOWCASE);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     try {
@@ -50,13 +52,13 @@ export function HomeShowcase({ onGoToCatalog }: HomeShowcaseProps) {
 
   return (
     <section
-      className="py-24 transition-colors duration-500"
+      className="py-10 md:py-[6svh] transition-colors duration-500"
       style={{ backgroundColor: "var(--milky-almond, #FBF8F6)", color: "var(--espresso-ink, #2C2420)" }}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         
         {/* Cabecera Editorial Elegante */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-6 md:mb-10 gap-4 md:gap-6">
           <div className="space-y-2">
             <span
               className="text-xs uppercase font-bold tracking-[0.25em]"
@@ -82,14 +84,17 @@ export function HomeShowcase({ onGoToCatalog }: HomeShowcaseProps) {
           </button>
         </div>
 
-        {/* 3 Tarjetas Visuales Presentacionales */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* 3 Tarjetas Visuales: carrusel deslizable en movil, 3 columnas desde tablet */}
+        <div
+          ref={carouselRef}
+          className="-mx-6 px-6 md:mx-0 md:px-0 flex md:grid md:grid-cols-3 gap-4 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
           {previewWorks.map((item) => (
-            <div 
+            <div
               key={item.id}
-              className="rounded-3xl bg-white border border-[#EFE9E2] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col"
+              className="snap-center shrink-0 w-[82%] md:w-auto rounded-3xl bg-white border border-[#EFE9E2] overflow-hidden shadow-xs hover:shadow-md transition-shadow flex flex-col"
             >
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#FAF6F2]">
+              <div className="relative aspect-[4/3] md:aspect-auto md:h-[clamp(160px,34svh,300px)] w-full overflow-hidden bg-[#FAF6F2]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={item.imgUrl}
@@ -120,6 +125,7 @@ export function HomeShowcase({ onGoToCatalog }: HomeShowcaseProps) {
             </div>
           ))}
         </div>
+        <SwipeDots count={previewWorks.length} targetRef={carouselRef} className="mt-5 md:hidden" />
 
       </div>
     </section>
