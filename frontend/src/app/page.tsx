@@ -14,6 +14,7 @@ import { SalonGuidelines } from "@/components/SalonGuidelines";
 import { TermsModal } from "@/components/TermsModal";
 import { WhatsAppConsultModal } from "@/components/WhatsAppConsultModal";
 import { getStoredWhatsAppPhone } from "@/lib/whatsapp";
+import { createNewBooking, formatIsoDate } from "@/lib/bookings";
 import { HomeShowcase } from "@/components/HomeShowcase";
 import { HomeCareMaintenance } from "@/components/HomeCareMaintenance";
 import { CinematicVideoShowcase } from "@/components/CinematicVideoShowcase";
@@ -46,7 +47,7 @@ export default function HomePage() {
   const [promoToast, setPromoToast] = useState<string | null>(null);
   
   // Datos de Reserva
-  const [selectedDate, setSelectedDate] = useState("2026-10-27");
+  const [selectedDate, setSelectedDate] = useState<string>(() => formatIsoDate(new Date()));
   const [selectedTime, setSelectedTime] = useState("11:30");
   const [clientName, setClientName] = useState("");
   const [clientPhone, setClientPhone] = useState("");
@@ -216,6 +217,32 @@ export default function HomePage() {
 
     const encodedMsg = encodeURIComponent(msgLines.join("\n"));
     const targetPhone = getStoredWhatsAppPhone();
+
+    // Registrar la reserva en el circuito unificado en memoria / localStorage para el Admin
+    try {
+      createNewBooking({
+        clientName,
+        clientPhone,
+        service: cartItems.map((c) => c.name).join(", "),
+        extras: cartItems.flatMap((c) => [
+          c.finish === "francesa" ? "Francesa Clásica" : null,
+          c.length?.price ? c.length.name : null,
+          c.shape?.price ? c.shape.name : null,
+          c.effect?.price ? c.effect.name : null,
+          c.removal?.price ? c.removal.name : null,
+        ].filter(Boolean) as string[]),
+        date: selectedDate,
+        timeSlot: selectedTime ? `${selectedTime} hrs` : "11:30 - 13:30",
+        durationMinutes: totalDuration,
+        totalPrice: total,
+        deposit20: deposit,
+        remaining80: remaining,
+        receiptNote: discountCode ? `Cupón ${discountCode} (-S/ ${discount})` : "Emitido desde la web"
+      });
+    } catch (e) {
+      console.error("Error registrando cita en memoria:", e);
+    }
+
     window.open(`https://wa.me/${targetPhone}?text=${encodedMsg}`, "_blank");
   };
 

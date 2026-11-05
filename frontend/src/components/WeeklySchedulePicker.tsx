@@ -1,57 +1,18 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Calendar as CalendarIcon, Clock, CheckCircle2, AlertCircle } from "lucide-react";
+import { 
+  getRollingWeekDays, 
+  ALL_PICKER_SLOTS, 
+  getStoredBookings, 
+  getSlotBookingStatus, 
+  BookingRecord,
+  WeekDay 
+} from "@/lib/bookings";
 
-export interface WeekDay {
-  day: string;
-  dateNum: string;
-  month: string;
-  fullDate: string;
-}
-
-export const FULL_WEEK: WeekDay[] = [
-  { day: "Lun", dateNum: "26", month: "Oct", fullDate: "2026-10-26" },
-  { day: "Mar", dateNum: "27", month: "Oct", fullDate: "2026-10-27" },
-  { day: "Mié", dateNum: "28", month: "Oct", fullDate: "2026-10-28" },
-  { day: "Jue", dateNum: "29", month: "Oct", fullDate: "2026-10-29" },
-  { day: "Vie", dateNum: "30", month: "Oct", fullDate: "2026-10-30" },
-  { day: "Sáb", dateNum: "31", month: "Oct", fullDate: "2026-10-31" },
-  { day: "Dom", dateNum: "01", month: "Nov", fullDate: "2026-11-01" },
-  { day: "Lun", dateNum: "02", month: "Nov", fullDate: "2026-11-02" },
-];
-
-export const ALL_SLOTS = [
-  "09:00", "09:30",
-  "10:00", "10:30",
-  "11:00", "11:30",
-  "12:00", "12:30",
-  "13:00", "13:30",
-  "14:00", "14:30",
-  "15:00", "15:30",
-  "16:00", "16:30",
-  "17:00", "17:30",
-  "18:00"
-];
-
-// Simulación de estados en la agenda
-export const MOCK_SCHEDULE: Record<string, { time: string; status: "pre_reserva" | "confirmada" }[]> = {
-  "2026-10-26": [
-    { time: "10:00", status: "confirmada" },
-    { time: "10:30", status: "confirmada" },
-    { time: "11:00", status: "confirmada" },
-    { time: "11:30", status: "confirmada" },
-  ],
-  "2026-10-27": [
-    { time: "11:30", status: "pre_reserva" },
-    { time: "12:00", status: "pre_reserva" },
-    { time: "14:00", status: "confirmada" },
-    { time: "14:30", status: "confirmada" },
-  ],
-  "2026-10-28": [
-    { time: "15:00", status: "pre_reserva" },
-    { time: "15:30", status: "pre_reserva" },
-  ]
-};
+export type { WeekDay };
+export const ALL_SLOTS = ALL_PICKER_SLOTS;
 
 interface WeeklySchedulePickerProps {
   selectedDate: string;
@@ -68,6 +29,27 @@ export function WeeklySchedulePicker({
   onSelectTime,
   durationMinutes,
 }: WeeklySchedulePickerProps) {
+  const [weekDays] = useState<WeekDay[]>(() => getRollingWeekDays(8));
+  const [bookings, setBookings] = useState<BookingRecord[]>(() => getStoredBookings());
+
+  useEffect(() => {
+    const syncBookings = () => {
+      setBookings(getStoredBookings());
+    };
+    window.addEventListener("storage", syncBookings);
+    window.addEventListener("samm-bookings-change", syncBookings);
+    return () => {
+      window.removeEventListener("storage", syncBookings);
+      window.removeEventListener("samm-bookings-change", syncBookings);
+    };
+  }, []);
+
+  // Asegurar que si la fecha actual seleccionada no está en la semana rodante, tome el primer día disponible
+  useEffect(() => {
+    if (weekDays.length > 0 && !weekDays.some(w => w.fullDate === selectedDate)) {
+      onSelectDate(weekDays[0].fullDate);
+    }
+  }, [weekDays, selectedDate, onSelectDate]);
 
   // Calcular hora fin estimada
   const getCalculatedEndTime = (startTime: string, duration: number) => {
@@ -80,9 +62,7 @@ export function WeeklySchedulePicker({
   };
 
   const getSlotStatus = (date: string, time: string): "disponible" | "pre_reserva" | "confirmada" => {
-    const list = MOCK_SCHEDULE[date] || [];
-    const item = list.find((s) => s.time === time);
-    return item ? item.status : "disponible";
+    return getSlotBookingStatus(date, time, bookings);
   };
 
   const endTime = getCalculatedEndTime(selectedTime, durationMinutes);
@@ -105,7 +85,7 @@ export function WeeklySchedulePicker({
 
       {/* Días en Carousel / Grid */}
       <div className="grid grid-cols-4 sm:grid-cols-8 gap-1.5">
-        {FULL_WEEK.map((w) => {
+        {weekDays.map((w) => {
           const isSelected = selectedDate === w.fullDate;
           return (
             <button

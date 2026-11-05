@@ -50,6 +50,16 @@ import {
   sanitizeWhatsAppPhone, 
   getWhatsAppDirectUrl 
 } from "@/lib/whatsapp";
+import { 
+  getStoredBookings, 
+  updateBookingStatus, 
+  deleteBooking, 
+  clearAllBookings, 
+  resetDemoBookings, 
+  createNewBooking, 
+  formatIsoDate, 
+  BookingRecord 
+} from "@/lib/bookings";
 import { getAssetPath } from "@/lib/assets";
 import { 
   DEFAULT_HERO_BG, 
@@ -75,23 +85,7 @@ import {
 type AdminTab = "dashboard" | "servicios" | "articulos" | "multimedia" | "temporada";
 type MediaSectionFilter = "todos" | "home" | "servicios" | "galeria" | "cuidados" | "nosotros";
 
-interface AdminBooking {
-  id: string;
-  code: string;
-  clientName: string;
-  clientPhone: string;
-  service: string;
-  extras: string[];
-  date: string;
-  timeSlot: string;
-  durationMinutes: number;
-  totalPrice: number;
-  deposit20: number;
-  remaining80: number;
-  status: "pre_reserva" | "confirmada" | "cancelada";
-  paymentMethod: "Yape" | "Plin" | "Transferencia" | "Pendiente";
-  receiptNote?: string;
-}
+type AdminBooking = BookingRecord;
 
 interface MediaItem {
   id: string;
@@ -106,60 +100,6 @@ interface MediaItem {
     isActive: boolean;
   }[];
 }
-
-const INITIAL_BOOKINGS: AdminBooking[] = [
-  {
-    id: "b-1",
-    code: "PRE-4821",
-    clientName: "Valeria Montes",
-    clientPhone: "+51 984 123 456",
-    service: "Manicura Rusa Anatómica Combinada",
-    extras: ["Retirada de Acrílico Ajeno (+30m)"],
-    date: "2026-10-27",
-    timeSlot: "11:30 - 14:00",
-    durationMinutes: 150,
-    totalPrice: 100,
-    deposit20: 20,
-    remaining80: 80,
-    status: "pre_reserva",
-    paymentMethod: "Pendiente",
-    receiptNote: "Esperando captura de Yape por WhatsApp"
-  },
-  {
-    id: "b-2",
-    code: "PRE-8910",
-    clientName: "Carla Mendoza",
-    clientPhone: "+51 977 456 789",
-    service: "Esculpidas en Acrílico Premium con Molde",
-    extras: ["French Micro-Line (+30m)", "Reconstrucción Uña Rota (+30m)"],
-    date: "2026-10-27",
-    timeSlot: "14:00 - 17:00",
-    durationMinutes: 180,
-    totalPrice: 170,
-    deposit20: 34,
-    remaining80: 136,
-    status: "confirmada",
-    paymentMethod: "Yape",
-    receiptNote: "Adelanto S/ 34 verificado con comprobante Yape"
-  },
-  {
-    id: "b-3",
-    code: "PRE-3312",
-    clientName: "Jimena Morales",
-    clientPhone: "+51 912 345 678",
-    service: "Kapping Gel & Rubber Base Fortalecedor",
-    extras: ["Nivelación Extra con Calcio"],
-    date: "2026-10-28",
-    timeSlot: "10:00 - 12:00",
-    durationMinutes: 120,
-    totalPrice: 70,
-    deposit20: 14,
-    remaining80: 56,
-    status: "confirmada",
-    paymentMethod: "Plin",
-    receiptNote: "Plin verificado en cuenta BCP"
-  }
-];
 
 const INITIAL_MEDIA_SLOTS: MediaItem[] = [
   // =========================================================================
@@ -247,7 +187,7 @@ const INITIAL_MEDIA_SLOTS: MediaItem[] = [
 
 export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<AdminTab>("dashboard");
-  const [bookings, setBookings] = useState<AdminBooking[]>(INITIAL_BOOKINGS);
+  const [bookings, setBookings] = useState<AdminBooking[]>(() => getStoredBookings());
   const [filterStatus, setFilterStatus] = useState<string>("todos");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [saveAlert, setSaveAlert] = useState<string | null>(null);
@@ -379,6 +319,8 @@ export default function AdminPage() {
         setPromoConfig(JSON.parse(storedPromo));
       }
 
+      setBookings(getStoredBookings());
+
       const limaState = getActiveLimaThemeState();
       setThemeMode(limaState.mode);
       setActiveTheme(limaState.activeTheme);
@@ -386,6 +328,17 @@ export default function AdminPage() {
     } catch (e) {
       console.error(e);
     }
+
+    const syncBookings = () => {
+      setBookings(getStoredBookings());
+    };
+    window.addEventListener("samm-bookings-change", syncBookings);
+    window.addEventListener("storage", syncBookings);
+
+    return () => {
+      window.removeEventListener("samm-bookings-change", syncBookings);
+      window.removeEventListener("storage", syncBookings);
+    };
   }, []);
 
   // Generador dinámico de QR para vista previa en el Admin
@@ -425,50 +378,55 @@ export default function AdminPage() {
   const confirmedCount = bookings.filter(b => b.status === "confirmada").length;
 
   const handleConfirmYape = (id: string) => {
-    setBookings(prev => prev.map(b => {
-      if (b.id === id) {
-        return {
-          ...b,
-          status: "confirmada",
-          paymentMethod: "Yape",
-          receiptNote: "Adelanto 20% verificado en Yape (Casilla Verde asegurada)"
-        };
-      }
-      return b;
-    }));
+    const updated = updateBookingStatus(id, "confirmada", "Yape", "Adelanto 20% verificado en Yape (Casilla Verde asegurada)");
+    setBookings(updated);
     triggerSaveToast("Pre-reserva aprobada en caja verde");
   };
 
   const handleCancelBooking = (id: string) => {
-    setBookings(prev => prev.map(b => {
-      if (b.id === id) {
-        return { ...b, status: "cancelada", receiptNote: "Liberado por tiempo de espera excedido" };
-      }
-      return b;
-    }));
+    const updated = updateBookingStatus(id, "cancelada", "Pendiente", "Liberado por tiempo de espera excedido");
+    setBookings(updated);
+    triggerSaveToast("Turno cancelado y liberado");
+  };
+
+  const handleDeleteBooking = (id: string) => {
+    const updated = deleteBooking(id);
+    setBookings(updated);
+    triggerSaveToast("Cita eliminada permanentemente");
+  };
+
+  const handleClearAllBookings = () => {
+    if (window.confirm("¿Seguro que deseas limpiar todas las citas y dejar la agenda en blanco?")) {
+      const empty = clearAllBookings();
+      setBookings(empty);
+      triggerSaveToast("Agenda limpiada a cero (RAM lista)");
+    }
+  };
+
+  const handleResetDemoBookings = () => {
+    const demo = resetDemoBookings();
+    setBookings(demo);
+    triggerSaveToast("Citas de demostración recargadas");
   };
 
   const handleCreateMockPreReservation = () => {
-    const randomCode = Math.floor(1000 + Math.random() * 9000);
-    const newMock: AdminBooking = {
-      id: `b-${Date.now()}`,
-      code: `PRE-${randomCode}`,
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const newBooking = createNewBooking({
       clientName: "Lucía Fernandez",
       clientPhone: "+51 993 888 777",
       service: "Extensiones Soft Gel & Full Cover Tips",
       extras: ["Retiro Seguro Set Ajeno (+30m)"],
-      date: "2026-10-28",
+      date: formatIsoDate(tomorrow),
       timeSlot: "16:00 - 18:30",
       durationMinutes: 150,
       totalPrice: 135,
       deposit20: 27,
       remaining80: 108,
-      status: "pre_reserva",
-      paymentMethod: "Pendiente",
       receiptNote: "Pre-reserva recién emitida en web"
-    };
-    setBookings([newMock, ...bookings]);
-    triggerSaveToast("Pre-reserva de prueba añadida");
+    });
+    setBookings(getStoredBookings());
+    triggerSaveToast(`Pre-reserva #${newBooking.code} añadida`);
   };
 
   // Función maestra de sincronización de fotos en las 3 páginas de la web
@@ -1235,7 +1193,27 @@ export default function AdminPage() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#EFE2DC]">
               <div>
                 <h3 className="font-serif text-2xl font-bold text-[#231C1A]">Agenda de Turnos & Recepción</h3>
-                <p className="text-xs text-[#8d7e78] mt-0.5">Control de comprobantes de pago para asegurar turnos.</p>
+                <p className="text-xs text-[#8d7e78] mt-0.5">Control en memoria/localStorage de comprobantes y citas en vivo.</p>
+                <div className="flex items-center gap-2 mt-2">
+                  <button
+                    type="button"
+                    onClick={handleClearAllBookings}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-rose-200 text-rose-700 hover:bg-rose-50 text-[11px] font-semibold transition-all cursor-pointer"
+                    title="Limpiar todas las citas registradas"
+                  >
+                    <Trash2 className="w-3 h-3" />
+                    <span>Limpiar Citas (A Cero)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleResetDemoBookings}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#D5C6BA] text-[#6C5F57] hover:bg-[#FAF6F2] text-[11px] font-semibold transition-all cursor-pointer"
+                    title="Restablecer citas de demostración"
+                  >
+                    <Sparkles className="w-3 h-3 text-[#9E5742]" />
+                    <span>Cargar Citas Demo</span>
+                  </button>
+                </div>
               </div>
 
               {/* Filtro y Búsqueda */}
@@ -1359,10 +1337,17 @@ export default function AdminPage() {
                         )}
                         <button
                           onClick={() => handleCancelBooking(booking.id)}
-                          className="text-xs text-rose-600 hover:bg-rose-50 p-2 rounded-full"
-                          title="Cancelar"
+                          className="text-xs text-amber-600 hover:bg-amber-50 p-2 rounded-full transition-colors cursor-pointer"
+                          title="Cancelar turno"
                         >
                           <X className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteBooking(booking.id)}
+                          className="text-xs text-rose-600 hover:bg-rose-50 p-2 rounded-full transition-colors cursor-pointer"
+                          title="Eliminar permanentemente"
+                        >
+                          <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
                     </div>

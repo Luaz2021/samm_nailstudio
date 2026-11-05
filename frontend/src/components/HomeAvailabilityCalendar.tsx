@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar as CalendarIcon, Clock, CheckCircle2, Lock, ShieldCheck, Sparkles, ArrowRight } from "lucide-react";
-
-interface SlotInfo {
-  time: string;
-  endTime: string;
-  status: "disponible" | "pre_reserva" | "confirmada";
-  label?: string;
-}
+import { 
+  getRollingWeekDays, 
+  getCabinScheduleForDate, 
+  getStoredBookings, 
+  BookingRecord, 
+  CabinSlotInfo, 
+  WeekDay 
+} from "@/lib/bookings";
 
 interface DaySchedule {
   day: string;
@@ -16,95 +17,8 @@ interface DaySchedule {
   month: string;
   fullDate: string;
   freeCount: number;
-  slots: SlotInfo[];
+  slots: CabinSlotInfo[];
 }
-
-const WEEK_DATA: DaySchedule[] = [
-  {
-    day: "Lun",
-    dateNum: "26",
-    month: "Oct",
-    fullDate: "2026-10-26",
-    freeCount: 2,
-    slots: [
-      { time: "09:30", endTime: "11:30", status: "confirmada", label: "Ocupado" },
-      { time: "11:30", endTime: "13:30", status: "confirmada", label: "Ocupado" },
-      { time: "14:00", endTime: "16:00", status: "disponible", label: "Hueco Libre" },
-      { time: "16:30", endTime: "18:30", status: "disponible", label: "Hueco Libre" },
-      { time: "18:30", endTime: "20:30", status: "confirmada", label: "Ocupado" }
-    ]
-  },
-  {
-    day: "Mar",
-    dateNum: "27",
-    month: "Oct",
-    fullDate: "2026-10-27",
-    freeCount: 3,
-    slots: [
-      { time: "09:30", endTime: "11:30", status: "disponible", label: "Hueco Libre" },
-      { time: "11:30", endTime: "13:30", status: "pre_reserva", label: "En Confirmación" },
-      { time: "14:00", endTime: "16:00", status: "confirmada", label: "Ocupado" },
-      { time: "16:30", endTime: "18:30", status: "disponible", label: "Hueco Libre" },
-      { time: "18:30", endTime: "20:30", status: "disponible", label: "Hueco Libre" }
-    ]
-  },
-  {
-    day: "Mié",
-    dateNum: "28",
-    month: "Oct",
-    fullDate: "2026-10-28",
-    freeCount: 2,
-    slots: [
-      { time: "09:30", endTime: "11:30", status: "confirmada", label: "Ocupado" },
-      { time: "11:30", endTime: "13:30", status: "disponible", label: "Hueco Libre" },
-      { time: "14:00", endTime: "16:00", status: "pre_reserva", label: "En Confirmación" },
-      { time: "16:30", endTime: "18:30", status: "disponible", label: "Hueco Libre" },
-      { time: "18:30", endTime: "20:30", status: "confirmada", label: "Ocupado" }
-    ]
-  },
-  {
-    day: "Jue",
-    dateNum: "29",
-    month: "Oct",
-    fullDate: "2026-10-29",
-    freeCount: 3,
-    slots: [
-      { time: "09:30", endTime: "11:30", status: "disponible", label: "Hueco Libre" },
-      { time: "11:30", endTime: "13:30", status: "disponible", label: "Hueco Libre" },
-      { time: "14:00", endTime: "16:00", status: "confirmada", label: "Ocupado" },
-      { time: "16:30", endTime: "18:30", status: "confirmada", label: "Ocupado" },
-      { time: "18:30", endTime: "20:30", status: "disponible", label: "Hueco Libre" }
-    ]
-  },
-  {
-    day: "Vie",
-    dateNum: "30",
-    month: "Oct",
-    fullDate: "2026-10-30",
-    freeCount: 1,
-    slots: [
-      { time: "09:30", endTime: "11:30", status: "confirmada", label: "Ocupado" },
-      { time: "11:30", endTime: "13:30", status: "confirmada", label: "Ocupado" },
-      { time: "14:00", endTime: "16:00", status: "confirmada", label: "Ocupado" },
-      { time: "16:30", endTime: "18:30", status: "disponible", label: "Último Turno" },
-      { time: "18:30", endTime: "20:30", status: "confirmada", label: "Ocupado" }
-    ]
-  },
-  {
-    day: "Sáb",
-    dateNum: "31",
-    month: "Oct",
-    fullDate: "2026-10-31",
-    freeCount: 2,
-    slots: [
-      { time: "09:30", endTime: "11:30", status: "disponible", label: "Hueco Libre" },
-      { time: "11:30", endTime: "13:30", status: "confirmada", label: "Ocupado" },
-      { time: "14:00", endTime: "16:00", status: "confirmada", label: "Ocupado" },
-      { time: "16:30", endTime: "18:30", status: "disponible", label: "Hueco Libre" },
-      { time: "18:30", endTime: "20:30", status: "confirmada", label: "Ocupado" }
-    ]
-  }
-];
 
 interface HomeAvailabilityCalendarProps {
   onSelectSlot: (date: string, time: string) => void;
@@ -115,8 +29,36 @@ export function HomeAvailabilityCalendar({
   onSelectSlot,
   onExploreCatalog
 }: HomeAvailabilityCalendarProps) {
-  const [selectedDayIndex, setSelectedDayIndex] = useState(1); // Default to Martes 27
-  const activeDay = WEEK_DATA[selectedDayIndex] || WEEK_DATA[0];
+  const [selectedDayIndex, setSelectedDayIndex] = useState(0);
+  const [weekDays] = useState<WeekDay[]>(() => getRollingWeekDays(6));
+  const [bookings, setBookings] = useState<BookingRecord[]>(() => getStoredBookings());
+
+  useEffect(() => {
+    const syncBookings = () => {
+      setBookings(getStoredBookings());
+    };
+    window.addEventListener("storage", syncBookings);
+    window.addEventListener("samm-bookings-change", syncBookings);
+    return () => {
+      window.removeEventListener("storage", syncBookings);
+      window.removeEventListener("samm-bookings-change", syncBookings);
+    };
+  }, []);
+
+  const weekData: DaySchedule[] = weekDays.map((d) => {
+    const slots = getCabinScheduleForDate(d.fullDate, bookings);
+    const freeCount = slots.filter((s) => s.status === "disponible").length;
+    return {
+      day: d.day,
+      dateNum: d.dateNum,
+      month: d.month,
+      fullDate: d.fullDate,
+      freeCount,
+      slots,
+    };
+  });
+
+  const activeDay = weekData[selectedDayIndex] || weekData[0];
 
   return (
     <section
@@ -160,7 +102,7 @@ export function HomeAvailabilityCalendar({
         {/* Selector Horizontal de Días */}
         <div className="mb-4">
           <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {WEEK_DATA.map((d, idx) => {
+            {weekData.map((d, idx) => {
               const isSelected = idx === selectedDayIndex;
               return (
                 <button
