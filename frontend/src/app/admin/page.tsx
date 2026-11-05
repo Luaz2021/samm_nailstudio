@@ -60,7 +60,7 @@ import {
   formatIsoDate, 
   BookingRecord 
 } from "@/lib/bookings";
-import { getAssetPath } from "@/lib/assets";
+import { getAssetPath, compressImageToDataUrl } from "@/lib/assets";
 import { 
   DEFAULT_HERO_BG, 
   DEFAULT_ABOUT_PHOTO,
@@ -480,6 +480,7 @@ export default function AdminPage() {
       }
 
       window.dispatchEvent(new Event("storage"));
+      window.dispatchEvent(new CustomEvent("samm-media-change", { detail: { slotId, newUrl } }));
     } catch (e) {
       console.error(e);
     }
@@ -2233,12 +2234,11 @@ export default function AdminPage() {
                         type="file" 
                         accept="image/*" 
                         className="hidden" 
-                        onChange={(e) => {
+                        onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (file) {
-                            const reader = new FileReader();
-                            reader.onload = (ev) => {
-                              const result = ev.target?.result as string;
+                            try {
+                              const result = await compressImageToDataUrl(file, 1600, 0.82);
                               if (result) {
                                 const newEntry = {
                                   id: `up-${Date.now()}`,
@@ -2261,8 +2261,10 @@ export default function AdminPage() {
                                 syncMediaToSite(slot.id, result);
                                 triggerSaveToast(`Nueva foto subida y sincronizada en ${slot.slotName}`);
                               }
-                            };
-                            reader.readAsDataURL(file);
+                            } catch (err) {
+                              console.error("Error al procesar y comprimir imagen:", err);
+                              triggerSaveToast("Error al procesar la imagen seleccionada");
+                            }
                           }
                         }}
                       />

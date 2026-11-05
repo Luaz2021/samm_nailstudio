@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Sparkles, ArrowRight, ShieldCheck } from "lucide-react";
 import { DEFAULT_HERO_BG, getActiveLimaThemeState, LimaTheme } from "@/data/catalog";
+import { getAssetPath } from "@/lib/assets";
 
 interface HeroCinematicProps {
   onOpenBooking: () => void;
@@ -17,18 +18,30 @@ export function HeroCinematic({ onOpenBooking, onExploreCatalog }: HeroCinematic
     try {
       const syncFromStorage = () => {
         const storedBg = localStorage.getItem("samm_hero_bg");
-        if (storedBg) setHeroBg(storedBg);
+        if (storedBg && storedBg.trim()) {
+          setHeroBg(storedBg);
+        } else {
+          setHeroBg(DEFAULT_HERO_BG);
+        }
 
         const themeState = getActiveLimaThemeState();
         setActiveTheme(themeState.activeTheme);
       };
 
+      const handleMediaChange = (e: any) => {
+        if (e.detail?.slotId === "hero-main" && e.detail?.newUrl) {
+          setHeroBg(e.detail.newUrl);
+        }
+      };
+
       syncFromStorage();
       window.addEventListener("storage", syncFromStorage);
       window.addEventListener("samm-theme-change", syncFromStorage);
+      window.addEventListener("samm-media-change", handleMediaChange);
       return () => {
         window.removeEventListener("storage", syncFromStorage);
         window.removeEventListener("samm-theme-change", syncFromStorage);
+        window.removeEventListener("samm-media-change", handleMediaChange);
       };
     } catch (e) {
       console.error(e);
@@ -44,9 +57,14 @@ export function HeroCinematic({ onOpenBooking, onExploreCatalog }: HeroCinematic
       {/* Background de Portada Dinámico */}
       <div className="absolute inset-0 z-0">
         <img
-          src={heroBg}
+          src={getAssetPath(heroBg)}
           alt="Portada Hero Atelier"
-          className="w-full h-full object-cover opacity-45 filter brightness-95 saturate-90 scale-105 transform animate-fade-in transition-all duration-700"
+          onError={() => {
+            if (heroBg !== DEFAULT_HERO_BG) {
+              setHeroBg(DEFAULT_HERO_BG);
+            }
+          }}
+          className="w-full h-full object-cover opacity-50 filter brightness-95 saturate-90 scale-105 transform animate-fade-in transition-all duration-700"
         />
         {/* Capas de gradientes con tinte sutil de la temporada */}
         <div
